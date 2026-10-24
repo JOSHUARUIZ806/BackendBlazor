@@ -7,16 +7,4 @@
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Components\Pages\Docente.razor" />
-    <Content Remove="Components\Pages\Estudiantes.razor" />
-    <Content Remove="Components\Pages\login.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Components\Pages\Docente.razor" />
-    <None Include="Components\Pages\Estudiantes.razor" />
-    <None Include="Components\Pages\login.razor" />
-  </ItemGroup>
-
 </Project>

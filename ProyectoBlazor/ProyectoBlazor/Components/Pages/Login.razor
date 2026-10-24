@@ -1,0 +1,374 @@
+﻿@page "/login"
+
+@inject NavigationManager Navigation
+
+<PageTitle>Iniciar Sesión — Evaluación Cognitiva</PageTitle>
+
+<style>
+  :root{
+    --navy:#1A3560;
+    --navy-dark:#132848;
+    --amber:#C97B2E;
+    --ink:#1F2937;
+    --muted:#6B7280;
+    --card-bg:#F6F7F8;
+    --card-border:#ECEDEF;
+    --bg:#FFFFFF;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ── Header ── */
+  header{
+    background:var(--navy);
+    color:white;
+    display:flex;
+    align-items:center;
+    padding:18px 40px;
+    gap:16px;
+  }
+  .logo{ height:38px; width:auto; flex-shrink:0; }
+  .divider{
+    width:1px; height:34px;
+    background:rgba(255,255,255,0.25);
+    flex-shrink:0;
+  }
+  header h1{ font-size:19px; font-weight:600; }
+  .back{
+    margin-left:auto; font-size:13px; color:white;
+    opacity:0.85; text-decoration:none;
+    display:flex; align-items:center; gap:6px;
+  }
+  .back:hover{ opacity:1; }
+
+  /* ── Main ── */
+  main{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 24px;
+  }
+
+  /* ── Login Card ── */
+  .login-card{
+    width:100%;
+    max-width:420px;
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    padding:48px 36px 40px;
+    box-shadow:0 4px 24px rgba(26,53,96,0.06);
+  }
+
+  /* Icon */
+  .login-icon{
+    width:56px; height:56px;
+    margin:0 auto 20px;
+    background:var(--navy);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+  }
+  .login-icon svg{ width:28px; height:28px; }
+
+  /* Title */
+  .login-card h2{
+    text-align:center;
+    font-size:24px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .login-card .subtitle{
+    text-align:center;
+    font-size:14px;
+    color:var(--muted);
+    margin-bottom:32px;
+  }
+
+  /* Role badge */
+  .role-badge{
+    display:block;
+    text-align:center;
+    margin-bottom:28px;
+  }
+  .role-badge span{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--amber);
+    background:#FBEFE1;
+    padding:5px 14px;
+    border-radius:20px;
+  }
+
+  /* Form fields */
+  .field{
+    margin-bottom:20px;
+  }
+  .field label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--navy);
+    margin-bottom:7px;
+  }
+  .field input{
+    width:100%;
+    padding:13px 16px;
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    font-size:15px;
+    font-family:'Inter', sans-serif;
+    background:white;
+    color:var(--ink);
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input::placeholder{
+    color:#B0B5BD;
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px rgba(26,53,96,0.1);
+  }
+
+  /* Button */
+  .btn-login{
+    width:100%;
+    padding:14px 24px;
+    margin-top:8px;
+    background:var(--navy);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn-login:hover{
+    background:var(--navy-dark);
+  }
+  .btn-login:active{
+    transform:scale(0.98);
+  }
+  .btn-login svg{
+    width:18px; height:18px;
+  }
+
+  /* Footer */
+  footer{
+    text-align:center;
+    padding:24px 24px 32px;
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  .hidden{ display:none !important; }
+
+  .form-error{
+    background:#FDEBEB; color:#D14343; border:1px solid rgba(209,67,67,0.25);
+    border-radius:8px; padding:10px 14px; font-size:13px; margin-bottom:16px;
+  }
+
+  /* ── Responsive ── */
+  @@media (max-width:640px){
+    header{ padding:16px 20px; }
+    header h1{ font-size:16px; }
+    .back{ display:none; }
+    .login-card{ padding:36px 24px 32px; }
+  }
+</style>
+
+<header>
+  <img class="logo" src="Logo_TecNM_Horizontal_Blanco.svg" alt="TecNM - Instituto Tecnológico de Tijuana">
+
+  <div class="divider"></div>
+
+  <h1>Sistema de Evaluación de Aprendizaje Cognitivo</h1>
+
+  <a class="back" href="index.html">← Volver al inicio</a>
+</header>
+
+<main>
+  <div class="login-card">
+    <!-- Icon -->
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <polyline points="10 17 15 12 10 7"/>
+        <line x1="15" y1="12" x2="3" y2="12"/>
+      </svg>
+    </div>
+
+    <!-- Title -->
+    <h2>Bienvenido</h2>
+    <p class="subtitle">Ingresa tus credenciales para continuar</p>
+
+    <!-- Role badge (filled dynamically) -->
+    <div class="role-badge" id="role-badge"></div>
+
+    <!-- Formulario de Estudiante: nombre + código de grupo (lo que de verdad
+         necesita el backend para guardar y luego mostrar tus resultados) -->
+    <form id="login-form-estudiante" class="login-form hidden" onsubmit="return handleLoginEstudiante(event)">
+      <div class="field">
+        <label for="nombre">Nombre completo (opcional)</label>
+        <input id="nombre" type="text" placeholder="Ej. Joshua Ruiz López" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="codigoGrupo">Código de grupo (opcional)</label>
+        <input id="codigoGrupo" type="text" placeholder="Déjalo vacío para entrar directo" autocomplete="off" maxlength="6" style="text-transform:uppercase;">
+      </div>
+
+      <p id="error-estudiante" class="form-error hidden"></p>
+
+      <button type="submit" class="btn-login" id="btn-login-estudiante">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Ingresar
+      </button>
+    </form>
+
+    <!-- Formulario de Docente: aún no requiere validación contra el servidor,
+         el panel de docente.html es el que genera y administra los códigos de grupo -->
+    <form id="login-form-docente" class="login-form hidden" onsubmit="return handleLoginDocente(event)">
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="tu.correo@example.com" autocomplete="email" required>
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" required>
+      </div>
+
+      <button type="submit" class="btn-login" id="btn-login-docente">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Ingresar
+      </button>
+    </form>
+  </div>
+</main>
+
+<footer>
+  Instituto Tecnológico de Tijuana · Departamento de Sistemas y Computación
+</footer>
+
+<script>
+  // ── Read role from URL ──
+  const params = new URLSearchParams(window.location.search);
+  const role = params.get('role') || 'estudiante';
+
+  // Map role to display info
+  const roles = {
+    estudiante: { label: '🎓 Estudiante', redirect: 'Estudiantes.html' },
+    docente:    { label: '📚 Docente',    redirect: 'docente.html' }
+  };
+
+  const current = roles[role] || roles.estudiante;
+
+  // Show role badge
+  document.getElementById('role-badge').innerHTML =
+    '<span>' + current.label + '</span>';
+
+  // Mostrar el formulario correcto según el rol
+  document.getElementById('login-form-estudiante').classList.toggle('hidden', role !== 'estudiante');
+  document.getElementById('login-form-docente').classList.toggle('hidden', role === 'estudiante');
+
+  // ── Login de Estudiante: contra el backend real (nombre + código de grupo) ──
+function dbLocal() {
+    try { var d = JSON.parse(localStorage.getItem('evaluacionCognitiva')); if (d && d.grupos) return d; } catch (e) {}
+    return { grupos: [], estudiantes: [], resultados: [], sig: { g: 1, e: 1, r: 1 } };
+  }
+  function guardarDb(d) { localStorage.setItem('evaluacionCognitiva', JSON.stringify(d)); }
+  function resumenLocal(d, id) {
+    var o = {};
+    ['memoria', 'atencion', 'razonamiento', 'velocidad'].forEach(function (p) {
+      var l = d.resultados.filter(function (r) { return r.estudiante_id === id && r.prueba === p; });
+      o[p] = l[l.length - 1] || null;
+    });
+    return o;
+  }
+
+  async function handleLoginEstudiante(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('error-estudiante');
+    errorEl.classList.add('hidden');
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const codigoGrupo = document.getElementById('codigoGrupo').value.trim().toUpperCase();
+    const btn = document.getElementById('btn-login-estudiante');
+
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    try {
+      // SIN BACKEND: la sesión se guarda en este navegador. No hace falta nombre ni código.
+      const d = dbLocal();
+      const nombreFinal = nombre || 'Estudiante';
+      const codigoFinal = codigoGrupo || 'LOCAL1';
+      let grupo = d.grupos.filter((x) => x.codigo === codigoFinal)[0];
+      if (!grupo) {
+        grupo = { id: d.sig.g++, codigo: codigoFinal, nombre: 'Grupo ' + codigoFinal, creado_en: new Date().toISOString() };
+        d.grupos.push(grupo);
+      }
+      let est = d.estudiantes.filter((e) => e.grupo_id === grupo.id && e.nombre.toLowerCase() === nombreFinal.toLowerCase())[0];
+      if (!est) {
+        est = { id: d.sig.e++, nombre: nombreFinal, grupo_id: grupo.id, creado_en: new Date().toISOString() };
+        d.estudiantes.push(est);
+      }
+      guardarDb(d);
+      const data = { estudiante: est, grupo: grupo };
+
+      // Guardamos la sesión del estudiante en este navegador para que
+      // Estudiantes.html sepa quién es y pueda pedir sus resultados.
+      localStorage.setItem('estudianteId', data.estudiante.id);
+      localStorage.setItem('estudianteNombre', data.estudiante.nombre);
+      localStorage.setItem('grupoCodigo', data.grupo.codigo);
+
+      window.location.href = current.redirect;
+    } catch (err) {
+      errorEl.textContent = err.message || 'Ocurrió un error al iniciar sesión.';
+      errorEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+    return false;
+  }
+
+  // ── Login de Docente: aún sin backend propio, solo redirige
+  //    (docente.html es quien genera/administra los códigos de grupo) ──
+  function handleLoginDocente(e) {
+    e.preventDefault();
+    window.location.href = current.redirect;
+    return false;
+  }
+</script>
