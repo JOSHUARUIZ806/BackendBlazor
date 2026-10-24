@@ -1,8 +1,8 @@
 wwwroot\app.css
 Components\Layout\ReconnectModal.razor.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.12\build\..\_framework\blazor.web.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.12\build\..\_framework\blazor.server.js
+C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\build\..\_framework\blazor.web.js
+C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\build\..\_framework\blazor.server.js
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\ProyectoBlazor\wwwroot\app.css
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\ProyectoBlazor\Components\Layout\ReconnectModal.razor.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.12\_framework\blazor.web.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.12\_framework\blazor.server.js
+C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\_framework\blazor.web.js
+C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\_framework\blazor.server.js

@@ -1,5 +1,5 @@
-@page "/Docente"
-
+﻿@page "/Docente"
+@inject NavigationManager Navigation
 <PageTitle>Docente — Evaluación Cognitiva</PageTitle>
 
 <style>
@@ -37,7 +37,7 @@
 
   /* Tarjeta de arriba: muestra el código de grupo y el botón para
      generar uno nuevo (la lógica de ese botón está al final del
-     archivo, en el <script>). */
+     archivo, en el script). */
   .group-card{
     background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px;
     padding:28px 32px; display:flex; justify-content:space-between; align-items:center;
@@ -106,7 +106,7 @@
   .donut::before{ content:''; position:absolute; inset:7px; border-radius:50%; background:#fff; }
   .donut b{ position:relative; font-size:11.5px; font-weight:700; color:var(--navy); }
   .donut.level-strong{ --col:#1E9E63; }
-  .donut.level-avg{ --col:#C97B2E; }
+  .donut.level-avg{ --col:#F2C230; }  /* amarillo = Promedio */
   .donut.level-focus{ --col:#D14343; }
   .donut.level-none b{ color:var(--muted); font-weight:600; }
   .donut-lbl{ display:block; margin-top:4px; font-size:10px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--muted); }
@@ -145,17 +145,33 @@
   .chart-value{ font-size:12px; font-weight:700; color:var(--navy); margin-bottom:4px; }
   .chart-label{ font-size:11.5px; color:var(--muted); margin-top:8px; text-align:center; }
 
+
+  /* Tabla guía de recomendaciones para el docente */
+  .guia-wrap{ margin-top:48px; }
+  .guia{ table-layout:fixed; min-width:760px; font-size:12.5px; }
+  .guia th, .guia td{ vertical-align:top; line-height:1.45; }
+  .guia th.col-fuerte{ color:#1E9E63; }
+  .guia th.col-promedio{ color:#92400E; }
+  .guia th.col-reforzar{ color:#D14343; }
+  .guia td.skill{ font-weight:700; color:var(--navy); width:15%; }
+  .guia td.skill small{ display:block; font-weight:400; color:var(--muted); margin-top:3px; font-size:11.5px; }
+  .guia ul{ margin:0; padding-left:16px; }
+  .guia li{ margin-bottom:3px; }
+  .guia-n{
+    display:inline-block; margin-bottom:6px; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
+    text-transform:uppercase; padding:2px 8px; border-radius:20px; background:#ECEDEF; color:var(--muted);
+  }
+  .guia-n.has{ background:#E8EEF8; color:var(--navy); }
+
   footer{ text-align:center; padding:30px 24px 40px; font-size:12px; color:var(--muted); }
 
-  @media (max-width:640px){
+  @@media (max-width:640px){
     .stats{ grid-template-columns:1fr 1fr; }
     header{ padding:16px 20px; }
     .back{ display:none; }
     table{ font-size:12px; }
   }
 </style>
-</head>
-<body>
 
 <header>
   <!-- Logo del TecNM en SVG (idéntico al de las otras 2 páginas) -->
@@ -282,6 +298,63 @@
   </table>
   </div>
 
+
+  <!-- ============================================================
+       TABLA GUÍA: recomendaciones generales para el docente según la
+       habilidad y el nivel del alumno (Fuerte / Promedio / Por reforzar).
+       Cada celda muestra cuántos alumnos del grupo están en ese nivel.
+       ============================================================ -->
+  <div class="guia-wrap">
+    <div class="section-title">Guía de recomendaciones para el docente</div>
+    <div class="section-sub">Estrategias generales para atender las necesidades de tus alumnos según su nivel en cada habilidad.</div>
+  </div>
+  <div class="table-wrap">
+  <table class="guia">
+    <thead>
+      <tr>
+        <th>Habilidad</th>
+        <th class="col-fuerte">Fuerte (75% o más)</th>
+        <th class="col-promedio">Promedio (50 a 74%)</th>
+        <th class="col-reforzar">Por reforzar (menos de 50%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="skill">Memoria<small>Retención y manejo de información reciente</small></td>
+        <td><span class="guia-n" id="guia-memoria-fuerte">— alumnos</span><ul><li>Proyectos que integren varios temas y retos de recuperación sin apuntes.</li><li>Permitir que apoye a compañeros (tutoría entre pares).</li></ul></td>
+        <td><span class="guia-n" id="guia-memoria-promedio">— alumnos</span><ul><li>Entregar guías y esquemas previos a la clase.</li><li>Fragmentar el contenido en bloques cortos y repasar al inicio de cada sesión.</li></ul></td>
+        <td><span class="guia-n" id="guia-memoria-reforzar">— alumnos</span><ul><li>Sesiones breves con pausas y apoyos visuales (mapas, tarjetas).</li><li>Preguntas de recuperación frecuentes (mini quizzes) con retroalimentación inmediata.</li></ul></td>
+      </tr>
+      <tr>
+        <td class="skill">Atención<small>Concentración y control de distractores</small></td>
+        <td><span class="guia-n" id="guia-atencion-fuerte">— alumnos</span><ul><li>Asignar tareas largas o complejas y roles de coordinación.</li><li>Mantener el reto con actividades que exijan sostener el foco.</li></ul></td>
+        <td><span class="guia-n" id="guia-atencion-promedio">— alumnos</span><ul><li>Actividades en bloques de 20 a 25 minutos con cambios de dinámica.</li><li>Dar instrucciones claras, una a la vez, y reducir distractores del aula.</li></ul></td>
+        <td><span class="guia-n" id="guia-atencion-reforzar">— alumnos</span><ul><li>Ubicarlo cerca del docente y lejos de distractores.</li><li>Dividir las tareas en pasos con lista de verificación y pausas activas.</li><li>Si persiste, canalizar a tutoría o apoyo psicopedagógico.</li></ul></td>
+      </tr>
+      <tr>
+        <td class="skill">Razonamiento<small>Detección de patrones y lógica</small></td>
+        <td><span class="guia-n" id="guia-razonamiento-fuerte">— alumnos</span><ul><li>Casos abiertos, proyectos y debates.</li><li>Preguntas de nivel superior (analizar, evaluar, crear).</li></ul></td>
+        <td><span class="guia-n" id="guia-razonamiento-promedio">— alumnos</span><ul><li>Modelar la resolución paso a paso.</li><li>Ejercicios graduados y pedir que explique su razonamiento.</li></ul></td>
+        <td><span class="guia-n" id="guia-razonamiento-reforzar">— alumnos</span><ul><li>Partir de ejemplos concretos y visuales.</li><li>Problemas pequeños con apoyo (andamiaje), trabajo en parejas y retroalimentación sobre el proceso, no solo la respuesta.</li></ul></td>
+      </tr>
+      <tr>
+        <td class="skill">Velocidad<small>Rapidez de procesamiento y respuesta</small></td>
+        <td><span class="guia-n" id="guia-velocidad-fuerte">— alumnos</span><ul><li>Actividades cronometradas de mayor exigencia.</li><li>Invitarlo a revisar sus respuestas antes de entregar.</li></ul></td>
+        <td><span class="guia-n" id="guia-velocidad-promedio">— alumnos</span><ul><li>Ejercicios con tiempo progresivo.</li><li>Enseñar gestión del tiempo en exámenes.</li></ul></td>
+        <td><span class="guia-n" id="guia-velocidad-reforzar">— alumnos</span><ul><li>Práctica sin presión antes de cronometrar y, cuando sea razonable, tiempo adicional.</li><li>Evitar comparaciones públicas y revisar en tutoría factores externos (sueño, estrés).</li></ul></td>
+      </tr>
+      <tr>
+        <td class="skill">Estilo de aprendizaje<small>Apoyo a cualquier nivel (según el cuestionario del alumno)</small></td>
+        <td colspan="3"><ul>
+          <li><b>Visual:</b> esquemas, mapas mentales, colores, videos e imágenes.</li>
+          <li><b>Auditivo:</b> explicaciones orales, discusión en grupo, grabaciones y podcasts.</li>
+          <li><b>Kinestésico:</b> prácticas, simulaciones, actividades con movimiento y pausas activas.</li>
+        </ul></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
   <div class="note" id="notaFinal">El grupo aún no tiene alumnos ni evaluaciones registradas — genera un código y compártelo con tus estudiantes para que empiecen a aparecer aquí.</div>
 </main>
 
@@ -312,23 +385,40 @@
   }
 
   // ── Generar un código de grupo NUEVO (pide uno real al servidor) ──
+function dbLocal() {
+    try { var d = JSON.parse(localStorage.getItem('evaluacionCognitiva')); if (d && d.grupos) return d; } catch (e) {}
+    return { grupos: [], estudiantes: [], resultados: [], sig: { g: 1, e: 1, r: 1 } };
+  }
+  function guardarDb(d) { localStorage.setItem('evaluacionCognitiva', JSON.stringify(d)); }
+  function resumenLocal(d, id) {
+    var o = {};
+    ['memoria', 'atencion', 'razonamiento', 'velocidad'].forEach(function (p) {
+      var l = d.resultados.filter(function (r) { return r.estudiante_id === id && r.prueba === p; });
+      o[p] = l[l.length - 1] || null;
+    });
+    return o;
+  }
+
   async function generarCodigoNuevo() {
     btn.disabled = true;
     try {
-      const resp = await fetch('/api/grupos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: null })
-      });
-      const data = await resp.json();
-      if (!data.ok) throw new Error('No se pudo generar el código');
+      // SIN BACKEND: el código se genera aquí y se guarda en este navegador
+      const d = dbLocal();
+      const C = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let codigo;
+      do { codigo = ''; for (let i = 0; i < 6; i++) codigo += C.charAt(Math.floor(Math.random() * C.length)); }
+      while (d.grupos.some((g) => g.codigo === codigo));
+      const grupoNuevo = { id: d.sig.g++, codigo, nombre: 'Grupo sin nombre', creado_en: new Date().toISOString() };
+      d.grupos.push(grupoNuevo);
+      guardarDb(d);
+      const data = { ok: true, grupo: grupoNuevo };
 
       localStorage.setItem('grupoDocenteCodigo', data.grupo.codigo);
       codeEl.textContent = data.grupo.codigo;
       destellarCodigo();
       cargarDatosGrupo(data.grupo.codigo);
     } catch (err) {
-      alert('No se pudo conectar con el servidor. Verifica que esté corriendo (node server/server.js).');
+      alert('No se pudo generar el código.');
     } finally {
       btn.disabled = false;
     }
@@ -357,18 +447,42 @@
 
   async function cargarDatosGrupo(codigo) {
     try {
-      const resp = await fetch('/api/grupos/' + encodeURIComponent(codigo) + '/resultados');
-      const data = await resp.json();
-      if (!resp.ok || !data.ok) throw new Error(data.error || 'Grupo no encontrado');
+      const d = dbLocal();
+      const grupo = d.grupos.filter((g) => g.codigo === String(codigo).toUpperCase())[0];
+      if (!grupo) throw new Error('Grupo no encontrado');
+      const data = { estudiantes: d.estudiantes.filter((e) => e.grupo_id === grupo.id)
+        .map((e) => ({ estudiante: e, resumen: resumenLocal(d, e.id) })) };
 
       pintarDashboard(data.estudiantes);
     } catch (err) {
       document.getElementById('notaFinal').textContent =
-        'No se encontró ese código de grupo, o el servidor no está disponible.';
+        'No se encontró ese código de grupo en este navegador.';
     }
   }
 
+  // Cuenta cuántos alumnos del grupo hay en cada nivel de cada habilidad
+  // y lo muestra en la tabla guía (según su resultado más reciente).
+  function pintarGuia(estudiantes) {
+    PRUEBAS.forEach((prueba) => {
+      const conteo = { fuerte: 0, promedio: 0, reforzar: 0 };
+      estudiantes.forEach(({ resumen }) => {
+        if (!resumen[prueba]) return;
+        const pts = Math.round(resumen[prueba].puntaje);
+        if (pts >= 75) conteo.fuerte++;
+        else if (pts >= 50) conteo.promedio++;
+        else conteo.reforzar++;
+      });
+      Object.keys(conteo).forEach((nivel) => {
+        const el = document.getElementById('guia-' + prueba + '-' + nivel);
+        if (!el) return;
+        el.textContent = conteo[nivel] + (conteo[nivel] === 1 ? ' alumno' : ' alumnos');
+        el.classList.toggle('has', conteo[nivel] > 0);
+      });
+    });
+  }
+
   function pintarDashboard(estudiantes) {
+    pintarGuia(estudiantes);
     document.getElementById('statAlumnos').textContent = estudiantes.length;
 
     let evaluacionesCompletas = 0;
