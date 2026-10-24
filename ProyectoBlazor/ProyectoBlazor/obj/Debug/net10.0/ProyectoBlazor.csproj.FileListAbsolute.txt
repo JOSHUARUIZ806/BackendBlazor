@@ -41,3 +41,8 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\Proyecto
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.sourcelink.json
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\wvsicyqpfc-{0}-cd06xom9c5-cd06xom9c5.gz
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\d2a3rvbibu-{0}-vmftroxvhh-vmftroxvhh.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ValidatableTypeAttribute.cs
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.dll
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\refint\ProyectoBlazor.dll
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.pdb
