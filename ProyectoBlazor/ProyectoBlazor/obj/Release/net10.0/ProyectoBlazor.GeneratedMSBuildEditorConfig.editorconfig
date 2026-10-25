@@ -39,20 +39,28 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFc3R1ZGlhbnRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Estudiantes.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFc3R1ZGlhbnRlcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/login.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xsb2dpbi5yYXpvcg==
+[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Home.razor.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9yLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/NotFound.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Procesamiento.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9jZXNhbWllbnRvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Razonamiento.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSYXpvbmFtaWVudG8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Contr/OneDrive/Escritorio/Antigravity Proyectos/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Routes.razor]

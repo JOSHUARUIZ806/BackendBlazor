@@ -1,0 +1,987 @@
+﻿@page "/Procesamiento"
+@inject NavigationManager Navigation
+<PageTitle>Procesamiento</PageTitle>
+<!-- ============================================================
+     juego Conecta los circulos "Test Trazo"                      
+     ============================================================ -->
+
+     <style>
+    /* ── Reset & Variables ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:    #FFFFFF;
+      --bg-card:    #F6F7F8;
+      --border:     #ECEDEF;
+      --text:       #1F2937;
+      --text-dim:   #6B7280;
+      --accent:     #1A3560;
+      --accent-glow:#24427A;
+      --success:    #1E9E63;
+      --success-glow:#3FB37F;
+      --error:      #D14343;
+      --error-glow: #E27171;
+      --gold:       #C97B2E;
+      --gold-glow:  #DB9A54;
+      --line-color: rgba(26,53,96,0.55);
+      --radius:     14px;
+      --circle-r:   26px;
+      --font:       'Inter', system-ui, sans-serif;
+      --mono:       'JetBrains Mono', monospace;
+    }
+
+    html { height: 100%; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-deep);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Header ── */
+    body > header {
+      width: 100%;
+      padding: 58px 28px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), #24427A);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(26,53,96,0.3);
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #1A3560, #24427A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── Stats Bar ── */
+    .stats {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-chip .label {
+      color: var(--text-dim);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-chip .value {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .stat-chip.level .value  { color: var(--accent); font-size: 13px; }
+    .stat-chip.hits .value   { color: var(--success); }
+    .stat-chip.errors .value { color: var(--error); }
+    .stat-chip.time .value   { color: var(--gold); }
+
+    .stat-chip.hits.pulse   { border-color: var(--success); box-shadow: 0 0 12px rgba(30,158,99,0.3); }
+    .stat-chip.errors.pulse { border-color: var(--error);   box-shadow: 0 0 12px rgba(209,67,67,0.3); }
+
+    /* ── Play Area ── */
+    .play-area-wrapper {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      position: relative;
+    }
+
+    .play-area {
+      position: relative;
+      width: min(900px, 100%);
+      aspect-ratio: 16 / 10;
+      max-height: calc(100vh - 140px);
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(26,53,96,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 80%, rgba(201,123,46,0.03) 0%, transparent 60%),
+        var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(19,40,72,0.02),
+        0 8px 40px rgba(19,40,72,0.08);
+    }
+
+    /* Grid pattern */
+    .play-area::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(19,40,72,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(19,40,72,0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* ── SVG Lines ── */
+    #lineCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #lineCanvas line {
+      stroke: var(--line-color);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 4px rgba(26,53,96,0.35));
+    }
+
+    .line-animate {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 0.4s ease-out forwards;
+    }
+
+    @@keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* ── Circles ── */
+    .circle {
+      position: absolute;
+      width: calc(var(--circle-r) * 2);
+      height: calc(var(--circle-r) * 2);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      z-index: 2;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+      transform: translate(-50%, -50%) scale(0);
+      will-change: transform;
+
+      background: #F6F7F8;
+      border: 2px solid rgba(26,53,96,0.3);
+      color: #1A3560;
+      box-shadow:
+        0 0 12px rgba(26,53,96,0.1),
+        inset 0 1px 0 rgba(19,40,72,0.03);
+      backdrop-filter: blur(6px);
+    }
+
+    /* Nivel de fonemas: letra grande + pequeño índice de orden */
+    .circle.fonema { font-size: 20px; }
+
+    .circle .orden {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      background: var(--gold);
+      pointer-events: none;
+    }
+
+    .circle.visible {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .circle.first-visible {
+      border-color: var(--accent-glow);
+      background: rgba(26,53,96,0.12);
+      color: var(--accent);
+      box-shadow:
+        0 0 20px rgba(26,53,96,0.3),
+        0 0 40px rgba(26,53,96,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      animation: pulseFirst 2s ease-in-out infinite;
+    }
+
+    @@keyframes pulseFirst {
+      0%, 100% { box-shadow: 0 0 20px rgba(26,53,96,0.3), 0 0 40px rgba(26,53,96,0.12); }
+      50%      { box-shadow: 0 0 28px rgba(26,53,96,0.45),  0 0 56px rgba(26,53,96,0.2); }
+    }
+
+    .circle:hover:not(.done):not(.error-flash) {
+      transform: translate(-50%, -50%) scale(1.12);
+      box-shadow: 0 0 20px rgba(26,53,96,0.3);
+    }
+
+    .circle.done {
+      background: rgba(30,158,99,0.16);
+      border-color: var(--success);
+      color: var(--success);
+      cursor: default;
+      box-shadow:
+        0 0 14px rgba(30,158,99,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @@keyframes popIn {
+      0%   { transform: translate(-50%, -50%) scale(0.6); }
+      50%  { transform: translate(-50%, -50%) scale(1.15); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .circle.error-flash {
+      animation: errorShake 0.5s ease;
+      border-color: var(--error);
+      background: rgba(209,67,67,0.16);
+      color: var(--error);
+      box-shadow: 0 0 20px rgba(209,67,67,0.3);
+    }
+
+    @@keyframes errorShake {
+      0%, 100% { transform: translate(-50%, -50%) scale(1) translateX(0); }
+      20%      { transform: translate(-50%, -50%) scale(1) translateX(-6px); }
+      40%      { transform: translate(-50%, -50%) scale(1) translateX(6px); }
+      60%      { transform: translate(-50%, -50%) scale(1) translateX(-4px); }
+      80%      { transform: translate(-50%, -50%) scale(1) translateX(4px); }
+    }
+
+    /* ── Overlays ── */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(19,40,72,0.78);
+      backdrop-filter: blur(10px);
+      z-index: 20;
+      opacity: 1;
+      transition: opacity 0.4s;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .overlay-card {
+      text-align: center;
+      padding: 40px 48px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 16px 64px rgba(19,40,72,0.25);
+      max-width: 420px;
+      width: 90%;
+      max-height: 96%;
+      overflow-y: auto;
+    }
+
+    .overlay-card h2 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #1F2937, var(--accent-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .overlay-card .subtitle {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .overlay-card .results {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      background: #F6F7F8;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .result-row .r-label {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .result-row .r-value {
+      font-family: var(--mono);
+      white-space: nowrap;
+      margin-left: 12px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .result-row .r-value.green  { color: var(--success); }
+    .result-row .r-value.red    { color: var(--error); }
+    .result-row .r-value.yellow { color: var(--gold); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #24427A);
+      box-shadow: 0 4px 20px rgba(26,53,96,0.3);
+    }
+
+    .btn[hidden] { display: none; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(26,53,96,0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    /* ── Progress Bar ── */
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--success-glow));
+      border-radius: 0 3px 0 0;
+      transition: width 0.35s ease-out;
+      z-index: 5;
+      box-shadow: 0 0 8px rgba(26,53,96,0.35);
+    }
+
+    /* ── Responsive ── */
+    @@media (max-width: 640px) {
+      body > header { padding: 96px 14px 12px; flex-wrap: wrap; justify-content: center; }
+      .brand h1 { font-size: 15px; }
+      .stats { gap: 4px; }
+      .stat-chip { padding: 4px 10px; font-size: 11px; }
+      .stat-chip .value { font-size: 12px; }
+      /* En celular el área es más alta que ancha para que quepan los círculos */
+      .play-area { border-radius: 10px; aspect-ratio: 3 / 4; }
+      .overlay-card { padding: 28px 24px; }
+      .overlay-card h2 { font-size: 22px; }
+      :root { --circle-r: 22px; }
+      .circle { font-size: 13px; }
+      .circle.fonema { font-size: 18px; }
+    }
+
+    /* ── Confetti Canvas ── */
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+  </style>
+  <script>
+    // Si este alumno ya terminó esta prueba, no puede volver a entrar.
+    (function () {
+      var P = 'velocidad';
+      try {
+        var id = localStorage.getItem('estudianteId');
+        if (!id) return;
+        var d = JSON.parse(localStorage.getItem('evaluacionCognitiva') || '{}');
+        if ((d.resultados || []).some(function (r) { return r.estudiante_id === Number(id) && r.prueba === P; })) {
+          location.replace('../Estudiantes.html?completada=' + P);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <nav class="game-nav">
+    <a href="../Estudiantes.html">← Volver a tus pruebas</a>
+    <a href="../index.html">Volver a inicio</a>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">4</div>
+      <h1>Conecta los Círculos</h1>
+    </div>
+    <div class="stats">
+      <div class="stat-chip level" id="statLevel">
+        <span class="label">Nivel</span>
+        <span class="value" id="levelVal"></span>
+      </div>
+      <div class="stat-chip hits" id="statHits">
+        <span class="label">Aciertos</span>
+        <span class="value" id="hitsVal">0</span>
+      </div>
+      <div class="stat-chip errors" id="statErrors">
+        <span class="label">Errores</span>
+        <span class="value" id="errorsVal">0</span>
+      </div>
+      <div class="stat-chip time">
+        <span class="label">Tiempo</span>
+        <span class="value" id="timerVal">00:00.0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Play Area -->
+  <div class="play-area-wrapper">
+    <div class="play-area" id="playArea">
+      <svg id="lineCanvas"></svg>
+      <div class="progress-bar" id="progressBar"></div>
+
+      <!-- End Overlay -->
+      <div class="overlay hidden" id="endOverlay">
+        <div class="overlay-card">
+          <h2 id="endTitle"></h2>
+          <div class="results" id="results"></div>
+          <button class="btn" id="btnNext" type="button" hidden>Siguiente nivel&ensp;→</button>
+          <a class="btn" id="btnReturnHome" href="../Estudiantes.html" style="text-decoration:none;" hidden>🏠&ensp;Regresar al Inicio</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Overlay -->
+  <div class="start-screen" id="startOverlay">
+    <div class="cover-wrap">
+      <header class="cover-header">
+        <div class="header__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h6l-1 8 10-12h-6z"/></svg>
+          Velocidad de procesamiento
+        </div>
+        <h1 class="header__title">Conecta los Círculos</h1>
+        <p class="header__subtitle">Cuatro niveles: números, letras, números con letras y fonemas, lo más rápido posible</p>
+      </header>
+      <div class="start-card">
+        <div class="start-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <h2>¿Listo para el reto?</h2>
+        <p>Recorrerás 4 niveles consecutivos conectando los círculos en orden. Además de tu rapidez y tus errores, se mide cuánto tardas en dar el primer clic en cuanto aparecen los círculos. Cada clic fuera de secuencia cuenta como error.</p>
+        <div class="cover-rules">
+          <div class="cover-rules__item"><span class="cover-rules__num">1</span> Nivel 1: 1→25 · Nivel 2: A→Y · Nivel 3: 1→A→2→B… · Nivel 4: R→M→N repetido (sigue el índice de orden)</div>
+          <div class="cover-rules__item"><span class="cover-rules__num">2</span> El cronómetro de cada nivel inicia al pulsar el primer círculo de la secuencia</div>
+          <div class="cover-rules__item"><span class="cover-rules__num">3</span> Se registran aciertos, errores, tiempo y el tiempo de reacción al primer clic</div>
+        </div>
+        <button class="btn-primary-cover" id="btnStart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Iniciar Prueba
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti"></canvas>
+
+  <script>
+    /* ══════════════════════════════════════
+       GAME ENGINE
+    ══════════════════════════════════════ */
+    const MIN_GAP = 14;        // px de separación entre bordes de círculos
+
+    /* ── Definición de los 4 niveles ──
+       etiquetas: lista en el orden correcto en que hay que hacer clic.
+       mostrarOrden: añade un pequeño índice (1..n) porque las letras se repiten. */
+    const ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXY'.split(''); // A→Y (25 letras, sin Ñ)
+    const NIVELES = [
+      { tipo: 'numeros',   nombre: 'Números',
+        etiquetas: Array.from({ length: 25 }, (_, i) => String(i + 1)) },
+      { tipo: 'letras',    nombre: 'Letras',
+        etiquetas: ALFABETO },
+      { tipo: 'alternado', nombre: 'Números y letras',
+        etiquetas: Array.from({ length: 10 }, (_, i) => [String(i + 1), ALFABETO[i]]).flat() },
+      { tipo: 'fonemas',   nombre: 'Fonemas R, M, N', mostrarOrden: true,
+        etiquetas: Array.from({ length: 18 }, (_, i) => 'RMN'[i % 3]) }
+    ];
+
+    const playArea      = document.getElementById('playArea');
+    const lineCanvas    = document.getElementById('lineCanvas');
+    const progressBar   = document.getElementById('progressBar');
+    const startOverlay  = document.getElementById('startOverlay');
+    const endOverlay    = document.getElementById('endOverlay');
+    const endTitle      = document.getElementById('endTitle');
+    const resultsDiv    = document.getElementById('results');
+    const levelVal      = document.getElementById('levelVal');
+    const hitsVal       = document.getElementById('hitsVal');
+    const errorsVal     = document.getElementById('errorsVal');
+    const timerVal      = document.getElementById('timerVal');
+    const statHits      = document.getElementById('statHits');
+    const statErrors    = document.getElementById('statErrors');
+    const btnStart      = document.getElementById('btnStart');
+    const btnNext       = document.getElementById('btnNext');
+    const btnReturnHome = document.getElementById('btnReturnHome');
+
+    let circles      = [];     // {el, x, y, orden}  (orden = posición en la secuencia, desde 0)
+    let nivelActual  = 0;
+    let resultados   = [];     // un objeto por nivel terminado
+    let nextExpected = 0;      // índice de orden del siguiente círculo correcto
+    let hits         = 0;
+    let errors       = 0;
+    let visibleAt    = null;   // instante en que los círculos quedan jugables
+    let primerClicMs = null;   // latencia al primer clic (cualquier círculo)
+    let primerClicCorrecto = false;
+    let startTime    = null;   // inicia al acertar el primer círculo de la secuencia
+    let timerRAF     = null;
+    let gameActive   = false;
+
+    /* ── Circle radius in px ── */
+    function getR() {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--circle-r'));
+    }
+
+    /* ── Generate non-overlapping positions ── */
+    function generatePositions(count, w, h) {
+      const r = getR();
+      const pad = w < 500 ? 10 : 36;   // margen a los bordes (menor en celular)
+      const positions = [];
+      const maxTries  = 2000;
+
+      for (let i = 0; i < count; i++) {
+        let placed = false;
+        for (let t = 0; t < maxTries; t++) {
+          const x = pad + r + Math.random() * (w - 2 * (pad + r));
+          const y = pad + r + Math.random() * (h - 2 * (pad + r));
+          let ok = true;
+          for (const p of positions) {
+            const dx = x - p.x;
+            const dy = y - p.y;
+            if (Math.sqrt(dx * dx + dy * dy) < r * 2 + MIN_GAP) {
+              ok = false;
+              break;
+            }
+          }
+          if (ok) {
+            positions.push({ x, y });
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          // Fallback: cuadrícula que se adapta a la proporción del área
+          const cols = Math.ceil(Math.sqrt(count * w / h));
+          const rows = Math.ceil(count / cols);
+          const row  = Math.floor(i / cols);
+          const col  = i % cols;
+          const gx   = pad + r + col * ((w - 2 * (pad + r)) / Math.max(cols - 1, 1));
+          const gy   = pad + r + row * ((h - 2 * (pad + r)) / Math.max(rows - 1, 1));
+          positions.push({ x: gx, y: gy });
+        }
+      }
+      return positions;
+    }
+
+    /* ── Build circles del nivel (todos ocultos hasta revealAllCircles) ── */
+    function buildCircles(nivel) {
+      circles.forEach(c => c.el.remove());
+      circles = [];
+      lineCanvas.innerHTML = '';
+      progressBar.style.width = '0%';
+
+      const rect = playArea.getBoundingClientRect();
+      const positions = generatePositions(nivel.etiquetas.length, rect.width, rect.height);
+
+      nivel.etiquetas.forEach((etiqueta, orden) => {
+        const el = document.createElement('div');
+        el.className = 'circle' + (nivel.mostrarOrden ? ' fonema' : '');
+        el.textContent = etiqueta;
+        el.dataset.etiqueta = etiqueta;
+        el.dataset.orden = orden + 1;
+        el.style.left = positions[orden].x + 'px';
+        el.style.top  = positions[orden].y + 'px';
+
+        if (nivel.mostrarOrden) {
+          const badge = document.createElement('span');
+          badge.className = 'orden';
+          badge.textContent = orden + 1;
+          el.appendChild(badge);
+        }
+
+        el.addEventListener('click', () => onCircleClick(orden));
+
+        playArea.appendChild(el);
+        circles.push({ el, x: positions[orden].x, y: positions[orden].y, orden });
+      });
+    }
+
+    /* ── Muestra todos los círculos con escalonado; el primero queda resaltado ── */
+    function revealAllCircles() {
+      circles.forEach((c, i) => {
+        setTimeout(() => c.el.classList.add('visible'), i * 30);
+      });
+      circles[0].el.classList.add('first-visible');
+    }
+
+    /* ── Draw line between two circles ── */
+    function drawLine(from, to) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', from.x);
+      line.setAttribute('y1', from.y);
+      line.setAttribute('x2', to.x);
+      line.setAttribute('y2', to.y);
+      line.classList.add('line-animate');
+      lineCanvas.appendChild(line);
+    }
+
+    /* ── Timer display ── */
+    function formatTime(ms) {
+      const totalSec = ms / 1000;
+      const min = Math.floor(totalSec / 60);
+      const sec = Math.floor(totalSec % 60);
+      const dec = Math.floor((totalSec % 1) * 10);
+      return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}.${dec}`;
+    }
+
+    function updateTimer() {
+      if (startTime === null || !gameActive) return;
+      timerVal.textContent = formatTime(performance.now() - startTime);
+      timerRAF = requestAnimationFrame(updateTimer);
+    }
+
+    /* ── Pulse stat chip ── */
+    function pulseStat(el) {
+      el.classList.add('pulse');
+      setTimeout(() => el.classList.remove('pulse'), 400);
+    }
+
+    /* ── Circle click handler ── */
+    function onCircleClick(orden) {
+      if (!gameActive) return;
+
+      const circle = circles[orden];
+      if (circle.el.classList.contains('done')) return;
+
+      // Latencia al primer clic: el primero sobre cualquier círculo, acierte o no
+      if (primerClicMs === null) {
+        primerClicMs = Math.round(performance.now() - visibleAt);
+        primerClicCorrecto = orden === nextExpected;
+      }
+
+      if (orden === nextExpected) {
+        // Correct!
+        hits++;
+        hitsVal.textContent = hits;
+        pulseStat(statHits);
+
+        // El cronómetro del nivel inicia al acertar el primer círculo de la secuencia
+        if (orden === 0) {
+          startTime = performance.now();
+          updateTimer();
+        }
+
+        circle.el.classList.remove('first-visible');
+        circle.el.classList.add('done');
+
+        if (orden > 0) drawLine(circles[orden - 1], circle);
+
+        progressBar.style.width = ((hits / circles.length) * 100) + '%';
+
+        nextExpected++;
+
+        if (nextExpected >= circles.length) {
+          endLevel();
+        }
+      } else {
+        // Wrong!
+        errors++;
+        errorsVal.textContent = errors;
+        pulseStat(statErrors);
+
+        circle.el.classList.add('error-flash');
+        setTimeout(() => circle.el.classList.remove('error-flash'), 500);
+      }
+    }
+
+    /* ── Inicia un nivel: reinicia contadores, redistribuye círculos y los revela ── */
+    function iniciarNivel(indice) {
+      const nivel = NIVELES[indice];
+      nivelActual  = indice;
+      nextExpected = 0;
+      hits = 0;
+      errors = 0;
+      startTime = null;
+      primerClicMs = null;
+      primerClicCorrecto = false;
+
+      levelVal.textContent = `${indice + 1}/${NIVELES.length} · ${nivel.nombre}`;
+      hitsVal.textContent = '0';
+      errorsVal.textContent = '0';
+      timerVal.textContent = '00:00.0';
+      endOverlay.classList.add('hidden');
+
+      buildCircles(nivel);
+      revealAllCircles();
+      visibleAt = performance.now();   // a partir de aquí los círculos son jugables
+      gameActive = true;
+    }
+
+    /* ── Puntaje de un nivel (0-100) ──
+       Es una prueba de VELOCIDAD de procesamiento, así que combina:
+         · precisión (60%) = aciertos / (aciertos + errores)
+         · rapidez   (40%) = segundos por círculo: <= SEG_RAPIDO da 100 y
+                             >= SEG_LENTO da 0 (lineal entre ambos).
+       Los umbrales son ajustables si el psicólogo define otros. ── */
+    const SEG_RAPIDO = 1.5;
+    const SEG_LENTO  = 5;
+    function precisionNivel(aciertos, errores) {
+      return Math.round((aciertos / (aciertos + errores)) * 100);
+    }
+    function rapidezNivel(tiempoMs, circulos) {
+      const segPorCirculo = tiempoMs / 1000 / circulos;
+      const r = (SEG_LENTO - segPorCirculo) / (SEG_LENTO - SEG_RAPIDO);
+      return Math.round(Math.max(0, Math.min(1, r)) * 100);
+    }
+    function puntajeNivel(aciertos, errores, tiempoMs) {
+      return Math.round(0.6 * precisionNivel(aciertos, errores) + 0.4 * rapidezNivel(tiempoMs, aciertos));
+    }
+
+    /* ── Fin de nivel: guarda resultados y muestra el resumen ── */
+    function endLevel() {
+      gameActive = false;
+      cancelAnimationFrame(timerRAF);
+
+      const nivel = NIVELES[nivelActual];
+      const tiempoMs = Math.round(performance.now() - startTime);
+      timerVal.textContent = formatTime(tiempoMs);
+
+      const res = {
+        nivel: nivelActual + 1,
+        tipo: nivel.tipo,
+        tiempoMs,
+        errores: errors,
+        primerClicMs,
+        primerClicCorrecto,
+        precision: precisionNivel(nivel.etiquetas.length, errors),
+        rapidez: rapidezNivel(tiempoMs, nivel.etiquetas.length),
+        puntaje: puntajeNivel(nivel.etiquetas.length, errors, tiempoMs)
+      };
+      resultados.push(res);
+
+      const esUltimo = nivelActual === NIVELES.length - 1;
+      if (esUltimo) {
+        mostrarResumenFinal();
+      } else {
+        endTitle.textContent = `Nivel ${res.nivel} completado`;
+        resultsDiv.innerHTML =
+          filaResultado('✅ Aciertos', nivel.etiquetas.length, 'green') +
+          filaResultado('❌ Errores', res.errores, 'red') +
+          filaResultado('⏱️ Tiempo del nivel', formatTime(res.tiempoMs), 'yellow') +
+          filaResultado('🎯 Precisión', res.precision + '%', 'green') +
+          filaResultado('🚀 Rapidez', res.rapidez + '%', 'green') +
+          filaResultado('⚡ Tiempo de reacción al primer clic', formatSegundos(res.primerClicMs), 'yellow');
+        btnNext.hidden = false;
+        btnReturnHome.hidden = true;
+        // Delay overlay to let last circle animation play
+        setTimeout(() => {
+          endOverlay.classList.remove('hidden');
+          launchConfetti();
+        }, 500);
+      }
+    }
+
+    /* ── Resumen final de los 4 niveles + envío al servidor ── */
+    function mostrarResumenFinal() {
+      const aciertosTotal = NIVELES.reduce((sum, n) => sum + n.etiquetas.length, 0);
+      const erroresTotal  = resultados.reduce((sum, r) => sum + r.errores, 0);
+      const tiempoMs      = resultados.reduce((sum, r) => sum + r.tiempoMs, 0);
+      const primerClicMsPromedio = Math.round(
+        resultados.reduce((sum, r) => sum + r.primerClicMs, 0) / resultados.length);
+      const precisionPct = Math.round((aciertosTotal / (aciertosTotal + erroresTotal)) * 100);
+      // Puntaje final: promedio de los puntajes (60% precisión + 40% rapidez) de los 4 niveles
+      const puntaje = Math.round(resultados.reduce((sum, r) => sum + r.puntaje, 0) / resultados.length);
+
+      endTitle.textContent = '🏆 ¡Prueba completada!';
+      resultsDiv.innerHTML =
+        filaResultado('✅ Aciertos', aciertosTotal, 'green') +
+        filaResultado('❌ Errores', erroresTotal, 'red') +
+        filaResultado('⏱️ Tiempo total', formatTime(tiempoMs), 'yellow') +
+        filaResultado('🎯 Precisión', precisionPct + '%', 'green') +
+        filaResultado('⚡ Tiempo de reacción al primer clic (promedio)', formatSegundos(primerClicMsPromedio), 'yellow') +
+        filaResultado('⭐ Puntaje', puntaje + '/100', 'green');
+      btnNext.hidden = true;
+      btnReturnHome.hidden = false;
+
+      setTimeout(() => {
+        endOverlay.classList.remove('hidden');
+        launchConfetti();
+      }, 500);
+
+      // Enviar el resultado al backend para que aparezca en "Tus resultados"
+      // y en el panel del docente. Se llama una sola vez, al terminar los 4 niveles.
+      enviarResultadoAlServidor({
+        prueba: 'velocidad',
+        puntaje,
+        precisionPct,
+        tiempoMs,
+        errores: erroresTotal,
+        detalle: { primerClicMsPromedio, niveles: resultados }
+      });
+    }
+
+    /* ── Utilidades de presentación ── */
+    function filaResultado(etiqueta, valor, color) {
+      return `<div class="result-row"><span class="r-label">${etiqueta}</span><span class="r-value ${color}">${valor}</span></div>`;
+    }
+
+    function formatSegundos(ms) {
+      return (ms / 1000).toFixed(2) + ' s';
+    }
+
+    /* ── Envío de resultados al backend ── */
+    function enviarResultadoAlServidor(datos) {
+      const estudianteId = localStorage.getItem('estudianteId');
+      if (!estudianteId) return; // sin sesión de estudiante no se guarda
+      try {
+        // SIN BACKEND: el resultado se guarda en este navegador
+        const db = JSON.parse(localStorage.getItem('evaluacionCognitiva') || '{}');
+        db.grupos = db.grupos || []; db.estudiantes = db.estudiantes || []; db.resultados = db.resultados || [];
+        db.sig = db.sig || { g: 1, e: 1, r: 1 };
+        const id = Number(estudianteId);
+        if (db.resultados.some((r) => r.estudiante_id === id && r.prueba === datos.prueba)) return;
+        const n = (x) => (isFinite(Number(x)) ? Number(x) : 0);
+        db.resultados.push({
+          id: db.sig.r++, estudiante_id: id, prueba: datos.prueba, puntaje: n(datos.puntaje),
+          precision_pct: n(datos.precisionPct), tiempo_ms: n(datos.tiempoMs), errores: n(datos.errores),
+          detalle_json: datos.detalle ? JSON.stringify(datos.detalle) : null, creado_en: new Date().toISOString()
+        });
+        localStorage.setItem('evaluacionCognitiva', JSON.stringify(db));
+      } catch (e) {}
+    }
+
+    /* ── Confetti ── */
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#6366f1', '#22c55e', '#f59e0b', '#ec4899', '#06b6d4', '#a78bfa', '#f87171'];
+      const pieces = [];
+
+      for (let i = 0; i < 120; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 6 + Math.random() * 6,
+          h: 4 + Math.random() * 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vy: 2 + Math.random() * 4,
+          vx: (Math.random() - 0.5) * 3,
+          rot: Math.random() * Math.PI * 2,
+          vr: (Math.random() - 0.5) * 0.15,
+          opacity: 1,
+        });
+      }
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        for (const p of pieces) {
+          if (p.opacity <= 0) continue;
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.vy += 0.05;
+          if (p.y > canvas.height * 0.8) p.opacity -= 0.02;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+        frame++;
+        if (alive && frame < 300) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      draw();
+    }
+
+    /* ── Event bindings ── */
+    btnStart.addEventListener('click', () => {
+      startOverlay.classList.add('hidden');
+      iniciarNivel(0);
+    });
+    btnNext.addEventListener('click', () => iniciarNivel(nivelActual + 1));
+
+    /* ── Init: la portada se muestra hasta que el alumno pulse "Iniciar Prueba" ── */
+    levelVal.textContent = `1/${NIVELES.length} · ${NIVELES[0].nombre}`;
+  </script>

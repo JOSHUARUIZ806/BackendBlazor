@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\docente.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\docente.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,46 +18,49 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Home.razor",
               "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Home.razor",
               "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
               "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAwwHAAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD8AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-24T22:45:04.496Z",
+              "WhenOpened": "2026-10-25T19:36:56.731Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Login.razor",
               "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Login.razor",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Login.razor",
               "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Login.razor",
               "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Login.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-24T22:45:06.201Z",
+              "WhenOpened": "2026-10-25T19:49:51.869Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Docente.razor",
-              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Docente.razor",
-              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Docente.razor",
-              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Docente.razor",
-              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Docente.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-10-24T22:45:18.678Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             }
           ]
         }
