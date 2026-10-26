@@ -46,3 +46,8 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\refint\ProyectoBlazor.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.pdb
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ValidatableTypeAttribute.cs
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.dll
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\refint\ProyectoBlazor.dll
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.pdb

@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ProyectoBlazor"
+    "\\ProyectoBlazor",
+    "\\ProyectoBlazor\\ProyectoBlazor",
+    "\\ProyectoBlazor\\ProyectoBlazor\\Components",
+    "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages",
+    "\\ProyectoBlazor\\ProyectoBlazor\\Properties"
   ],
-  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor.slnx",
+  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
   "PreviewInSolutionExplorer": false
 }

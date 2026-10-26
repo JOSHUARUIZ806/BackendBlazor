@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "oMM/O/HEoJI=",
+  "dgSpecHash": "AlIbcMYIshA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
+  "projectFilePath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Contr\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.13\\microsoft.aspnetcore.app.internal.assets.10.0.13.nupkg.sha512"
+    "C:\\Users\\esdej\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.13\\microsoft.aspnetcore.app.internal.assets.10.0.13.nupkg.sha512"
   ],
   "logs": []
 }
