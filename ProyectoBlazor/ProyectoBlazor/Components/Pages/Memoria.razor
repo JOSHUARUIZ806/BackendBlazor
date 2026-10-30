@@ -1,0 +1,930 @@
+@page "/Memoria"
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+<PageTitle>Memoria</PageTitle>
+<!-- ============================================================
+     juego Memorama
+     ============================================================ -->
+
+<style>
+:root {
+  /* Color palette — alineada al sitio principal */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F6F7F8;
+  --bg-card: #1A3560;
+  --bg-card-hover: #132848;
+  --card-border: #ECEDEF;
+  --surface-glass: #F6F7F8;
+  --surface-glass-border: #ECEDEF;
+
+  --accent-primary: #1A3560;
+  --accent-secondary: #C97B2E;
+  --accent-glow: rgba(26, 53, 96, 0.25);
+  --accent-gradient: linear-gradient(135deg, #1A3560 0%, #24427A 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #132848 0%, #1A3560 100%);
+
+  --success: #1E9E63;
+  --success-glow: rgba(30, 158, 99, 0.25);
+  --error: #D14343;
+  --error-glow: rgba(209, 67, 67, 0.25);
+  --warning: #C97B2E;
+  --warning-glow: rgba(201, 123, 46, 0.25);
+
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+
+  /* Typography */
+  --font-family: 'Inter', sans-serif;
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   PARTICLES BACKGROUND
+   ═══════════════════════════════════════════ */
+
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent-secondary);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+@@keyframes particleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) scale(0);
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20vh) scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════ */
+
+.header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 56px 16px 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.accent {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESO (Fase · Tablero · Errores)
+   ═══════════════════════════════════════════ */
+
+.progress-line {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 8px 16px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.progress-line .sep {
+  color: var(--accent-secondary);
+}
+
+/* ═══════════════════════════════════════════
+   STATS BAR
+   ═══════════════════════════════════════════ */
+
+.stats-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  min-width: 140px;
+  transition: var(--transition-fast);
+}
+
+.stat-card:hover {
+  background: #EFF1F3;
+  border-color: #DCDFE3;
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  font-size: 1.4rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════
+   GAME BOARD
+   ═══════════════════════════════════════════ */
+
+.board-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px;
+}
+
+.board {
+  --n: 4;                       /* casillas por lado (lo fija game.js) */
+  --gap: clamp(3px, 0.9vw, 10px);
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap: var(--gap);
+  /* Cuadrado que cabe en el ancho y en el alto disponible (sin scroll horizontal) */
+  width: min(100%, 720px, calc(100vh - 250px));
+  min-width: min(100%, 280px);
+  perspective: 1200px;
+  container-type: inline-size;  /* permite escalar el emoji según el tablero */
+}
+
+/* ═══════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════ */
+
+.card {
+  position: relative;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: clamp(3px, 12%, 10px);
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.matched {
+  transform: rotateY(180deg);
+  pointer-events: none;
+}
+
+.card.matched .card-front {
+  border-color: var(--success);
+  box-shadow: 0 0 20px var(--success-glow), inset 0 0 20px rgba(30, 158, 99, 0.08);
+}
+
+.card.shake {
+  animation: cardShake 0.5s ease-in-out;
+}
+
+@@keyframes cardShake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  20% { transform: rotateY(180deg) translateX(-6px); }
+  40% { transform: rotateY(180deg) translateX(6px); }
+  60% { transform: rotateY(180deg) translateX(-4px); }
+  80% { transform: rotateY(180deg) translateX(4px); }
+}
+
+.card.match-pop {
+  animation: matchPop 0.6s ease-out;
+}
+
+@@keyframes matchPop {
+  0% { transform: rotateY(180deg) scale(1); }
+  30% { transform: rotateY(180deg) scale(1.15); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+/* Card Back */
+.card-back {
+  background: var(--bg-card);
+  border: 1px solid var(--surface-glass-border);
+  z-index: 2;
+}
+
+.card-back::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: calc(var(--radius-md) - 4px);
+}
+
+.card-back::after {
+  content: '?';
+  font-size: calc(36cqw / var(--n));
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  opacity: 1;
+}
+
+.card:hover .card-back {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 16px rgba(26, 53, 96, 0.25);
+}
+
+/* Card Front */
+.card-front {
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  transform: rotateY(180deg);
+  font-size: calc(62cqw / var(--n));
+  user-select: none;
+  line-height: 1;
+}
+
+.card.error-highlight .card-back {
+  border-color: var(--error);
+  box-shadow: 0 0 12px var(--error-glow);
+  animation: errorPulse 0.8s ease-out;
+}
+
+@@keyframes errorPulse {
+  0% { box-shadow: 0 0 0 0 var(--error-glow); }
+  50% { box-shadow: 0 0 16px 4px var(--error-glow); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ═══════════════════════════════════════════
+   ERROR PANEL
+   ═══════════════════════════════════════════ */
+
+.error-panel {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 12px auto 32px;
+  padding: 0 16px;
+}
+
+.error-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.error-panel-header h3 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.error-panel-icon {
+  font-size: 1rem;
+}
+
+.error-panel-body {
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  min-height: 50px;
+}
+
+.no-errors {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.error-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #EEF0F2;
+  font-size: 0.85rem;
+}
+
+.error-item:last-child {
+  border-bottom: none;
+}
+
+.error-item-emoji {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.error-item-text {
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.error-item-count {
+  background: rgba(209, 67, 67, 0.12);
+  color: var(--error);
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════
+   PHASE OVERLAY (Memorize countdown)
+   ═══════════════════════════════════════════ */
+
+.phase-overlay {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: 100px;
+  padding: 12px 28px 12px 20px;
+  box-shadow: 0 10px 30px rgba(19, 40, 72, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-medium), transform var(--transition-medium);
+}
+
+.phase-overlay.active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.phase-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.phase-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.phase-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.phase-content h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.countdown {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  animation: countdownPulse 1s ease-in-out infinite;
+  line-height: 1;
+}
+
+@@keyframes countdownPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.phase-hint {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin: 2px 0 0;
+}
+
+/* ═══════════════════════════════════════════
+   START SCREEN
+   ═══════════════════════════════════════════ */
+
+.start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.start-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.btn-play-again {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 40px;
+  background: var(--accent-gradient);
+  color: white;
+  font-family: var(--font-family);
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-play-again:hover {
+  background: var(--accent-gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.btn-play-again:active {
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   VICTORY MODAL
+   ═══════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 40px 16px;
+  background: rgba(19, 40, 72, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-medium), visibility var(--transition-medium);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-xl);
+  padding: 40px 36px;
+  max-width: 480px;
+  width: 90%;
+  max-height: calc(100vh - 80px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: auto 0;
+  text-align: center;
+  animation: modalAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 20px 50px rgba(19, 40, 72, 0.2);
+}
+
+@@keyframes modalAppear {
+  from { opacity: 0; transform: scale(0.8) translateY(30px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-icon {
+  font-size: 4rem;
+  margin-bottom: 8px;
+  animation: float 2s ease-in-out infinite;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.modal-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.modal-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-md);
+}
+
+.modal-stat-icon {
+  font-size: 1.4rem;
+}
+
+.modal-stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.modal-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modal-error-summary {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.modal-error-summary h4 {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.modal-error-summary .error-item {
+  font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+
+@@media (max-width: 640px) {
+  .stats-bar {
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .stat-card {
+    min-width: 120px;
+    padding: 8px 12px;
+  }
+
+  .stat-value {
+    font-size: 0.95rem;
+  }
+
+  .logo h1 {
+    font-size: 1.4rem;
+  }
+
+  .header { padding-top: 52px; }
+  .modal-overlay { padding-top: 64px; }
+  .modal { padding: 28px 20px; }
+  .btn-play-again { padding: 14px 24px; white-space: nowrap; }
+  .subtitle { display: none; }
+  .progress-line { font-size: 0.9rem; }
+
+  .phase-overlay {
+    width: calc(100% - 32px);
+    max-width: 340px;
+    padding: 10px 16px;
+    gap: 10px;
+  }
+
+  .phase-content h2 {
+    font-size: 0.85rem;
+  }
+
+  .phase-hint {
+    font-size: 0.7rem;
+  }
+
+  .countdown {
+    font-size: 1.3rem;
+  }
+}
+
+@@media (max-width: 400px) {
+  .stat-card {
+    min-width: 100px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .stat-icon {
+    font-size: 1.1rem;
+  }
+
+  .stat-value {
+    font-size: 0.85rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+}
+</style>
+
+    <!-- Particle background -->
+    <div class="particles" id="particles"></div>
+
+<nav class="game-nav">
+    <NavLink href="Estudiante">← Volver a tus pruebas</NavLink>
+    <NavLink href="" Match="NavLinkMatch.All">Volver a inicio</NavLink>
+</nav>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🧠</span>
+            <h1>Memorama <span class="accent">por fases</span></h1>
+        </div>
+        <p class="subtitle">Evaluación de Memoria</p>
+    </header>
+
+    <!-- Game Phase Overlay -->
+    <div class="phase-overlay" id="phaseOverlay">
+        <div class="phase-content">
+            <div class="phase-icon">👀</div>
+            <div class="phase-text">
+                <h2>¡Memoriza las cartas!</h2>
+                <p class="phase-hint">Se voltearán en unos segundos…</p>
+            </div>
+            <div class="countdown" id="countdown">5</div>
+        </div>
+    </div>
+
+    <!-- Progreso de la prueba: fase, tablero y errores (siempre visible) -->
+    <div class="progress-line" id="progressLine" aria-live="polite">
+        <span id="progFase">Fase 1/4</span><span class="sep">·</span>
+        <span id="progTablero">Tablero 1/2</span><span class="sep">·</span>
+        <span id="progErrores" class="prog-errores">Errores 0/4</span>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-card" id="statTime">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-info">
+                <span class="stat-label">Tiempo</span>
+                <span class="stat-value" id="timerDisplay">00:00</span>
+            </div>
+        </div>
+        <div class="stat-card" id="statMatches">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <span class="stat-label">Aciertos</span>
+                <span class="stat-value" id="matchesDisplay">0 / 8</span>
+            </div>
+        </div>
+        <div class="stat-card" id="statErrors">
+            <div class="stat-icon">❌</div>
+            <div class="stat-info">
+                <span class="stat-label">Errores</span>
+                <span class="stat-value" id="errorsDisplay">0 / 4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Board -->
+    <main class="board-container">
+        <div class="board" id="gameBoard"></div>
+    </main>
+
+    <!-- Error Pattern Panel -->
+    <div class="error-panel" id="errorPanel">
+        <div class="error-panel-header">
+            <span class="error-panel-icon">📊</span>
+            <h3>Patrón de Errores Repetidos</h3>
+        </div>
+        <div class="error-panel-body" id="errorPanelBody">
+            <p class="no-errors">¡Sin errores repetidos aún!</p>
+        </div>
+    </div>
+
+    <!-- Transición entre tableros / fases -->
+    <div class="modal-overlay" id="transitionModal">
+        <div class="modal">
+            <div class="modal-icon" id="transIcon">✅</div>
+            <h2 class="modal-title" id="transTitle">Tablero completado</h2>
+            <p class="modal-subtitle" id="transText"></p>
+            <button class="btn-play-again" id="btnContinue" type="button">Continuar</button>
+        </div>
+    </div>
+
+    <!-- Resultados finales (prueba completa o terminada por errores) -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal">
+            <div class="modal-icon" id="resIcon">🏆</div>
+            <h2 class="modal-title" id="resTitle">Prueba finalizada</h2>
+            <p class="modal-subtitle" id="resSubtitle"></p>
+
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <span class="modal-stat-icon">🎯</span>
+                    <span class="modal-stat-value" id="resPuntaje">0</span>
+                    <span class="modal-stat-label">Puntaje</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="modal-stat-icon">⏱️</span>
+                    <span class="modal-stat-value" id="resTiempo">00:00</span>
+                    <span class="modal-stat-label">Tiempo de juego</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="modal-stat-icon">✅</span>
+                    <span class="modal-stat-value" id="resAciertos">0</span>
+                    <span class="modal-stat-label">Pares encontrados</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="modal-stat-icon">❌</span>
+                    <span class="modal-stat-value" id="resErrores">0</span>
+                    <span class="modal-stat-label">Errores</span>
+                </div>
+            </div>
+
+            <div class="modal-error-summary" id="resFases"></div>
+
+            <NavLink class="btn-play-again" id="btnReturnHome" href="Estudiante" style="text-decoration:none;">
+                <span>🏠</span> Regresar al Inicio
+            </NavLink>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <div class="cover-wrap">
+            <header class="cover-header">
+                <div class="header__badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+                    Memoria de trabajo
+                </div>
+                <h1 class="header__title">Memorama</h1>
+                <p class="header__subtitle">Encuentra los pares ocultos en 4 fases de dificultad creciente</p>
+            </header>
+            <div class="start-card">
+                <div class="start-card__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                </div>
+                <h2>¿Listo para el reto?</h2>
+                <p>La prueba tiene <strong>4 fases</strong> (tableros de 4×4, 6×6, 8×8 y 10×10) y en cada fase resolverás <strong>2 memoramas</strong> del mismo tamaño. Al inicio de cada tablero se muestran las cartas unos segundos para que las memorices; luego deberás descubrirlas de dos en dos.</p>
+                <div class="cover-rules">
+                    <div class="cover-rules__item"><span class="cover-rules__num">1</span> 4 fases × 2 tableros: 4×4, 6×6, 8×8 y 10×10</div>
+                    <div class="cover-rules__item"><span class="cover-rules__num">2</span> Cada tablero permite un máximo de errores: la mitad de sus pares</div>
+                    <div class="cover-rules__item"><span class="cover-rules__num">3</span> Si superas el límite de errores, la prueba termina en ese punto</div>
+                </div>
+                <button class="btn-primary-cover" id="btnStart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                    Iniciar Prueba
+                </button>
+            </div>
+        </div>
+    </div>
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("iniciarMemorama");
+        }
+    }
+}

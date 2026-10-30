@@ -1,4 +1,4 @@
-﻿@page "/Estudiante"
+@page "/Estudiante"
 @inject NavigationManager Navigation
 <PageTitle>Estudiante — Evaluación Cognitiva</PageTitle>
 
@@ -214,7 +214,7 @@
        el <span class="test-status">. -->
   <div class="tests">
     <!-- Prueba 1: Memoria (juego "Memorama") -->
-    <a class="test-card" data-prueba="memoria" href="memorama/index.html" style="opacity:1;">
+    <NavLink class="test-card" data-prueba="memoria" href="Memoria" style="opacity:1;">
       <div class="test-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </div>
@@ -223,10 +223,10 @@
         <div class="test-desc">Memoria de trabajo</div>
         <span class="test-status available">Disponible</span>
       </div>
-    </a>
+    </NavLink>
 
     <!-- Prueba 2: Atención (juego "Color de tinta" / Efecto Stroop) -->
-    <a class="test-card" data-prueba="atencion" href="Atencion/index.html" style="opacity:1;">
+    <NavLink class="test-card" data-prueba="atencion" href="Atencion" style="opacity:1;">
       <div class="test-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
@@ -235,10 +235,10 @@
         <div class="test-desc">Atención</div>
         <span class="test-status available">Disponible</span>
       </div>
-    </a>
+    </NavLink>
 
     <!-- Prueba 3: Razonamiento lógico (juego "Sucesiones lógicas") -->
-    <a class="test-card" data-prueba="razonamiento" href="sucesiones/index.html" style="opacity:1;">
+    <NavLink class="test-card" data-prueba="razonamiento" href="Razonamiento" style="opacity:1;">
       <div class="test-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z"/></svg>
       </div>
@@ -247,13 +247,10 @@
         <div class="test-desc">Razonamiento lógico</div>
         <span class="test-status available">Disponible</span>
       </div>
-    </a>
+    </NavLink>
 
-    <!-- Prueba 4: Velocidad de procesamiento (juego "Conecta los números").
-         Nota: el href lleva %20 porque la carpeta real se llama
-         "Test Trazo" (con espacio), y los espacios en una URL se
-         escriben así para que el navegador los entienda bien. -->
-    <a class="test-card" data-prueba="velocidad" href="Test%20Trazo/index.html" style="opacity:1;">
+    <!-- Prueba 4: Velocidad de procesamiento (juego "Conecta los números"). -->
+    <NavLink class="test-card" data-prueba="velocidad" href="Procesamiento" style="opacity:1;">
       <div class="test-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 3 14h6l-1 8 10-12h-6z"/></svg>
       </div>
@@ -262,7 +259,7 @@
         <div class="test-desc">Velocidad de procesamiento</div>
         <span class="test-status available">Disponible</span>
       </div>
-    </a>
+    </NavLink>
   </div>
 
   <div class="note">Puedes presentar las 4 pruebas en el orden que prefieras. Tus resultados se muestran abajo a modo de ejemplo.</div>

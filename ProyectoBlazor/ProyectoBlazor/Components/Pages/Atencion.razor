@@ -1,0 +1,1224 @@
+@page "/Atencion"
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<PageTitle>Atencion</PageTitle>
+<!-- ============================================================
+     juego Color de Tinta
+     ============================================================ -->
+
+<style>
+    :root {
+        --bg-main: #FFFFFF;
+        --card-bg: #FFFFFF;
+        --card-border: #ECEDEF;
+        --card-hover-border: #C7CBD1;
+        --text-primary: #1F2937;
+        --text-secondary: #6B7280;
+        --text-muted: #9CA3AF;
+        --accent-cyan: #1A3560;
+        --accent-blue: #24427A;
+        --accent-purple: #24427A;
+        --color-hit: #1E9E63;
+        --color-hit-glow: rgba(30, 158, 99, 0.18);
+        --color-miss: #D14343;
+        --color-miss-glow: rgba(209, 67, 67, 0.18);
+        --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+        --shadow-card: 0 20px 40px -15px rgba(19, 40, 72, 0.12), 0 0 1px 1px rgba(19, 40, 72, 0.03);
+    }
+
+    /* ==========================================================================
+       Resets y Estructura Global
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--bg-main);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow-x: hidden;
+        position: relative;
+        padding: 24px 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==========================================================================
+       Fondos Animados y Efectos de Luz
+       ========================================================================== */
+    .background-blobs {
+        display: none;
+    }
+
+    .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.35;
+        animation: floatBlobs 16s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, #3b82f6, #1d4ed8);
+        top: -80px;
+        left: 10%;
+    }
+
+    .blob-2 {
+        width: 480px;
+        height: 480px;
+        background: radial-gradient(circle, #ec4899, #8b5cf6);
+        bottom: -100px;
+        right: 5%;
+        animation-delay: -6s;
+    }
+
+    .blob-3 {
+        width: 320px;
+        height: 320px;
+        background: radial-gradient(circle, #06b6d4, #10b981);
+        top: 40%;
+        left: 60%;
+        animation-delay: -10s;
+    }
+
+    @@keyframes floatBlobs {
+        0% {
+            transform: translateY(0) scale(1);
+        }
+
+        50% {
+            transform: translateY(35px) scale(1.08);
+        }
+
+        100% {
+            transform: translateY(-30px) scale(0.95);
+        }
+    }
+
+    /* ==========================================================================
+       Contenedor Principal & Glass Card
+       ========================================================================== */
+    .game-wrapper {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 680px;
+        margin: auto;
+        padding-top: 56px;
+    }
+
+    .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-card);
+        padding: 32px 36px;
+        transition: var(--transition-smooth);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    /* ==========================================================================
+       Cabecera del Juego
+       ========================================================================== */
+    .game-header {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .badge-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #1A3560;
+        background: rgba(26, 53, 96, 0.08);
+        border: 1px solid rgba(26, 53, 96, 0.18);
+        border-radius: 9999px;
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #1A3560;
+        box-shadow: 0 0 10px rgba(26, 53, 96, 0.5);
+        animation: pulseDot 2s infinite;
+    }
+
+    @@keyframes pulseDot {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.4;
+            transform: scale(0.8);
+        }
+    }
+
+    .icon-btn {
+        background: #F6F7F8;
+        border: 1px solid var(--card-border);
+        border-radius: 50%;
+        color: var(--text-secondary);
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+    }
+
+        .icon-btn:hover {
+            background: #ECEDEF;
+            color: var(--text-primary);
+            border-color: var(--card-hover-border);
+        }
+
+    .game-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #1A3560 20%, #24427A 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .instruction-banner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(201, 123, 46, 0.08);
+        border: 1px solid rgba(201, 123, 46, 0.3);
+        border-radius: var(--radius-md);
+        padding: 12px 16px;
+        color: #9A5F1F;
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    .banner-icon {
+        font-size: 1.25rem;
+    }
+
+    .instruction-banner strong {
+        color: var(--text-primary);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    /* ==========================================================================
+       Panel de Estadísticas y Progreso
+       ========================================================================== */
+    .stats-panel {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 10px 16px;
+        background: #F6F7F8;
+        border-radius: var(--radius-md);
+        padding: 10px 16px;
+        border: 1px solid var(--card-border);
+    }
+
+    .stat-pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .round-pill {
+        color: #1A3560;
+    }
+
+        .round-pill .stat-value {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+    .progress-bar-container {
+        grid-column: 1 / -1;
+        background: var(--card-border);
+        height: 8px;
+        border-radius: 9999px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .progress-bar-fill {
+        background: linear-gradient(90deg, #1A3560, #24427A);
+        height: 100%;
+        width: 20%;
+        border-radius: 9999px;
+        transition: width 0.4s ease;
+        box-shadow: 0 0 10px rgba(26, 53, 96, 0.35);
+    }
+
+    .scores-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .hit-pill {
+        color: var(--color-hit);
+    }
+
+        .hit-pill .stat-value {
+            background: var(--color-hit-glow);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(30, 158, 99, 0.3);
+        }
+
+    .miss-pill {
+        color: var(--color-miss);
+    }
+
+        .miss-pill .stat-value {
+            background: var(--color-miss-glow);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(209, 67, 67, 0.3);
+        }
+
+    /* ==========================================================================
+       Área del Estímulo Central (Palabra Stroop)
+       ========================================================================== */
+    .stimulus-section {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 28px 0;
+    }
+
+    .stimulus-box {
+        width: 100%;
+        background: #F6F7F8;
+        border: 2px solid var(--card-border);
+        border-radius: var(--radius-lg);
+        padding: 38px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: inset 0 2px 6px rgba(19, 40, 72, 0.05), 0 10px 25px rgba(19, 40, 72, 0.06);
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    }
+
+    /* Etiqueta grande que indica qué se pide: TINTA o PALABRA */
+    .task-label {
+        display: inline-block;
+        padding: 6px 22px;
+        margin-bottom: 10px;
+        border-radius: 9999px;
+        font-size: 1.35rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        color: #fff;
+    }
+
+        .task-label.task-tinta {
+            background: #1A3560;
+        }
+
+        .task-label.task-palabra {
+            background: #C97B2E;
+        }
+
+    .stimulus-hint {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .stimulus-word {
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        user-select: none;
+        transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-shadow: 0 2px 10px rgba(19, 40, 72, 0.12);
+    }
+
+    /* Retroalimentación visual flotante */
+    .feedback-toast {
+        position: absolute;
+        bottom: -16px;
+        padding: 6px 18px;
+        border-radius: 9999px;
+        font-weight: 700;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 10;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    }
+
+        .feedback-toast.correct {
+            background: #1E9E63;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(30, 158, 99, 0.4);
+        }
+
+        .feedback-toast.incorrect {
+            background: #D14343;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(209, 67, 67, 0.4);
+        }
+
+    @@keyframes popIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Animaciones del Estímulo */
+    .stimulus-box.correct-anim {
+        border-color: var(--color-hit);
+        box-shadow: 0 0 30px var(--color-hit-glow), inset 0 0 15px var(--color-hit-glow);
+    }
+
+    .stimulus-box.incorrect-anim {
+        border-color: var(--color-miss);
+        box-shadow: 0 0 30px var(--color-miss-glow), inset 0 0 15px var(--color-miss-glow);
+        animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @@keyframes shake {
+
+        10%,
+        90% {
+            transform: translate3d(-3px, 0, 0);
+        }
+
+        20%,
+        80% {
+            transform: translate3d(4px, 0, 0);
+        }
+
+        30%,
+        50%,
+        70% {
+            transform: translate3d(-5px, 0, 0);
+        }
+
+        40%,
+        60% {
+            transform: translate3d(5px, 0, 0);
+        }
+    }
+
+    /* ==========================================================================
+       Opciones de Respuesta
+       ========================================================================== */
+    .options-section {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .options-hint {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+        /* Con 5 opciones, la última ocupa todo el ancho */
+        .options-grid.options-5 .option-btn:last-child {
+            grid-column: 1 / -1;
+        }
+
+    .option-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        background: #F6F7F8;
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-family: var(--font-family);
+        font-size: 1.12rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        user-select: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .option-btn:hover:not(:disabled) {
+            background: #ECEDEF;
+            border-color: var(--card-hover-border);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(19, 40, 72, 0.1);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .option-btn:focus-visible {
+            outline: 2px solid var(--accent-cyan);
+            outline-offset: 3px;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+    .option-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .option-key-badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        background: #ECEDEF;
+        border: 1px solid var(--card-border);
+        width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .option-color-swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid rgba(19, 40, 72, 0.12);
+        box-shadow: 0 0 8px currentColor;
+    }
+
+    .option-name {
+        text-transform: capitalize;
+    }
+
+    /* Botones de solo color (Fase 2: Lee la palabra y estímulos de palabra en Fase 3) */
+    .option-btn.option-mode-color {
+        min-height: 56px;
+        box-shadow: 0 4px 12px rgba(19, 40, 72, 0.16);
+    }
+
+        .option-btn.option-mode-color:hover:not(:disabled) {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(19, 40, 72, 0.24);
+        }
+
+        .option-btn.option-mode-color .option-key-badge {
+            background: rgba(255, 255, 255, 0.9);
+            color: #1F2937;
+            border-color: rgba(19, 40, 72, 0.15);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .option-btn.option-mode-color.btn-selected-correct,
+        .option-btn.option-mode-color.btn-show-solution {
+            outline: 4px solid var(--color-hit);
+            outline-offset: 2px;
+            box-shadow: 0 0 20px var(--color-hit-glow) !important;
+        }
+
+        .option-btn.option-mode-color.btn-selected-incorrect {
+            outline: 4px solid var(--color-miss);
+            outline-offset: 2px;
+            box-shadow: 0 0 20px var(--color-miss-glow) !important;
+        }
+
+    /* Estados de feedback en los botones */
+    .option-btn:not(.option-mode-color).btn-selected-correct {
+        background: rgba(30, 158, 99, 0.14) !important;
+        border-color: var(--color-hit) !important;
+        box-shadow: 0 0 18px var(--color-hit-glow) !important;
+        color: var(--text-primary) !important;
+    }
+
+    .option-btn:not(.option-mode-color).btn-selected-incorrect {
+        background: rgba(209, 67, 67, 0.14) !important;
+        border-color: var(--color-miss) !important;
+        box-shadow: 0 0 18px var(--color-miss-glow) !important;
+    }
+
+    .option-btn:not(.option-mode-color).btn-show-solution {
+        border-color: var(--color-hit) !important;
+        background: rgba(30, 158, 99, 0.12) !important;
+    }
+
+    /* ==========================================================================
+       Pantalla de Resultados
+       ========================================================================== */
+    .results-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .trophy-badge {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        animation: bounceTrophy 1s ease-in-out infinite alternate;
+    }
+
+    @@keyframes bounceTrophy {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(-8px);
+        }
+    }
+
+    .results-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .results-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .summary-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .summary-card {
+        background: #F6F7F8;
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-md);
+        padding: 16px 10px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .summary-num {
+        font-size: 1.85rem;
+        font-weight: 800;
+    }
+
+    .hits-summary .summary-num {
+        color: var(--color-hit);
+    }
+
+    .misses-summary .summary-num {
+        color: var(--color-miss);
+    }
+
+    .accuracy-summary .summary-num,
+    .score-summary .summary-num {
+        color: #1A3560;
+    }
+
+    .summary-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .evaluation-box {
+        background: #F6F7F8;
+        border-left: 4px solid var(--accent-cyan);
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+    }
+
+        .evaluation-box h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--accent-cyan);
+        }
+
+        .evaluation-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+
+    /* Desglose de rondas */
+    .breakdown-wrapper {
+        margin-bottom: 28px;
+    }
+
+    .breakdown-heading {
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+    }
+
+    .phases-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .phase-result-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 14px;
+        background: #F6F7F8;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--card-border);
+        font-size: 0.9rem;
+    }
+
+        .phase-result-row.not-reached {
+            opacity: 0.6;
+        }
+
+    .phase-result-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .round-index-badge {
+        font-weight: 700;
+        color: #C97B2E;
+        min-width: 24px;
+    }
+
+    .phase-result-stats {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .phase-meta-chip {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: #ECEDEF;
+    }
+
+    .round-status-tag {
+        font-weight: 700;
+        font-size: 0.78rem;
+        padding: 3px 8px;
+        border-radius: 6px;
+    }
+
+        .round-status-tag.success {
+            background: rgba(30, 158, 99, 0.12);
+            color: var(--color-hit);
+            border: 1px solid rgba(30, 158, 99, 0.3);
+        }
+
+        .round-status-tag.failed {
+            background: rgba(209, 67, 67, 0.12);
+            color: var(--color-miss);
+            border: 1px solid rgba(209, 67, 67, 0.3);
+        }
+
+    .results-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #1A3560, #24427A);
+        color: #fff;
+        font-family: var(--font-family);
+        font-size: 1.05rem;
+        font-weight: 700;
+        border: none;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: var(--transition-smooth);
+        box-shadow: 0 10px 25px -5px rgba(26, 53, 96, 0.4);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(26, 53, 96, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+    /* ==========================================================================
+       Footer
+       ========================================================================== */
+    .app-footer {
+        margin-top: 24px;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       Responsividad
+       ========================================================================== */
+    @@media (max-width: 600px) {
+        .glass-card {
+            padding: 24px 18px;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+        }
+
+        .stimulus-word {
+            font-size: 2.6rem;
+        }
+
+        .options-grid {
+            gap: 8px;
+        }
+
+        .option-btn {
+            padding: 12px 12px;
+            font-size: 1rem;
+        }
+
+        .stats-panel {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .summary-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .task-label {
+            font-size: 1.15rem;
+            margin-bottom: 6px;
+        }
+
+        .stimulus-box {
+            padding: 24px 14px;
+        }
+
+        .phase-card {
+            padding: 24px 18px;
+        }
+    }
+
+    /* ==========================================================================
+       Pantalla de Inicio / Instrucciones
+       ========================================================================== */
+    .start-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-main);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+        .start-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+    /* ==========================================================================
+       Pantalla de instrucciones de fase
+       ========================================================================== */
+    .phase-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .phase-kicker {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #C97B2E;
+    }
+
+    .phase-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1A3560;
+        letter-spacing: -0.02em;
+    }
+
+    .phase-desc {
+        color: var(--text-secondary);
+        line-height: 1.55;
+        max-width: 480px;
+    }
+
+        .phase-desc strong {
+            color: var(--text-primary);
+        }
+
+    .phase-example {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .example-item {
+        flex: 1 1 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        background: #F6F7F8;
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-md);
+        padding: 14px 12px;
+    }
+
+        .example-item .task-label {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+    .example-word {
+        font-size: 2.2rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .example-answer {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .phase-meta {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    /* Pantallas bajas (laptops): compacta para que quepan hasta 6 opciones */
+    @@media (min-width: 601px) and (max-height: 820px) {
+        .glass-card {
+            padding: 20px 28px;
+        }
+
+        .game-wrapper {
+            padding-top: 44px;
+        }
+
+        .game-header {
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .stimulus-section {
+            margin: 16px 0;
+        }
+
+        .stimulus-box {
+            padding: 18px 20px;
+        }
+
+        .stimulus-word {
+            font-size: 3rem;
+        }
+
+        .options-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+            .options-grid.options-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .options-grid.options-5 .option-btn:last-child {
+                grid-column: auto;
+            }
+
+        .option-btn {
+            padding: 12px 14px;
+        }
+    }
+</style>
+
+<div class="background-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<nav class="game-nav">
+    <NavLink href="Estudiante">← Volver a tus pruebas</NavLink>
+    <NavLink href="" Match="NavLinkMatch.All">Volver a inicio</NavLink>
+</nav>
+
+<main class="game-wrapper">
+    <!-- Instrucciones previas a cada fase -->
+    <div id="phase-card" class="glass-card phase-card hidden">
+        <span id="phase-kicker" class="phase-kicker">Fase 1 de 3</span>
+        <h2 id="phase-title" class="phase-title">Color de la tinta</h2>
+        <p id="phase-desc" class="phase-desc"></p>
+        <div id="phase-example" class="phase-example" aria-label="Ejemplo"></div>
+        <p id="phase-meta" class="phase-meta"></p>
+        <button id="btn-start-phase" class="btn-primary" type="button">Comenzar fase</button>
+    </div>
+
+    <!-- Pantalla de juego -->
+    <div id="game-card" class="glass-card">
+        <header class="game-header">
+            <div class="header-top">
+                <div class="badge-tag">
+                    <span class="pulse-dot"></span>
+                    Test de Control Cognitivo
+                </div>
+                <button id="btn-sound-toggle" class="icon-btn" aria-label="Activar o desactivar sonido" title="Sonido activado/desactivado">
+                    <svg id="sound-icon-on" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                    <svg id="sound-icon-off" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <h1 class="game-title">Desafío de Atención</h1>
+
+            <div class="instruction-banner">
+                <span class="banner-icon">🎯</span>
+                <p id="instruction-text"></p>
+            </div>
+
+            <!-- Barra de métricas -->
+            <div class="stats-panel">
+                <div class="stat-pill round-pill">
+                    <span id="position-indicator" class="stat-value">Fase 1/3 · Nivel 1/5</span>
+                </div>
+
+                <div class="scores-group">
+                    <div class="stat-pill hit-pill" title="Aciertos acumulados">
+                        <span class="stat-icon">✓</span>
+                        <span class="stat-label">Aciertos:</span>
+                        <span id="hits-count" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-pill miss-pill" title="Errores acumulados">
+                        <span class="stat-icon">✗</span>
+                        <span class="stat-label">Errores:</span>
+                        <span id="misses-count" class="stat-value">0/5</span>
+                    </div>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Área de la palabra central (Estímulo Stroop) -->
+        <section class="stimulus-section" aria-live="polite">
+            <div class="stimulus-box" id="stimulus-box">
+                <span id="task-label" class="task-label task-tinta">TINTA</span>
+                <span id="stimulus-hint" class="stimulus-hint">¿De qué color es la tinta?</span>
+                <div id="stimulus-word" class="stimulus-word">CARGANDO...</div>
+            </div>
+            <div id="feedback-toast" class="feedback-toast hidden"></div>
+        </section>
+
+        <!-- Cuadrícula de 4 a 6 opciones -->
+        <section class="options-section">
+            <p id="options-hint" class="options-hint">Elige una opción:</p>
+            <div id="options-grid" class="options-grid" role="group" aria-label="Opciones de colores">
+                <!-- Botones inyectados dinámicamente por JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Pantalla de Resultados Finales -->
+    <div id="results-card" class="glass-card hidden">
+        <div class="results-header">
+            <div class="trophy-badge" id="results-icon">🏆</div>
+            <h2 class="results-title">¡Prueba Finalizada!</h2>
+            <p id="results-subtitle" class="results-subtitle">Resumen de tu prueba de atención.</p>
+        </div>
+
+        <!-- Resumen de Estadísticas -->
+        <div class="summary-cards-grid">
+            <div class="summary-card hits-summary">
+                <span class="summary-num" id="final-hits">0</span>
+                <span class="summary-label">Aciertos</span>
+            </div>
+            <div class="summary-card misses-summary">
+                <span class="summary-num" id="final-misses">0</span>
+                <span class="summary-label">Errores</span>
+            </div>
+            <div class="summary-card accuracy-summary">
+                <span class="summary-num" id="final-accuracy">0%</span>
+                <span class="summary-label">Precisión</span>
+            </div>
+            <div class="summary-card score-summary">
+                <span class="summary-num" id="final-score">0</span>
+                <span class="summary-label">Puntaje /100</span>
+            </div>
+        </div>
+
+        <!-- Diagnóstico de rendimiento -->
+        <div class="evaluation-box" id="evaluation-box">
+            <h3 id="evaluation-title">Evaluación de Enfoque</h3>
+            <p id="evaluation-desc">Calculando...</p>
+        </div>
+
+        <!-- Desglose por fase -->
+        <div class="breakdown-wrapper">
+            <h3 class="breakdown-heading">Detalle por fase</h3>
+            <div id="phases-breakdown" class="phases-breakdown">
+                <!-- Rellenado por app.js -->
+            </div>
+        </div>
+
+        <div class="results-actions">
+            <NavLink id="btn-return-home" href="Estudiante" class="btn-primary" style="text-decoration:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Regresar al Inicio
+            </NavLink>
+        </div>
+    </div>
+</main>
+
+<footer class="app-footer">
+    <p>Basado en el <strong>Efecto Stroop</strong> (1935) — Paradigma clásico de psicología cognitiva y atención selectiva.</p>
+</footer>
+
+<!-- Pantalla de Inicio / Instrucciones -->
+<div class="start-screen" id="startScreen">
+    <div class="cover-wrap">
+        <header class="cover-header">
+            <div class="header__badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="3" /></svg>
+                Atención
+            </div>
+            <h1 class="header__title">Desafío de Atención</h1>
+            <p class="header__subtitle">Tres fases para medir tu control de la atención: tinta, palabra y mixta</p>
+        </header>
+        <div class="start-card">
+            <div class="start-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+            </div>
+            <h2>¿Listo para el reto?</h2>
+            <p>Pon a prueba tu control cognitivo con el clásico Efecto Stroop. Verás nombres de colores escritos con una tinta diferente y, según la fase, responderás por el color de la tinta, por lo que dice la palabra o por lo que te pida la etiqueta.</p>
+            <div class="cover-rules">
+                <div class="cover-rules__item"><span class="cover-rules__num">1</span> 3 fases: color de la tinta, lee la palabra y mixta</div>
+                <div class="cover-rules__item"><span class="cover-rules__num">2</span> 5 niveles por fase, cada vez con más opciones (hasta 6)</div>
+                <div class="cover-rules__item"><span class="cover-rules__num">3</span> Al acumular 5 errores en total, la prueba se cierra</div>
+            </div>
+            <button class="btn-primary-cover" id="btnStartGame" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                Iniciar Prueba
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("iniciarAtencion");
+        }
+    }
+}
