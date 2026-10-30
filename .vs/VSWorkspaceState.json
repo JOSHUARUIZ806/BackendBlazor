@@ -5,8 +5,9 @@
     "\\ProyectoBlazor\\ProyectoBlazor",
     "\\ProyectoBlazor\\ProyectoBlazor\\Components",
     "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages",
-    "\\ProyectoBlazor\\ProyectoBlazor\\Properties"
+    "\\ProyectoBlazor\\ProyectoBlazor\\Properties",
+    "\\ProyectoBlazor\\ProyectoBlazor\\wwwroot"
   ],
-  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\login.razor",
+  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
   "PreviewInSolutionExplorer": false
 }

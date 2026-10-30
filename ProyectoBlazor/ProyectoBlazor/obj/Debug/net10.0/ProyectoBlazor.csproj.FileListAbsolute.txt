@@ -45,3 +45,15 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\Proyecto.654BA1E1.Up2Date
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\riuz8qxs4x-{0}-r1xvejzhs7-r1xvejzhs7.gz
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-o2djeqil0i-o2djeqil0i.gz
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\EmbeddedAttribute.cs
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ValidatableTypeAttribute.cs
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.AssemblyInfoInputs.cache
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.AssemblyInfo.cs
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.csproj.CoreCompileInputs.cache
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.sourcelink.json
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.dll
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\refint\ProyectoBlazor.dll
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\ProyectoBlazor.pdb

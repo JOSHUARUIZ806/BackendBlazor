@@ -27,6 +27,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Atencion.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBdGVuY2lvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Docente.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEb2NlbnRlLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -43,12 +47,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/instrucciones.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xpbnN0cnVjY2lvbmVzLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/login.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xsb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/Memoria.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xNZW1vcmlhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/esdej/OneDrive/Documentos/GitHub/BackendBlazor/ProyectoBlazor/ProyectoBlazor/Components/Pages/NotFound.razor]

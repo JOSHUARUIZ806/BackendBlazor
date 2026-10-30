@@ -2,7 +2,7 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "Microsoft.AspNetCore.App.Internal.Assets/10.0.13": {
+      "Microsoft.AspNetCore.App.Internal.Assets/10.0.14": {
         "type": "package",
         "build": {
           "build/Microsoft.AspNetCore.App.Internal.Assets.props": {},
@@ -15,10 +15,10 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.App.Internal.Assets/10.0.13": {
-      "sha512": "Y2cXnMnqht5fvja2H8kkr5WA2fYItIPwXiBVo83+/9oySuKZCrz4T+yyZRFtLpxxDScvtYDt7e+J0eNElJ+AiA==",
+    "Microsoft.AspNetCore.App.Internal.Assets/10.0.14": {
+      "sha512": "T1IOYbID1msKjQEh684HebnN+Xnq/pocMXDukOMZtzzPTf9c4/30+/JndM/1txrqwuSYqWvLiAQWzu4U93cshw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.app.internal.assets/10.0.13",
+      "path": "microsoft.aspnetcore.app.internal.assets/10.0.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -34,34 +34,34 @@
         "build/Microsoft.AspNetCore.App.Internal.Assets.targets",
         "buildMultiTargeting/Microsoft.AspNetCore.App.Internal.Assets.targets",
         "buildTransitive/Microsoft.AspNetCore.App.Internal.Assets.targets",
-        "microsoft.aspnetcore.app.internal.assets.10.0.13.nupkg.sha512",
+        "microsoft.aspnetcore.app.internal.assets.10.0.14.nupkg.sha512",
         "microsoft.aspnetcore.app.internal.assets.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.13"
+      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.14"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Contr\\.nuget\\packages\\": {},
+    "C:\\Users\\esdej\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
+      "projectUniqueName": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
       "projectName": "ProyectoBlazor",
-      "projectPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
-      "packagesPath": "C:\\Users\\Contr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\obj\\",
+      "projectPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\ProyectoBlazor.csproj",
+      "packagesPath": "C:\\Users\\esdej\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Contr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\esdej\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -99,7 +99,7 @@
           "Microsoft.AspNetCore.App.Internal.Assets": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[10.0.13, )",
+            "version": "[10.0.14, )",
             "autoReferenced": true
           }
         },
@@ -122,7 +122,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.402/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.403/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
