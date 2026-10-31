@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,7 +42,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Program.cs",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Program.cs",
@@ -50,18 +50,17 @@
               "RelativeToolTip": "ProyectoBlazor\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-30T23:34:28.486Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-30T23:34:28.486Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Home.razor",
               "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor*",
+              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Home.razor*",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAAIoAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-10-30T23:05:48.892Z",
               "EditorCaption": ""

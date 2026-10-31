@@ -4,13 +4,13 @@ wwwroot\Memorama.js
 wwwroot\Procesamiento.js
 wwwroot\Razonamiento.js
 Components\Layout\ReconnectModal.razor.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\build\..\_framework\blazor.web.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\build\..\_framework\blazor.server.js
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\app.css
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Atencion.js
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Memorama.js
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\Components\Layout\ReconnectModal.razor.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\_framework\blazor.web.js
-C:\Users\Contr\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.13\_framework\blazor.server.js
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Procesamiento.js
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Razonamiento.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\build\..\_framework\blazor.web.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\build\..\_framework\blazor.server.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Procesamiento.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Memorama.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Atencion.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\app.css
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Razonamiento.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\_framework\blazor.server.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\_framework\blazor.web.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\Components\Layout\ReconnectModal.razor.js
