@@ -72,8 +72,6 @@ C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoB
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\snhckdgwv9-{0}-kr7gi2zws0-kr7gi2zws0.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\19pydepsbz-{0}-mxef1obvqm-mxef1obvqm.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\l40t2e53ca-{0}-v3fo2r0ct3-v3fo2r0ct3.gz
-C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\riuz8qxs4x-{0}-4xijk8e1zf-4xijk8e1zf.gz
-C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-5323ty7q5i-5323ty7q5i.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\4nleioeuk1-{0}-abdmv1u4y3-abdmv1u4y3.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\wvsicyqpfc-{0}-xmryko9e6j-xmryko9e6j.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\d2a3rvbibu-{0}-7d17r9czpp-7d17r9czpp.gz
@@ -92,3 +90,5 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-8xirr0jrrm-8xirr0jrrm.gz
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\Proyecto.654BA1E1.Up2Date
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\riuz8qxs4x-{0}-614kfzk6af-614kfzk6af.gz
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-iwei4ie3pc-iwei4ie3pc.gz

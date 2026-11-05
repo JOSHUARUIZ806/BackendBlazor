@@ -1,17 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\",
+  "WorkspaceRootPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\razonamiento.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\razonamiento.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\razonamiento.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\wwwroot\\razonamiento.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\wwwroot\\razonamiento.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\wwwroot\\razonamiento.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
@@ -24,6 +24,10 @@
           "DockedWidth": 200,
           "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -41,16 +45,12 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Razonamiento.razor",
-              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
+              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
-              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
               "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAALYEAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -61,9 +61,9 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Razonamiento.js",
-              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
+              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
               "RelativeDocumentMoniker": "ProyectoBlazor\\wwwroot\\Razonamiento.js",
-              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
               "RelativeToolTip": "ProyectoBlazor\\wwwroot\\Razonamiento.js",
               "ViewState": "AgIAAMMDAAAAAAAAAAAkwN8DAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
@@ -73,9 +73,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Home.razor",
-              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
+              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
               "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Home.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAIoAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
