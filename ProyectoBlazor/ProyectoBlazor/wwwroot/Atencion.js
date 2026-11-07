@@ -307,6 +307,7 @@ class StroopGame {
     this.totalTimeMs = 0;       // suma de los tiempos de respuesta
     this.stimulusStartTime = 0;
     this.resultSent = false;
+    this.rondas = [];
     this.phaseStats = PHASES.map(() => ({
       aciertos: 0,
       errores: 0,
@@ -529,6 +530,14 @@ class StroopGame {
 
     this.totalTimeMs += reactionTimeMs;
     stats.tiempos.push(reactionTimeMs);
+    this.rondas.push({
+      numeroRonda: this.rondas.length + 1,
+      palabraMostrada: stim.word.name,
+      colorTinta: stim.ink.name,
+      colorElegido: selectedColor.name,
+      esCorrecto: isCorrect,
+      tiempoReaccionMs: reactionTimeMs
+    });
 
     const allButtons = this.optionsGrid.querySelectorAll('.option-btn');
     allButtons.forEach(b => { b.disabled = true; });
@@ -638,7 +647,7 @@ class StroopGame {
     }));
     this.renderPhasesBreakdown(fases);
 
-    // Envío único al servidor
+    // Envío único al servidor (SQL Server)
     if (this.resultSent) return;
     this.resultSent = true;
     enviarResultadoAlServidor({
@@ -650,7 +659,8 @@ class StroopGame {
       detalle: {
         terminoPorErrores: closedByErrors,
         estimulosRespondidos: answered,
-        fases
+        fases,
+        rondas: this.rondas
       }
     });
   }
@@ -677,25 +687,23 @@ class StroopGame {
   }
 }
 
-// ── Envío de resultados al backend ──
+// ── Envío de resultados al backend (SQL Server) ──
 function enviarResultadoAlServidor(datos) {
   const estudianteId = localStorage.getItem('estudianteId');
   if (!estudianteId) return; // sin sesión de estudiante no se guarda
-  try {
-    // SIN BACKEND: el resultado se guarda en este navegador
-    const db = JSON.parse(localStorage.getItem('evaluacionCognitiva') || '{}');
-    db.grupos = db.grupos || []; db.estudiantes = db.estudiantes || []; db.resultados = db.resultados || [];
-    db.sig = db.sig || { g: 1, e: 1, r: 1 };
-    const id = Number(estudianteId);
-    if (db.resultados.some((r) => r.estudiante_id === id && r.prueba === datos.prueba)) return;
-    const n = (x) => (isFinite(Number(x)) ? Number(x) : 0);
-    db.resultados.push({
-      id: db.sig.r++, estudiante_id: id, prueba: datos.prueba, puntaje: n(datos.puntaje),
-      precision_pct: n(datos.precisionPct), tiempo_ms: n(datos.tiempoMs), errores: n(datos.errores),
-      detalle_json: datos.detalle ? JSON.stringify(datos.detalle) : null, creado_en: new Date().toISOString()
-    });
-    localStorage.setItem('evaluacionCognitiva', JSON.stringify(db));
-  } catch (e) {}
+  fetch('/api/resultados', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      estudianteId: Number(estudianteId),
+      prueba: datos.prueba,
+      puntaje: Number(datos.puntaje) || 0,
+      precisionPct: Number(datos.precisionPct) || 0,
+      tiempoMs: Number(datos.tiempoMs) || 0,
+      errores: Number(datos.errores) || 0,
+      detalle: datos.detalle || null
+    })
+  }).catch(() => {});
 }
 
 // Iniciar aplicación desde Blazor

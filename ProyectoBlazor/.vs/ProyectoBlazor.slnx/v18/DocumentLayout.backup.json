@@ -1,18 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\",
+  "WorkspaceRootPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\razonamiento.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\razonamiento.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\atencion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\atencion.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\wwwroot\\razonamiento.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\wwwroot\\razonamiento.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\models\\docente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\models\\docente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\contr\\onedrive\\escritorio\\antigravity proyectos\\backendblazor\\proyectoblazor\\proyectoblazor\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,10 +28,6 @@
           "DockedWidth": 200,
           "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -45,41 +45,57 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Razonamiento.razor",
-              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
-              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
-              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
-              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Razonamiento.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAALYEAAAqAAAAAAAAAA==",
+              "Title": "Atencion.razor",
+              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Atencion.razor",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Atencion.razor",
+              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Atencion.razor",
+              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Atencion.razor",
+              "ViewState": "AgIAAA0DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-11-05T00:42:39.559Z",
+              "WhenOpened": "2026-11-06T03:46:46.643Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Razonamiento.js",
-              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
-              "RelativeDocumentMoniker": "ProyectoBlazor\\wwwroot\\Razonamiento.js",
-              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\wwwroot\\Razonamiento.js",
-              "RelativeToolTip": "ProyectoBlazor\\wwwroot\\Razonamiento.js",
-              "ViewState": "AgIAAMMDAAAAAAAAAAAkwN8DAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-11-05T00:42:37.374Z"
+              "DocumentIndex": 2,
+              "Title": "Login.razor",
+              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Login.razor",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Login.razor",
+              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Login.razor",
+              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Login.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGgCAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-06T03:25:37.327Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Home.razor",
-              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Home.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIoAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-11-05T00:15:29.366Z"
+              "DocumentIndex": 1,
+              "Title": "Docente.cs",
+              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Models\\Docente.cs",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Models\\Docente.cs",
+              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Models\\Docente.cs",
+              "RelativeToolTip": "ProyectoBlazor\\Models\\Docente.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-06T02:53:50.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "ProyectoBlazor\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-11-06T02:34:17.536Z"
             }
           ]
         }

@@ -1,4 +1,4 @@
-﻿/* ═══════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    MEMORAMA POR FASES — Lógica del juego
    4 fases (4x4, 6x6, 8x8, 10x10) × 2 tableros por fase.
    Cada tablero tiene un límite de errores (mitad de sus pares);
@@ -474,25 +474,23 @@ window.iniciarMemorama = function () {
     if (inicioTableroMs === null) timerDisplay.textContent = formatTime(Math.floor(tiempoAcumuladoMs / 1000));
   }
 
-  // ─── Envío de resultados al backend ─────────────────
+  // ─── Envío de resultados al backend (SQL Server) ────
   function enviarResultadoAlServidor(datos) {
     const estudianteId = localStorage.getItem('estudianteId');
     if (!estudianteId) return; // sin sesión de estudiante no se guarda
-    try {
-      // SIN BACKEND: el resultado se guarda en este navegador
-      const db = JSON.parse(localStorage.getItem('evaluacionCognitiva') || '{}');
-      db.grupos = db.grupos || []; db.estudiantes = db.estudiantes || []; db.resultados = db.resultados || [];
-      db.sig = db.sig || { g: 1, e: 1, r: 1 };
-      const id = Number(estudianteId);
-      if (db.resultados.some((r) => r.estudiante_id === id && r.prueba === datos.prueba)) return;
-      const n = (x) => (isFinite(Number(x)) ? Number(x) : 0);
-      db.resultados.push({
-        id: db.sig.r++, estudiante_id: id, prueba: datos.prueba, puntaje: n(datos.puntaje),
-        precision_pct: n(datos.precisionPct), tiempo_ms: n(datos.tiempoMs), errores: n(datos.errores),
-        detalle_json: datos.detalle ? JSON.stringify(datos.detalle) : null, creado_en: new Date().toISOString()
-      });
-      localStorage.setItem('evaluacionCognitiva', JSON.stringify(db));
-    } catch (e) { }
+    fetch('/api/resultados', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        estudianteId: Number(estudianteId),
+        prueba: datos.prueba,
+        puntaje: Number(datos.puntaje) || 0,
+        precisionPct: Number(datos.precisionPct) || 0,
+        tiempoMs: Number(datos.tiempoMs) || 0,
+        errores: Number(datos.errores) || 0,
+        detalle: datos.detalle || null
+      })
+    }).catch(() => {});
   }
 
   // ─── Event Listeners ───────────────────────────────

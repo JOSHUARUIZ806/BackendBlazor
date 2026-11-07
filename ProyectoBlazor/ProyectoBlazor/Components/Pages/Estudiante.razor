@@ -192,16 +192,12 @@
     <p>Ingresa el código de grupo que te compartió tu docente para comenzar.</p>
   </div>
 
-  <!-- Formulario para ingresar el código de grupo.
-       type="button" (no "submit") en el botón porque todavía no hay
-       nada en el servidor que reciba este formulario — es solo la
-       vista, por eso el botón no hace nada al hacer clic por ahora. -->
-  <form class="access">
+  <form class="access" onsubmit="return false;">
     <div class="access-field">
       <label for="code">Código de grupo</label>
-      <input id="code" type="text" placeholder="Ej. INF-2026-A">
+      <input id="code" type="text" placeholder="Ej. INF-2026-A" maxlength="20" style="text-transform:uppercase;">
     </div>
-    <button type="button" class="btn">Ingresar</button>
+    <button type="button" class="btn" id="btnUnirseGrupo">Ingresar</button>
   </form>
 
   <div class="section-title">Tus pruebas</div>
@@ -327,20 +323,6 @@
   const PRUEBAS = ['memoria', 'atencion', 'razonamiento', 'velocidad'];
 
   // Nivel según el puntaje: >=75 Fuerte (verde), >=50 Promedio (amarillo), menos Por reforzar (rojo)
-function dbLocal() {
-    try { var d = JSON.parse(localStorage.getItem('evaluacionCognitiva')); if (d && d.grupos) return d; } catch (e) {}
-    return { grupos: [], estudiantes: [], resultados: [], sig: { g: 1, e: 1, r: 1 } };
-  }
-  function guardarDb(d) { localStorage.setItem('evaluacionCognitiva', JSON.stringify(d)); }
-  function resumenLocal(d, id) {
-    var o = {};
-    ['memoria', 'atencion', 'razonamiento', 'velocidad'].forEach(function (p) {
-      var l = d.resultados.filter(function (r) { return r.estudiante_id === id && r.prueba === p; });
-      o[p] = l[l.length - 1] || null;
-    });
-    return o;
-  }
-
   function nivelDeDesempeno(puntaje) {
     if (puntaje >= 75) return { id: 'fuerte', texto: 'Fuerte', clase: 'level-strong', color: '#1E9E63' };
     if (puntaje >= 50) return { id: 'promedio', texto: 'Promedio', clase: 'level-avg', color: '#F2C230' };
@@ -550,9 +532,42 @@ function dbLocal() {
     st.textContent = 'Completado';
     st.className = 'test-status done';
   }
-  if (estudianteId) {
-    PRUEBAS.forEach((p) => {
-      try { if (localStorage.getItem('pruebaCompletada:' + estudianteId + ':' + p) === '1') bloquearCompletada(p); } catch (e) {}
+
+  // Unirse a un grupo en SQL Server
+  const inputCodigo = document.getElementById('code');
+  const btnUnirseGrupo = document.getElementById('btnUnirseGrupo');
+  const grupoActual = localStorage.getItem('grupoCodigo');
+  if (inputCodigo && grupoActual) {
+    inputCodigo.value = grupoActual;
+  }
+  if (btnUnirseGrupo && inputCodigo) {
+    btnUnirseGrupo.addEventListener('click', async () => {
+      const codigo = inputCodigo.value.trim().toUpperCase();
+      if (!codigo) return;
+      if (!estudianteId) {
+        alert('Inicia sesión como estudiante para unirte a un grupo.');
+        return;
+      }
+      btnUnirseGrupo.disabled = true;
+      try {
+        const res = await fetch('/api/grupos/unirse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ estudianteId: Number(estudianteId), codigo })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || 'No se encontró ese código de grupo.');
+          return;
+        }
+        localStorage.setItem('grupoCodigo', data.codigo);
+        inputCodigo.value = data.codigo;
+        alert('Te has inscrito correctamente al grupo ' + data.codigo + '.');
+      } catch (err) {
+        alert('Error al conectar con la base de datos.');
+      } finally {
+        btnUnirseGrupo.disabled = false;
+      }
     });
   }
 
@@ -564,11 +579,15 @@ function dbLocal() {
     PRUEBAS.forEach((p) => pintarTarjeta(p, { puntaje: ejemplo[p] }));
   } else {
     PRUEBAS.forEach((p) => pintarTarjeta(p, null));
-    // SIN BACKEND: los resultados se leen de este navegador
-    const dLocal = dbLocal();
-    const data = { resumen: resumenLocal(dLocal, Number(estudianteId)) };
-    {
-      {
+    // Cargar resultados reales del estudiante desde SQL Server
+    fetch('/api/estudiantes/' + encodeURIComponent(estudianteId) + '/resumen')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data || !data.resumen) return;
+        if (data.grupoCodigo && inputCodigo && !inputCodigo.value) {
+          inputCodigo.value = data.grupoCodigo;
+          localStorage.setItem('grupoCodigo', data.grupoCodigo);
+        }
         const tag = document.getElementById('results-tag');
         tag.textContent = 'Tus resultados';
         tag.style.color = '#1E9E63';
@@ -578,8 +597,8 @@ function dbLocal() {
           : 'Este es tu perfil cognitivo según tus pruebas completadas.';
         PRUEBAS.forEach((p) => pintarTarjeta(p, data.resumen[p]));
         PRUEBAS.forEach((p) => { if (data.resumen[p]) bloquearCompletada(p); });
-      }
-    }
+      })
+      .catch(() => {});
   }
 </script>
 

@@ -502,24 +502,23 @@ window.iniciarProcesamiento = function () {
         return (ms / 1000).toFixed(2) + ' s';
     }
 
-    /* ── Envío de resultados al backend ── */
+    /* ── Envío de resultados al backend (SQL Server) ── */
     function enviarResultadoAlServidor(datos) {
         const estudianteId = localStorage.getItem('estudianteId');
         if (!estudianteId) return;
-        try {
-            const db = JSON.parse(localStorage.getItem('evaluacionCognitiva') || '{}');
-            db.grupos = db.grupos || []; db.estudiantes = db.estudiantes || []; db.resultados = db.resultados || [];
-            db.sig = db.sig || { g: 1, e: 1, r: 1 };
-            const id = Number(estudianteId);
-            if (db.resultados.some((r) => r.estudiante_id === id && r.prueba === datos.prueba)) return;
-            const n = (x) => (isFinite(Number(x)) ? Number(x) : 0);
-            db.resultados.push({
-                id: db.sig.r++, estudiante_id: id, prueba: datos.prueba, puntaje: n(datos.puntaje),
-                precision_pct: n(datos.precisionPct), tiempo_ms: n(datos.tiempoMs), errores: n(datos.errores),
-                detalle_json: datos.detalle ? JSON.stringify(datos.detalle) : null, creado_en: new Date().toISOString()
-            });
-            localStorage.setItem('evaluacionCognitiva', JSON.stringify(db));
-        } catch (e) { }
+        fetch('/api/resultados', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                estudianteId: Number(estudianteId),
+                prueba: datos.prueba,
+                puntaje: Number(datos.puntaje) || 0,
+                precisionPct: Number(datos.precisionPct) || 0,
+                tiempoMs: Number(datos.tiempoMs) || 0,
+                errores: Number(datos.errores) || 0,
+                detalle: datos.detalle || null
+            })
+        }).catch(() => {});
     }
 
     /* ── Confetti ── */

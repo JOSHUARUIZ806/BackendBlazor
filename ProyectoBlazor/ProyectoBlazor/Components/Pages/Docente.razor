@@ -204,7 +204,7 @@
        abre el panel desde otra computadora) -->
   <div class="note" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
     <span>¿Ya tienes un código de grupo?</span>
-    <input type="text" id="inputCodigoExistente" placeholder="Ej. 2C23LW" maxlength="6"
+    <input type="text" id="inputCodigoExistente" placeholder="Ej. INF-2026-A" maxlength="20"
       style="text-transform:uppercase; padding:7px 10px; border:1px solid var(--card-border); border-radius:6px; font-family:'Inter',sans-serif; font-size:13px; letter-spacing:0.05em;">
     <button type="button" class="btn-link" id="btnCargarCodigo">Cargar este grupo</button>
   </div>
@@ -384,41 +384,25 @@
     });
   }
 
-  // ── Generar un código de grupo NUEVO (pide uno real al servidor) ──
-function dbLocal() {
-    try { var d = JSON.parse(localStorage.getItem('evaluacionCognitiva')); if (d && d.grupos) return d; } catch (e) {}
-    return { grupos: [], estudiantes: [], resultados: [], sig: { g: 1, e: 1, r: 1 } };
-  }
-  function guardarDb(d) { localStorage.setItem('evaluacionCognitiva', JSON.stringify(d)); }
-  function resumenLocal(d, id) {
-    var o = {};
-    ['memoria', 'atencion', 'razonamiento', 'velocidad'].forEach(function (p) {
-      var l = d.resultados.filter(function (r) { return r.estudiante_id === id && r.prueba === p; });
-      o[p] = l[l.length - 1] || null;
-    });
-    return o;
-  }
-
+  // ── Generar un código de grupo NUEVO en SQL Server ──
   async function generarCodigoNuevo() {
     btn.disabled = true;
     try {
-      // SIN BACKEND: el código se genera aquí y se guarda en este navegador
-      const d = dbLocal();
-      const C = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let codigo;
-      do { codigo = ''; for (let i = 0; i < 6; i++) codigo += C.charAt(Math.floor(Math.random() * C.length)); }
-      while (d.grupos.some((g) => g.codigo === codigo));
-      const grupoNuevo = { id: d.sig.g++, codigo, nombre: 'Grupo sin nombre', creado_en: new Date().toISOString() };
-      d.grupos.push(grupoNuevo);
-      guardarDb(d);
-      const data = { ok: true, grupo: grupoNuevo };
+      const docenteId = Number(localStorage.getItem('docenteId') || 0);
+      const res = await fetch('/api/grupos/generar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ docenteId: docenteId > 0 ? docenteId : null })
+      });
+      if (!res.ok) throw new Error('Error al generar grupo');
+      const data = await res.json();
 
       localStorage.setItem('grupoDocenteCodigo', data.grupo.codigo);
       codeEl.textContent = data.grupo.codigo;
       destellarCodigo();
       cargarDatosGrupo(data.grupo.codigo);
     } catch (err) {
-      alert('No se pudo generar el código.');
+      alert('No se pudo generar el código en la base de datos.');
     } finally {
       btn.disabled = false;
     }
@@ -440,23 +424,20 @@ function dbLocal() {
     if (codigo) cargarDatosGrupo(codigo);
   });
 
-  // ── Cargar y pintar los resultados reales de un grupo ──
+  // ── Cargar y pintar los resultados reales de un grupo desde SQL Server ──
   const PRUEBAS = ['memoria', 'atencion', 'razonamiento', 'velocidad'];
   const NOMBRES_PRUEBA = { memoria: 'Memoria', atencion: 'Atención', razonamiento: 'Razonamiento', velocidad: 'Velocidad' };
   const COLOR_PRUEBA = { memoria: '#1E9E63', atencion: '#C97B2E', razonamiento: '#1A3560', velocidad: '#D14343' };
 
   async function cargarDatosGrupo(codigo) {
     try {
-      const d = dbLocal();
-      const grupo = d.grupos.filter((g) => g.codigo === String(codigo).toUpperCase())[0];
-      if (!grupo) throw new Error('Grupo no encontrado');
-      const data = { estudiantes: d.estudiantes.filter((e) => e.grupo_id === grupo.id)
-        .map((e) => ({ estudiante: e, resumen: resumenLocal(d, e.id) })) };
-
-      pintarDashboard(data.estudiantes);
+      const res = await fetch('/api/grupos/' + encodeURIComponent(codigo));
+      if (!res.ok) throw new Error('Grupo no encontrado');
+      const data = await res.json();
+      pintarDashboard(data.estudiantes || []);
     } catch (err) {
       document.getElementById('notaFinal').textContent =
-        'No se encontró ese código de grupo en este navegador.';
+        'No se encontró ese código de grupo en la base de datos.';
     }
   }
 

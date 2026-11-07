@@ -1,8 +1,8 @@
 @page "/login"
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
-@using System.Text.Json
-@using System.Text.Json.Nodes
+@inject ProyectoBlazor.Data.ApplicationDbContext Db
+@using Microsoft.EntityFrameworkCore
 @using System.Security.Cryptography
 
 <PageTitle>Iniciar sesión — Evaluación Cognitiva</PageTitle>
@@ -250,7 +250,7 @@
             {
                 <div class="field">
                     <label for="grupo">Código de grupo (opcional)</label>
-                    <input id="grupo" type="text" @bind="CodigoGrupo" @bind:event="oninput" placeholder="Ej. 2C23LW" maxlength="8" />
+                    <input id="grupo" type="text" @bind="CodigoGrupo" @bind:event="oninput" placeholder="Ej. INF-2026-A" maxlength="20" />
                     <p class="ayuda">Si tu docente ya te dio un código, escríbelo para que tus resultados aparezcan en su panel.</p>
                 </div>
             }
@@ -404,7 +404,7 @@
     {
         var rol = EsDocente ? "docente" : "estudiante";
         var correo = Correo.Trim().ToLowerInvariant();
-        var nombre = string.Join(' ', Nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        var nombreCompleto = string.Join(' ', Nombre.Split(' ', StringSplitOptions.RemoveEmptyEntries));
         var control = NumeroControl.Trim();
         var codigo = CodigoGrupo.Trim().ToUpperInvariant();
 
@@ -412,39 +412,110 @@
         if (EsDocente && !string.Equals(ClaveDocente.Trim(), ClaveDocenteValida, StringComparison.Ordinal))
             return "La clave de docente no es correcta.";
 
-        if (nombre.Length < 3) return "Escribe tu nombre completo.";
+        if (nombreCompleto.Length < 3) return "Escribe tu nombre completo.";
         if (!CorreoValido(correo)) return "Escribe un correo válido.";
         if (Password.Length < 6) return "La contraseña debe tener al menos 6 caracteres.";
         if (EsEstudiante)
         {
-            if (control.Length < 6 || control.Length > 12 || !control.All(char.IsLetterOrDigit))
-                return "Escribe tu número de control (de 6 a 12 letras o números).";
-            if (codigo.Length > 0 && (codigo.Length < 4 || codigo.Length > 8 || !codigo.All(char.IsLetterOrDigit)))
+            if (control.Length < 6 || control.Length > 20 || !control.All(char.IsLetterOrDigit))
+                return "Escribe tu número de control (de 6 a 20 letras o números).";
+            if (codigo.Length > 0 && (codigo.Length < 4 || codigo.Length > 20 || !codigo.All(c => char.IsLetterOrDigit(c) || c == '-')))
                 return "El código de grupo no es válido.";
         }
 
-        var usuarios = await CargarUsuariosAsync();
-        if (usuarios.Lista.Any(x => x.Rol == rol && x.Correo == correo))
-            return "Ya existe una cuenta con ese correo. Inicia sesión.";
-        if (EsEstudiante && usuarios.Lista.Any(x => x.Rol == rol &&
-                string.Equals(x.NumeroControl, control, StringComparison.OrdinalIgnoreCase)))
-            return "Ya existe una cuenta con ese número de control.";
+        var (nombre, paterno, materno) = SepararNombreCompleto(nombreCompleto);
+        var sal = NuevaSal();
+        var hashConSal = $"{sal}:{CalcularHash(Password, sal)}";
 
-        var usuario = new Usuario { Id = usuarios.Sig, Rol = rol, Nombre = nombre, Correo = correo };
-        usuarios.Sig++;
-        usuario.Sal = NuevaSal();
-        usuario.Clave = CalcularHash(Password, usuario.Sal);
-
-        if (EsEstudiante)
+        if (EsDocente)
         {
-            usuario.NumeroControl = control;
-            usuario.EstudianteId = await CrearEstudianteAsync(nombre, correo, control, codigo);
-        }
+            if (await Db.Docentes.AnyAsync(d => d.CorreoElectronico.ToLower() == correo))
+                return "Ya existe una cuenta de docente con ese correo. Inicia sesión.";
 
-        usuarios.Lista.Add(usuario);
-        await GuardarUsuariosAsync(usuarios);
-        await AbrirSesionAsync(usuario);
-        return null;
+            string numEmpleado;
+            do
+            {
+                numEmpleado = "D-" + RandomNumberGenerator.GetInt32(1000, 99999);
+            } while (await Db.Docentes.AnyAsync(d => d.NumeroEmpleado == numEmpleado));
+
+            var nuevoDocente = new ProyectoBlazor.Models.Docente
+            {
+                Nombre = nombre,
+                ApellidoPaterno = paterno,
+                ApellidoMaterno = materno,
+                NumeroEmpleado = numEmpleado,
+                Carrera = "Ingeniería en Sistemas Computacionales",
+                CorreoElectronico = correo,
+                Contrasena = hashConSal,
+                FechaRegistro = DateTime.Now
+            };
+
+            Db.Docentes.Add(nuevoDocente);
+            await Db.SaveChangesAsync();
+
+            var usuario = new Usuario
+            {
+                Id = nuevoDocente.IdDocente,
+                Rol = rol,
+                Nombre = nombreCompleto,
+                Correo = correo
+            };
+            await AbrirSesionAsync(usuario, null);
+            return null;
+        }
+        else
+        {
+            if (await Db.Estudiantes.AnyAsync(e => e.CorreoElectronico.ToLower() == correo))
+                return "Ya existe una cuenta con ese correo. Inicia sesión.";
+            if (await Db.Estudiantes.AnyAsync(e => e.Matricula.ToLower() == control.ToLower()))
+                return "Ya existe una cuenta con ese número de control.";
+
+            ProyectoBlazor.Models.Grupo? grupoBd = null;
+            if (codigo.Length > 0)
+            {
+                grupoBd = await Db.Grupos.FirstOrDefaultAsync(g => g.CodigoGrupo.ToUpper() == codigo && g.Activo);
+                if (grupoBd == null)
+                    return "No se encontró ningún grupo activo con ese código.";
+            }
+
+            var nuevoEstudiante = new ProyectoBlazor.Models.Estudiante
+            {
+                Nombre = nombre,
+                ApellidoPaterno = paterno,
+                ApellidoMaterno = materno,
+                Matricula = control,
+                Carrera = "Ingeniería en Sistemas Computacionales",
+                CorreoElectronico = correo,
+                Contrasena = hashConSal,
+                FechaRegistro = DateTime.Now
+            };
+
+            Db.Estudiantes.Add(nuevoEstudiante);
+            await Db.SaveChangesAsync();
+
+            if (grupoBd != null)
+            {
+                Db.GruposEstudiantes.Add(new ProyectoBlazor.Models.GrupoEstudiante
+                {
+                    IdGrupo = grupoBd.IdGrupo,
+                    IdEstudiante = nuevoEstudiante.IdEstudiante,
+                    FechaInscripcion = DateTime.Now
+                });
+                await Db.SaveChangesAsync();
+            }
+
+            var usuario = new Usuario
+            {
+                Id = nuevoEstudiante.IdEstudiante,
+                Rol = rol,
+                Nombre = nombreCompleto,
+                Correo = correo,
+                NumeroControl = control,
+                EstudianteId = nuevoEstudiante.IdEstudiante
+            };
+            await AbrirSesionAsync(usuario, grupoBd?.CodigoGrupo);
+            return null;
+        }
     }
 
     private async Task<string?> EntrarAsync()
@@ -452,32 +523,106 @@
         var rol = EsDocente ? "docente" : "estudiante";
         var correo = Correo.Trim().ToLowerInvariant();
 
-        var usuarios = await CargarUsuariosAsync();
-        var usuario = usuarios.Lista.FirstOrDefault(x => x.Rol == rol && x.Correo == correo);
-        if (usuario == null)
-            return "No encontramos una cuenta con ese correo. Usa \"Crear cuenta\".";
+        if (EsDocente)
+        {
+            var docente = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == correo);
+            if (docente == null)
+                return "No encontramos una cuenta de docente con ese correo. Usa \"Crear cuenta\".";
 
-        var esperado = Convert.FromBase64String(usuario.Clave);
-        var calculado = Convert.FromBase64String(CalcularHash(Password, usuario.Sal));
-        if (!CryptographicOperations.FixedTimeEquals(esperado, calculado))
-            return "La contraseña es incorrecta.";
+            if (!VerificarContrasena(Password, docente.Contrasena))
+                return "La contraseña es incorrecta.";
 
-        await AbrirSesionAsync(usuario);
-        return null;
+            var nombreCompleto = FormatearNombreCompleto(docente.Nombre, docente.ApellidoPaterno, docente.ApellidoMaterno);
+            var usuario = new Usuario
+            {
+                Id = docente.IdDocente,
+                Rol = rol,
+                Nombre = nombreCompleto,
+                Correo = docente.CorreoElectronico
+            };
+
+            var grupoDocente = await Db.Grupos
+                .Where(g => g.IdDocente == docente.IdDocente && g.Activo)
+                .OrderByDescending(g => g.FechaCreacion)
+                .FirstOrDefaultAsync();
+
+            await AbrirSesionAsync(usuario, grupoDocente?.CodigoGrupo);
+            return null;
+        }
+        else
+        {
+            var estudiante = await Db.Estudiantes.FirstOrDefaultAsync(e => e.CorreoElectronico.ToLower() == correo);
+            if (estudiante == null)
+                return "No encontramos una cuenta de estudiante con ese correo. Usa \"Crear cuenta\".";
+
+            if (!VerificarContrasena(Password, estudiante.Contrasena))
+                return "La contraseña es incorrecta.";
+
+            var inscripcion = await Db.GruposEstudiantes
+                .Include(ge => ge.Grupo)
+                .Where(ge => ge.IdEstudiante == estudiante.IdEstudiante)
+                .OrderByDescending(ge => ge.FechaInscripcion)
+                .FirstOrDefaultAsync();
+
+            var codigoGrupo = inscripcion?.Grupo?.CodigoGrupo;
+            var nombreCompleto = FormatearNombreCompleto(estudiante.Nombre, estudiante.ApellidoPaterno, estudiante.ApellidoMaterno);
+
+            var usuario = new Usuario
+            {
+                Id = estudiante.IdEstudiante,
+                Rol = rol,
+                Nombre = nombreCompleto,
+                Correo = estudiante.CorreoElectronico,
+                NumeroControl = estudiante.Matricula,
+                EstudianteId = estudiante.IdEstudiante
+            };
+
+            await AbrirSesionAsync(usuario, codigoGrupo);
+            return null;
+        }
     }
 
-    // ============================================================
-    //  Apoyo (almacenamiento temporal en el navegador)
-    // ============================================================
-    // CLAVE DE DOCENTE (TEMPORAL): clave que el departamento entrega al personal docente.
-    // OJO: al estar en el código, cualquiera que lo lea la puede ver. Sirve solo para pruebas.
-    // Con la base de datos, esta validación debe hacerse en el servidor
-    // (clave guardada en la BD o en configuración, o aprobación de un administrador).
-    private const string ClaveDocenteValida = "TECTIJ-DOCENTE";
+    private static (string Nombre, string Paterno, string? Materno) SepararNombreCompleto(string nombreCompleto)
+    {
+        var partes = nombreCompleto.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (partes.Length == 1)
+            return (partes[0], "-", null);
+        if (partes.Length == 2)
+            return (partes[0], partes[1], null);
+        var materno = partes[^1];
+        var paterno = partes[^2];
+        var nombres = string.Join(' ', partes[..^2]);
+        return (nombres, paterno, materno);
+    }
 
-    private const string ClaveUsuarios = "usuariosEvaluacionBlazor";
-    private const string ClaveDb = "evaluacionCognitiva";
-    private static readonly JsonSerializerOptions Opciones = new() { PropertyNameCaseInsensitive = true };
+    private static string FormatearNombreCompleto(string nombre, string paterno, string? materno)
+    {
+        var partes = new List<string> { nombre };
+        if (!string.IsNullOrWhiteSpace(paterno) && paterno != "-") partes.Add(paterno);
+        if (!string.IsNullOrWhiteSpace(materno)) partes.Add(materno);
+        return string.Join(' ', partes);
+    }
+
+    private static bool VerificarContrasena(string passwordIngresado, string contrasenaGuardada)
+    {
+        if (contrasenaGuardada.Contains(':'))
+        {
+            var partes = contrasenaGuardada.Split(':', 2);
+            try
+            {
+                var esperado = Convert.FromBase64String(partes[1]);
+                var calculado = Convert.FromBase64String(CalcularHash(passwordIngresado, partes[0]));
+                return CryptographicOperations.FixedTimeEquals(esperado, calculado);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        return string.Equals(passwordIngresado, contrasenaGuardada, StringComparison.Ordinal);
+    }
+
+    private const string ClaveDocenteValida = "TECTIJ-DOCENTE";
 
     public class Usuario
     {
@@ -487,14 +632,6 @@
         public string Correo { get; set; } = "";
         public string? NumeroControl { get; set; }
         public int? EstudianteId { get; set; }
-        public string Sal { get; set; } = "";
-        public string Clave { get; set; } = "";
-    }
-
-    public class UsuariosDb
-    {
-        public int Sig { get; set; } = 1;
-        public List<Usuario> Lista { get; set; } = new();
     }
 
     private static bool CorreoValido(string correo)
@@ -511,115 +648,29 @@
         return Convert.ToBase64String(bytes);
     }
 
-    private async Task<UsuariosDb> CargarUsuariosAsync()
+    // Guarda el identificador de sesión actual para que las páginas Estudiante / Docente / juegos sepan quién entró.
+    private async Task AbrirSesionAsync(Usuario usuario, string? codigoGrupo)
     {
-        var json = await JS.InvokeAsync<string?>("localStorage.getItem", ClaveUsuarios);
-        if (string.IsNullOrWhiteSpace(json)) return new UsuariosDb();
-        try { return JsonSerializer.Deserialize<UsuariosDb>(json, Opciones) ?? new UsuariosDb(); }
-        catch (JsonException) { return new UsuariosDb(); }
-    }
+        await JS.InvokeVoidAsync("localStorage.removeItem", "usuariosEvaluacionBlazor");
+        await JS.InvokeVoidAsync("localStorage.removeItem", "evaluacionCognitiva");
 
-    private async Task GuardarUsuariosAsync(UsuariosDb usuarios)
-    {
-        await JS.InvokeVoidAsync("localStorage.setItem", ClaveUsuarios, JsonSerializer.Serialize(usuarios));
-    }
-
-    // Base local del sistema (grupos, estudiantes, resultados): la misma que usan los juegos.
-    private static JsonObject AbrirDb(string? json)
-    {
-        JsonObject d;
-        try { d = (string.IsNullOrWhiteSpace(json) ? null : JsonNode.Parse(json)) as JsonObject ?? new JsonObject(); }
-        catch (JsonException) { d = new JsonObject(); }
-
-        if (d["grupos"] is not JsonArray) d["grupos"] = new JsonArray();
-        if (d["estudiantes"] is not JsonArray) d["estudiantes"] = new JsonArray();
-        if (d["resultados"] is not JsonArray) d["resultados"] = new JsonArray();
-        if (d["sig"] is not JsonObject) d["sig"] = new JsonObject();
-        var sig = d["sig"]!.AsObject();
-        foreach (var k in new[] { "g", "e", "r" })
-        {
-            if (sig[k] is null) sig[k] = 1;
-        }
-        return d;
-    }
-
-    private async Task<int> CrearEstudianteAsync(string nombre, string correo, string control, string codigo)
-    {
-        var d = AbrirDb(await JS.InvokeAsync<string?>("localStorage.getItem", ClaveDb));
-        var sig = d["sig"]!.AsObject();
-        var grupos = d["grupos"]!.AsArray();
-
-        int? grupoId = null;
-        if (codigo.Length > 0)
-        {
-            JsonNode? grupo = null;
-            foreach (var g in grupos)
-            {
-                if (g?["codigo"]?.GetValue<string>() == codigo) { grupo = g; break; }
-            }
-            if (grupo == null)
-            {
-                var gid = sig["g"]!.GetValue<int>();
-                sig["g"] = gid + 1;
-                grupo = new JsonObject
-                {
-                    ["id"] = gid,
-                    ["codigo"] = codigo,
-                    ["nombre"] = "Grupo " + codigo,
-                    ["creado_en"] = DateTime.UtcNow.ToString("o")
-                };
-                grupos.Add(grupo);
-            }
-            grupoId = grupo["id"]!.GetValue<int>();
-        }
-
-        var eid = sig["e"]!.GetValue<int>();
-        sig["e"] = eid + 1;
-        d["estudiantes"]!.AsArray().Add(new JsonObject
-        {
-            ["id"] = eid,
-            ["nombre"] = nombre,
-            ["grupo_id"] = grupoId,
-            ["numero_control"] = control,
-            ["correo"] = correo,
-            ["creado_en"] = DateTime.UtcNow.ToString("o")
-        });
-
-        await JS.InvokeVoidAsync("localStorage.setItem", ClaveDb, d.ToJsonString());
-        return eid;
-    }
-
-    // Guarda lo que leen las páginas Estudiante / Docente / juegos para saber quién entró.
-    private async Task AbrirSesionAsync(Usuario usuario)
-    {
         if (usuario.Rol == "estudiante")
         {
-            string? codigoGrupo = null;
-            var d = AbrirDb(await JS.InvokeAsync<string?>("localStorage.getItem", ClaveDb));
-            foreach (var e in d["estudiantes"]!.AsArray())
-            {
-                if (e?["id"]?.GetValue<int>() != usuario.EstudianteId) continue;
-                var gid = e?["grupo_id"];
-                if (gid == null) break;
-                foreach (var g in d["grupos"]!.AsArray())
-                {
-                    if (g?["id"]?.GetValue<int>() == gid.GetValue<int>())
-                        codigoGrupo = g?["codigo"]?.GetValue<string>();
-                }
-                break;
-            }
-
             await JS.InvokeVoidAsync("localStorage.setItem", "estudianteId", usuario.EstudianteId.ToString());
             await JS.InvokeVoidAsync("localStorage.setItem", "estudianteNombre", usuario.Nombre);
-            if (codigoGrupo != null) await JS.InvokeVoidAsync("localStorage.setItem", "grupoCodigo", codigoGrupo);
+            if (!string.IsNullOrWhiteSpace(codigoGrupo)) await JS.InvokeVoidAsync("localStorage.setItem", "grupoCodigo", codigoGrupo);
             else await JS.InvokeVoidAsync("localStorage.removeItem", "grupoCodigo");
+            await JS.InvokeVoidAsync("localStorage.removeItem", "docenteId");
             await JS.InvokeVoidAsync("localStorage.removeItem", "docenteNombre");
             await JS.InvokeVoidAsync("localStorage.removeItem", "docenteCorreo");
         }
         else
         {
+            await JS.InvokeVoidAsync("localStorage.setItem", "docenteId", usuario.Id.ToString());
             await JS.InvokeVoidAsync("localStorage.setItem", "docenteNombre", usuario.Nombre);
             await JS.InvokeVoidAsync("localStorage.setItem", "docenteCorreo", usuario.Correo);
+            if (!string.IsNullOrWhiteSpace(codigoGrupo))
+                await JS.InvokeVoidAsync("localStorage.setItem", "grupoDocenteCodigo", codigoGrupo);
             await JS.InvokeVoidAsync("localStorage.removeItem", "estudianteId");
             await JS.InvokeVoidAsync("localStorage.removeItem", "estudianteNombre");
             await JS.InvokeVoidAsync("localStorage.removeItem", "grupoCodigo");
