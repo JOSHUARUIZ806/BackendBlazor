@@ -1,0 +1,1134 @@
+/* ============================================================
+   VARIABLES DE DISEÑO (mismas que el resto del sitio)
+   ============================================================ */
+.guia {
+  --navy: #1A3560;
+  --navy-dark: #132848;
+  --amber: #C97B2E;
+  --ink: #1F2937;
+  --muted: #6B7280;
+  --card-bg: #F6F7F8;
+  --card-border: #ECEDEF;
+  --bg: #FFFFFF;
+
+  /* Colores de nivel de desempeño (iguales a Estudiantes y Docente) */
+  --strong: #1E9E63;
+  --strong-bg: #E3F5EC;
+  --avg: #F2C230;
+  --avg-bg: #FEF3C7;
+  --avg-ink: #92400E;
+  --focus: #D14343;
+  --focus-bg: #FDEBEB;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  overflow-x: clip;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+.guia ::deep * {
+  box-sizing: border-box;
+}
+
+/* ── Encabezado (igual que las demás páginas) ── */
+.guia ::deep header.top {
+  background: var(--navy);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 18px 40px;
+  gap: 16px;
+}
+
+.guia ::deep .logo {
+  height: 38px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.guia ::deep .divider {
+  width: 1px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.guia ::deep header.top h1 {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.guia ::deep .back {
+  margin-left: auto;
+  font-size: 13px;
+  color: white;
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.guia ::deep .back:hover {
+  opacity: 1;
+}
+
+/* ── Barra de progreso de lectura (arriba, ámbar) ── */
+.guia ::deep .progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 60;
+  background: var(--amber);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* ── Menú de secciones (se queda fijo al bajar) ── */
+.guia ::deep .subnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.guia ::deep .subnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.guia ::deep .subnav-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.guia ::deep .subnav a {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: color .2s, background .2s, border-color .2s;
+}
+
+.guia ::deep .subnav a:hover {
+  color: var(--navy);
+  background: var(--card-bg);
+}
+
+.guia ::deep .subnav a.active {
+  color: var(--navy);
+  background: #E9EEF6;
+  border-color: rgba(26, 53, 96, 0.18);
+}
+
+.guia ::deep main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+.guia ::deep section {
+  padding-top: 72px;
+}
+
+/* ── Títulos de sección ── */
+.guia ::deep .eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: #FBEFE1;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.guia ::deep .eyebrow.blue {
+  color: var(--navy);
+  background: #E9EEF6;
+}
+
+.guia ::deep h2.sec-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.guia ::deep .sec-sub {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: 10px;
+  max-width: 62ch;
+}
+
+.guia ::deep .sec-head {
+  margin-bottom: 32px;
+}
+
+/* ============================================================
+   ANIMACIÓN AL BAJAR
+   ============================================================ */
+.guia.js ::deep .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s cubic-bezier(.2, .7, .2, 1), transform .7s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: var(--d, 0s);
+}
+
+.guia.js ::deep .reveal.from-left {
+  transform: translateX(-30px);
+}
+
+.guia.js ::deep .reveal.zoom {
+  transform: scale(.94);
+}
+
+.guia.js ::deep .reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Portada de la guía (sin imágenes) ── */
+.guia ::deep .hero {
+  padding-top: 64px;
+  text-align: center;
+}
+
+.guia ::deep .hero h2 {
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: var(--navy);
+  text-wrap: balance;
+  max-width: 20ch;
+  margin: 0 auto;
+}
+
+.guia ::deep .hero p.lead {
+  font-size: 16.5px;
+  color: var(--muted);
+  margin: 16px auto 0;
+  max-width: 58ch;
+}
+
+.guia ::deep .cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.guia ::deep .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.guia ::deep .btn:hover {
+  transform: translateY(-2px);
+}
+
+.guia ::deep .btn-primary {
+  background: var(--navy);
+  color: #fff;
+  border: 1px solid var(--navy);
+  box-shadow: 0 4px 16px rgba(26, 53, 96, 0.25);
+}
+
+.guia ::deep .btn-primary:hover {
+  background: var(--navy-dark);
+  box-shadow: 0 8px 24px rgba(26, 53, 96, 0.32);
+}
+
+.guia ::deep .btn-outline {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid var(--card-border);
+}
+
+.guia ::deep .btn-outline:hover {
+  border-color: var(--navy);
+  box-shadow: 0 6px 18px rgba(26, 53, 96, 0.1);
+}
+
+.guia ::deep .facts {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.guia ::deep .fact {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 8px 16px;
+}
+
+.guia ::deep .fact b {
+  color: var(--amber);
+}
+
+/* ── Tarjetas generales ── */
+.guia ::deep .card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.guia ::deep .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(26, 53, 96, 0.08);
+  border-color: rgba(26, 53, 96, 0.2);
+}
+
+.guia ::deep .card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.guia ::deep .card p {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.guia ::deep .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.guia ::deep .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.guia ::deep .mark {
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--amber);
+  margin-bottom: 14px;
+}
+
+/* ── Pasos (línea de tiempo) ── */
+.guia ::deep .steps {
+  list-style: none;
+  position: relative;
+  padding-left: 0;
+}
+
+.guia ::deep .steps::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(var(--navy), rgba(26, 53, 96, 0.15));
+}
+
+.guia ::deep .step {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  padding-bottom: 26px;
+}
+
+.guia ::deep .step:last-child {
+  padding-bottom: 0;
+}
+
+.guia ::deep .step-num {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 1;
+  background: var(--navy);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 5px #fff;
+}
+
+.guia ::deep .step.amber .step-num {
+  background: var(--amber);
+}
+
+.guia ::deep .step-body {
+  padding-top: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.guia ::deep .step-body h3 {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.guia ::deep .step-body p {
+  font-size: 14.5px;
+  color: var(--muted);
+  margin-top: 3px;
+  max-width: 62ch;
+}
+
+.guia ::deep .step-body p b,
+.guia ::deep .card p b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.guia ::deep kbd,
+.guia ::deep .ui {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--navy);
+  background: #E9EEF6;
+  border-radius: 6px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+
+/* ── Tarjetas de las 4 pruebas ── */
+.guia ::deep .test {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+}
+
+.guia ::deep .test-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.guia ::deep .test h3 {
+  font-size: 18px;
+}
+
+.guia ::deep .skill {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.guia ::deep .skill.s1 {
+  background: var(--strong-bg);
+  color: var(--strong);
+}
+
+.guia ::deep .skill.s2 {
+  background: #FBEFE1;
+  color: var(--amber);
+}
+
+.guia ::deep .skill.s3 {
+  background: #E9EEF6;
+  color: var(--navy);
+}
+
+.guia ::deep .skill.s4 {
+  background: var(--focus-bg);
+  color: var(--focus);
+}
+
+.guia ::deep .test ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guia ::deep .test li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.guia ::deep .test li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+.guia ::deep .test li b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.guia ::deep .ends {
+  margin-top: auto;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--card-bg);
+  border-left: 3px solid var(--navy);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+}
+
+.guia ::deep .ends b {
+  color: var(--navy);
+}
+
+/* ── Aviso importante ── */
+.guia ::deep .callout {
+  background: #FFF8EC;
+  border: 1px solid #F3D9B0;
+  border-radius: 12px;
+  padding: 22px 26px;
+}
+
+.guia ::deep .callout h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #8A5016;
+  margin-bottom: 10px;
+}
+
+.guia ::deep .callout ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+}
+
+.guia ::deep .callout li {
+  font-size: 14px;
+  color: #6B4A1F;
+  padding-left: 20px;
+  position: relative;
+}
+
+.guia ::deep .callout li::before {
+  content: '!';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Niveles de resultado ── */
+.guia ::deep .levels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.guia ::deep .level-card {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 22px;
+  overflow: hidden;
+  position: relative;
+}
+
+.guia ::deep .level-card .bar {
+  height: 6px;
+  border-radius: 4px;
+  background: var(--card-border);
+  margin: 14px 0 12px;
+  overflow: hidden;
+}
+
+.guia ::deep .level-card .bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 4px;
+  transition: width 1.1s cubic-bezier(.2, .7, .2, 1) .25s;
+}
+
+.guia ::deep .level-card.visible .bar i {
+  width: var(--w);
+}
+
+.guia ::deep .pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.guia ::deep .pill.strong {
+  background: var(--strong-bg);
+  color: var(--strong);
+}
+
+.guia ::deep .pill.avg {
+  background: var(--avg-bg);
+  color: var(--avg-ink);
+}
+
+.guia ::deep .pill.focus {
+  background: var(--focus-bg);
+  color: var(--focus);
+}
+
+.guia ::deep .level-card .range {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 10px;
+}
+
+.guia ::deep .level-card p {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.guia ::deep .no-js-bar {
+  display: none;
+}
+
+/* ── Estilos de aprendizaje ── */
+.guia ::deep .styles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.guia ::deep .style-chip {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.guia ::deep .style-chip b {
+  display: block;
+  color: var(--navy);
+  font-size: 14.5px;
+  margin-bottom: 2px;
+}
+
+/* ── Panel del docente: lista de elementos ── */
+.guia ::deep .feature {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+}
+
+.guia ::deep .feature .tag {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #E9EEF6;
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guia ::deep .states {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.guia ::deep .st {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.guia ::deep .st.c {
+  background: #E3F5EC;
+  color: #1E9E63;
+}
+
+.guia ::deep .st.p {
+  background: #FBEFE1;
+  color: var(--amber);
+}
+
+.guia ::deep .st.n {
+  background: #ECEDEF;
+  color: var(--muted);
+}
+
+.guia ::deep .mini-donuts {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.guia ::deep .mini-donut {
+  --pct: 0;
+  --col: var(--strong);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  position: relative;
+  background: conic-gradient(var(--col) calc(var(--pct) * 1%), #E5E7EB 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.guia ::deep .mini-donut::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.guia ::deep .mini-donut span {
+  position: relative;
+}
+
+/* ── Preguntas frecuentes ── */
+.guia ::deep .faq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guia ::deep .faq-item {
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.guia ::deep .faq-q {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  background: none;
+  border: none;
+  padding: 16px 20px;
+  cursor: pointer;
+}
+
+.guia ::deep .faq-q:hover {
+  color: var(--navy);
+}
+
+.guia ::deep .faq-q:focus-visible,
+.guia ::deep .btn:focus-visible,
+.guia ::deep .subnav a:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.guia ::deep .faq-q .plus {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E9EEF6;
+  position: relative;
+  transition: transform .3s ease, background .3s;
+}
+
+.guia ::deep .faq-q .plus::before,
+.guia ::deep .faq-q .plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background: var(--navy);
+  transform: translate(-50%, -50%);
+}
+
+.guia ::deep .faq-q .plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  transition: transform .3s ease;
+}
+
+.guia ::deep .faq-item.open .plus {
+  background: var(--navy);
+  transform: rotate(180deg);
+}
+
+.guia ::deep .faq-item.open .plus::before {
+  background: #fff;
+}
+
+.guia ::deep .faq-item.open .plus::after {
+  background: #fff;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.guia ::deep .faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s ease;
+}
+
+.guia ::deep .faq-item.open .faq-a {
+  grid-template-rows: 1fr;
+}
+
+.guia ::deep .faq-a > div {
+  overflow: hidden;
+}
+
+.guia ::deep .faq-a p {
+  padding: 0 20px 18px;
+  font-size: 14.5px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── Cierre ── */
+.guia ::deep .final {
+  margin-top: 72px;
+  text-align: center;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 16px;
+  padding: 48px 28px;
+}
+
+.guia ::deep .final h2 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.guia ::deep .final p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 10px auto 0;
+  max-width: 50ch;
+}
+
+.guia ::deep .final .btn-primary {
+  background: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.guia ::deep .final .btn-primary:hover {
+  background: #B56C25;
+}
+
+.guia ::deep .final .btn-outline {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.guia ::deep .final .btn-outline:hover {
+  border-color: #fff;
+  box-shadow: none;
+}
+
+.guia ::deep .note {
+  margin-top: 28px;
+  font-size: 12.5px;
+  color: var(--muted);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.guia ::deep footer {
+  text-align: center;
+  padding: 30px 24px 40px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Pantallas pequeñas ── */
+@media (max-width: 760px) {
+  .guia ::deep header.top {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+  .guia ::deep header.top h1 {
+    font-size: 14px;
+    line-height: 1.25;
+    min-width: 0;
+  }
+  .guia ::deep .logo {
+    height: 30px;
+  }
+  .guia ::deep .divider {
+    height: 28px;
+  }
+  .guia ::deep .back {
+    display: none;
+  }
+  .guia ::deep .grid-3,
+  .guia ::deep .grid-2,
+  .guia ::deep .levels,
+  .guia ::deep .styles {
+    grid-template-columns: 1fr;
+  }
+  .guia ::deep .callout ul {
+    grid-template-columns: 1fr;
+  }
+  .guia ::deep h2.sec-title {
+    font-size: 24px;
+  }
+  .guia ::deep section {
+    padding-top: 56px;
+  }
+  .guia ::deep .final {
+    padding: 36px 20px;
+  }
+}
+
+/* ── Espacios para imágenes ── */
+.guia ::deep .shot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-top: 14px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px dashed #C9D3E3;
+  background: #F6F8FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+}
+
+.guia ::deep .shot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.guia ::deep .shot:has(img) {
+  border: 1px solid var(--card-border);
+  background: none;
+}
+
+.guia ::deep .shot.wide {
+  aspect-ratio: 21 / 9;
+  margin-top: 36px;
+}
+
+.guia ::deep .shot.sm {
+  aspect-ratio: 2 / 1;
+}
+
+.guia ::deep .tip-card {
+  background: #fff;
+}
+
+.guia ::deep .say {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--ink);
+  background: #F3F6FB;
+  border-left: 3px solid var(--amber);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  font-style: italic;
+}
+
+.guia ::deep .checklist {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.guia ::deep .checklist li {
+  position: relative;
+  padding-left: 28px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.guia ::deep .checklist li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--strong-bg);
+  color: var(--strong);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guia ::deep .checklist b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ── Cambio de contenido: Estudiante / Docente ── */
+.guia[data-rol="estudiante"] ::deep [data-role="docente"] {
+  display: none !important;
+}
+
+.guia[data-rol="docente"] ::deep [data-role="estudiante"] {
+  display: none !important;
+}
+
+.guia ::deep .rol-btn {
+  border: 1px solid var(--card-border);
+  background: #fff;
+  color: var(--navy);
+}
+
+.guia ::deep .rol-btn[aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+  box-shadow: 0 4px 16px rgba(26, 53, 96, 0.25);
+}
+
+.guia ::deep .rol-btn:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.guia ::deep .seg {
+  flex-shrink: 0;
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 3px;
+  margin-right: 6px;
+}
+
+.guia ::deep .seg button {
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: 16px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.guia ::deep .seg button[aria-pressed="true"] {
+  background: var(--navy);
+  color: #fff;
+}
+
+.guia ::deep .seg button:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 1px;
+}
+
+/* ── Si la persona prefiere menos movimiento, se quitan las animaciones ── */
+@media (prefers-reduced-motion: reduce) {
+  .guia.js ::deep .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .guia ::deep .level-card .bar i {
+    transition: none;
+    width: var(--w);
+  }
+  .guia ::deep .faq-a {
+    transition: none;
+  }
+}
+
