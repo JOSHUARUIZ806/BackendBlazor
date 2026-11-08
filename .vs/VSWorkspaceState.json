@@ -5,9 +5,10 @@
     "\\ProyectoBlazor\\ProyectoBlazor",
     "\\ProyectoBlazor\\ProyectoBlazor\\Components",
     "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages",
+    "\\ProyectoBlazor\\ProyectoBlazor\\Models",
     "\\ProyectoBlazor\\ProyectoBlazor\\Properties",
     "\\ProyectoBlazor\\ProyectoBlazor\\wwwroot"
   ],
-  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Home.razor",
+  "SelectedNode": "\\ProyectoBlazor\\ProyectoBlazor\\Models\\Docente.cs",
   "PreviewInSolutionExplorer": false
 }

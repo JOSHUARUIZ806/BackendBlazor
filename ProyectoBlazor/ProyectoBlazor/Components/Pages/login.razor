@@ -237,7 +237,7 @@
                 return;
             }
 
-            Navigation.NavigateTo(EsDocente ? "/Docente" : "/Estudiante");
+            Navigation.NavigateTo(EsDocente ? "/Docente" : "/Estudiante", forceLoad: true);
         }
         catch (Exception)
         {
