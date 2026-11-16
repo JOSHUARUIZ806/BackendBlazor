@@ -112,7 +112,7 @@
             {
                 <div class="field">
                     <label for="grupo">Código de grupo (opcional)</label>
-                    <input id="grupo" type="text" @bind="CodigoGrupo" @bind:event="oninput" placeholder="Ej. INF-2026-A" maxlength="20" />
+                    <input id="grupo" type="text" @bind="CodigoGrupo" @bind:event="oninput" placeholder="Ej. INF-2026-A" maxlength="20" style="text-transform:uppercase;" />
                     <p class="ayuda">Si tu docente ya te dio un código, escríbelo para que tus resultados aparezcan en su panel.</p>
                 </div>
             }
@@ -239,9 +239,9 @@
 
             Navigation.NavigateTo(EsDocente ? "/Docente" : "/Estudiante", forceLoad: true);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            MensajeError = "Ocurrió un error. Intenta de nuevo.";
+            MensajeError = $"Ocurrió un error al procesar tu solicitud: {ex.Message}";
         }
         finally
         {
@@ -282,8 +282,8 @@
         {
             if (control.Length < 6 || control.Length > 20 || !control.All(char.IsLetterOrDigit))
                 return "Escribe tu número de control (de 6 a 20 letras o números).";
-            if (codigo.Length > 0 && (codigo.Length < 4 || codigo.Length > 20 || !codigo.All(c => char.IsLetterOrDigit(c) || c == '-')))
-                return "El código de grupo no es válido.";
+            if (codigo.Length > 20)
+                return "El código de grupo no debe exceder 20 caracteres.";
         }
 
         var (nombre, paterno, materno) = SepararNombreCompleto(nombreCompleto);
@@ -336,9 +336,11 @@
             ProyectoBlazor.Models.Grupo? grupoBd = null;
             if (codigo.Length > 0)
             {
-                grupoBd = await Db.Grupos.FirstOrDefaultAsync(g => g.CodigoGrupo.ToUpper() == codigo && g.Activo);
+                grupoBd = await Db.Grupos
+                    .Include(g => g.Docente)
+                    .FirstOrDefaultAsync(g => g.CodigoGrupo.ToUpper() == codigo && g.Activo);
                 if (grupoBd == null)
-                    return "No se encontró ningún grupo activo con ese código.";
+                    return $"No se encontró ningún grupo activo con el código \"{codigo}\". Verifica que tu docente ya haya creado el grupo o déjalo vacío para registrarte y unirte después.";
             }
 
             var nuevoEstudiante = new ProyectoBlazor.Models.Estudiante
@@ -353,18 +355,27 @@
                 FechaRegistro = DateTime.Now
             };
 
+            if (grupoBd != null)
+            {
+                nuevoEstudiante.GruposEstudiantes.Add(new ProyectoBlazor.Models.GrupoEstudiante
+                {
+                    IdGrupo = grupoBd.IdGrupo,
+                    FechaInscripcion = DateTime.Now
+                });
+            }
+
             Db.Estudiantes.Add(nuevoEstudiante);
             await Db.SaveChangesAsync();
 
-            if (grupoBd != null)
+            string? docenteNombre = null;
+            if (grupoBd?.Docente != null)
             {
-                Db.GruposEstudiantes.Add(new ProyectoBlazor.Models.GrupoEstudiante
-                {
-                    IdGrupo = grupoBd.IdGrupo,
-                    IdEstudiante = nuevoEstudiante.IdEstudiante,
-                    FechaInscripcion = DateTime.Now
-                });
-                await Db.SaveChangesAsync();
+                var partes = new List<string> { grupoBd.Docente.Nombre };
+                if (!string.IsNullOrWhiteSpace(grupoBd.Docente.ApellidoPaterno) && grupoBd.Docente.ApellidoPaterno != "-")
+                    partes.Add(grupoBd.Docente.ApellidoPaterno);
+                if (!string.IsNullOrWhiteSpace(grupoBd.Docente.ApellidoMaterno))
+                    partes.Add(grupoBd.Docente.ApellidoMaterno);
+                docenteNombre = string.Join(' ', partes);
             }
 
             var usuario = new Usuario
@@ -376,7 +387,7 @@
                 NumeroControl = control,
                 EstudianteId = nuevoEstudiante.IdEstudiante
             };
-            await AbrirSesionAsync(usuario, grupoBd?.CodigoGrupo);
+            await AbrirSesionAsync(usuario, grupoBd?.CodigoGrupo, docenteNombre);
             return null;
         }
     }
@@ -423,11 +434,22 @@
 
             var inscripcion = await Db.GruposEstudiantes
                 .Include(ge => ge.Grupo)
+                    .ThenInclude(g => g!.Docente)
                 .Where(ge => ge.IdEstudiante == estudiante.IdEstudiante)
                 .OrderByDescending(ge => ge.FechaInscripcion)
                 .FirstOrDefaultAsync();
 
             var codigoGrupo = inscripcion?.Grupo?.CodigoGrupo;
+            string? docenteNombre = null;
+            if (inscripcion?.Grupo?.Docente != null)
+            {
+                var d = inscripcion.Grupo.Docente;
+                var partes = new List<string> { d.Nombre };
+                if (!string.IsNullOrWhiteSpace(d.ApellidoPaterno) && d.ApellidoPaterno != "-") partes.Add(d.ApellidoPaterno);
+                if (!string.IsNullOrWhiteSpace(d.ApellidoMaterno)) partes.Add(d.ApellidoMaterno);
+                docenteNombre = string.Join(' ', partes);
+            }
+
             var nombreCompleto = FormatearNombreCompleto(estudiante.Nombre, estudiante.ApellidoPaterno, estudiante.ApellidoMaterno);
 
             var usuario = new Usuario
@@ -440,7 +462,7 @@
                 EstudianteId = estudiante.IdEstudiante
             };
 
-            await AbrirSesionAsync(usuario, codigoGrupo);
+            await AbrirSesionAsync(usuario, codigoGrupo, docenteNombre);
             return null;
         }
     }
@@ -512,7 +534,7 @@
     }
 
     // Guarda el identificador de sesión actual para que las páginas Estudiante / Docente / juegos sepan quién entró.
-    private async Task AbrirSesionAsync(Usuario usuario, string? codigoGrupo)
+    private async Task AbrirSesionAsync(Usuario usuario, string? codigoGrupo, string? docenteNombre = null)
     {
         await JS.InvokeVoidAsync("localStorage.removeItem", "usuariosEvaluacionBlazor");
         await JS.InvokeVoidAsync("localStorage.removeItem", "evaluacionCognitiva");
@@ -523,8 +545,11 @@
             await JS.InvokeVoidAsync("localStorage.setItem", "estudianteNombre", usuario.Nombre);
             if (!string.IsNullOrWhiteSpace(codigoGrupo)) await JS.InvokeVoidAsync("localStorage.setItem", "grupoCodigo", codigoGrupo);
             else await JS.InvokeVoidAsync("localStorage.removeItem", "grupoCodigo");
+
+            if (!string.IsNullOrWhiteSpace(docenteNombre)) await JS.InvokeVoidAsync("localStorage.setItem", "docenteNombre", docenteNombre);
+            else await JS.InvokeVoidAsync("localStorage.removeItem", "docenteNombre");
+
             await JS.InvokeVoidAsync("localStorage.removeItem", "docenteId");
-            await JS.InvokeVoidAsync("localStorage.removeItem", "docenteNombre");
             await JS.InvokeVoidAsync("localStorage.removeItem", "docenteCorreo");
         }
         else

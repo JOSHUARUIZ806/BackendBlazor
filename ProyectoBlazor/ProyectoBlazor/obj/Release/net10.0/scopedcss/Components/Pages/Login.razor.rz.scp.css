@@ -1,0 +1,338 @@
+.page-scope[b-7rp6fjpsar] {
+  --navy: #1A3560;
+  --navy-dark: #132848;
+  --amber: #C97B2E;
+  --ink: #1F2937;
+  --muted: #6B7280;
+  --card-bg: #F6F7F8;
+  --card-border: #ECEDEF;
+  --bg: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.page-scope[b-7rp6fjpsar]  * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Header (igual que en las demás páginas) ── */
+.page-scope[b-7rp6fjpsar]  header {
+  background: var(--navy);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 18px 40px;
+  gap: 16px;
+}
+
+.page-scope[b-7rp6fjpsar]  .logo {
+  height: 40px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.page-scope[b-7rp6fjpsar]  .divider {
+  width: 1px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.page-scope[b-7rp6fjpsar]  header h1 {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.page-scope[b-7rp6fjpsar]  .back {
+  margin-left: auto;
+  font-size: 13px;
+  color: white;
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.page-scope[b-7rp6fjpsar]  .back:hover {
+  opacity: 1;
+}
+
+/* ── Contenido ── */
+.page-scope[b-7rp6fjpsar]  main {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+/* ── Tarjeta de acceso ── */
+.page-scope[b-7rp6fjpsar]  .login-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 40px 36px 34px;
+  box-shadow: 0 4px 24px rgba(26, 53, 96, 0.06);
+}
+
+/* Imagen del Instituto (en lugar del icono) */
+.page-scope[b-7rp6fjpsar]  .login-brand {
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 22px;
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-scope[b-7rp6fjpsar]  .card-logo {
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+.page-scope[b-7rp6fjpsar]  .login-card h2 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.page-scope[b-7rp6fjpsar]  .login-card .subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+/* Etiqueta del perfil */
+.page-scope[b-7rp6fjpsar]  .role-badge {
+  display: block;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.page-scope[b-7rp6fjpsar]  .role-badge span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+  background: #FBEFE1;
+  padding: 5px 14px;
+  border-radius: 20px;
+}
+
+/* Selector de perfil (solo si se entra sin ?rol=) */
+.page-scope[b-7rp6fjpsar]  .role-pick {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.page-scope[b-7rp6fjpsar]  .role-pick button {
+  flex: 1;
+  padding: 11px 8px;
+  border: 1px solid var(--card-border);
+  background: white;
+  color: var(--navy);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.page-scope[b-7rp6fjpsar]  .role-pick button:hover {
+  border-color: var(--navy);
+}
+
+.page-scope[b-7rp6fjpsar]  .role-pick button.activa {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+/* Pestañas Iniciar sesión / Crear cuenta */
+.page-scope[b-7rp6fjpsar]  .tabs {
+  display: flex;
+  background: white;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 22px;
+}
+
+.page-scope[b-7rp6fjpsar]  .tabs button {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  background: none;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background .15s ease, color .15s ease;
+}
+
+.page-scope[b-7rp6fjpsar]  .tabs button.activa {
+  background: var(--navy);
+  color: white;
+}
+
+/* Campos */
+.page-scope[b-7rp6fjpsar]  .field {
+  margin-bottom: 18px;
+}
+
+.page-scope[b-7rp6fjpsar]  .field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 7px;
+}
+
+.page-scope[b-7rp6fjpsar]  .field input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  color: var(--ink);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.page-scope[b-7rp6fjpsar]  .field input::placeholder {
+  color: #B0B5BD;
+}
+
+.page-scope[b-7rp6fjpsar]  .field input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(26, 53, 96, 0.1);
+}
+
+.page-scope[b-7rp6fjpsar]  .field .ayuda {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* Botón */
+.page-scope[b-7rp6fjpsar]  .btn-login {
+  width: 100%;
+  padding: 14px 24px;
+  margin-top: 6px;
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background .15s ease, transform .1s ease;
+}
+
+.page-scope[b-7rp6fjpsar]  .btn-login:hover {
+  background: var(--navy-dark);
+}
+
+.page-scope[b-7rp6fjpsar]  .btn-login:active {
+  transform: scale(0.98);
+}
+
+.page-scope[b-7rp6fjpsar]  .btn-login:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.page-scope[b-7rp6fjpsar]  .form-error {
+  background: #FDEBEB;
+  color: #D14343;
+  border: 1px solid rgba(209, 67, 67, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.page-scope[b-7rp6fjpsar]  .cambiar {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 18px;
+}
+
+.page-scope[b-7rp6fjpsar]  .cambiar button {
+  background: none;
+  border: none;
+  color: var(--navy);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 0;
+}
+
+.page-scope[b-7rp6fjpsar]  .cambiar button:hover {
+  text-decoration: underline;
+}
+
+.page-scope[b-7rp6fjpsar]  .volver {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.page-scope[b-7rp6fjpsar]  .volver:hover {
+  color: var(--navy);
+}
+
+.page-scope[b-7rp6fjpsar]  footer {
+  text-align: center;
+  padding: 24px 24px 32px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .page-scope[b-7rp6fjpsar]  header {
+    padding: 16px 20px;
+  }
+  .page-scope[b-7rp6fjpsar]  header h1 {
+    font-size: 16px;
+  }
+  .page-scope[b-7rp6fjpsar]  .back {
+    display: none;
+  }
+  .page-scope[b-7rp6fjpsar]  .login-card {
+    padding: 32px 22px 28px;
+  }
+}
+

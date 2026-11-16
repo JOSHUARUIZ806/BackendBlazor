@@ -39,7 +39,7 @@
     <!-- Progreso de la prueba: fase, tablero y errores (siempre visible) -->
     <div class="progress-line" id="progressLine" aria-live="polite">
         <span id="progFase">Fase 1/4</span><span class="sep">·</span>
-        <span id="progTablero">Tablero 1/2</span><span class="sep">·</span>
+        <span id="progTablero">Tablero 1/1</span><span class="sep">·</span>
         <span id="progErrores" class="prog-errores">Errores 0/4</span>
     </div>
 
@@ -105,7 +105,7 @@
                 <div class="modal-stat">
                     <span class="modal-stat-icon">🎯</span>
                     <span class="modal-stat-value" id="resPuntaje">0</span>
-                    <span class="modal-stat-label">Puntaje</span>
+                    <span class="modal-stat-label">Puntaje / 100</span>
                 </div>
                 <div class="modal-stat">
                     <span class="modal-stat-icon">⏱️</span>
@@ -148,11 +148,11 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                 </div>
                 <h2>¿Listo para el reto?</h2>
-                <p>La prueba tiene <strong>4 fases</strong> (tableros de 4×4, 6×6, 8×8 y 10×10) y en cada fase resolverás <strong>2 memoramas</strong> del mismo tamaño. Al inicio de cada tablero se muestran las cartas unos segundos para que las memorices; luego deberás descubrirlas de dos en dos.</p>
+                <p>La prueba tiene <strong>4 fases</strong> (tableros de 4×4, 6×6, 8×8 y 10×10) y en cada fase resolverás <strong>1 memorama</strong> del tamaño correspondiente. Al inicio de cada tablero se muestran las cartas unos segundos para que las memorices; luego deberás descubrirlas de dos en dos.</p>
                 <div class="cover-rules">
-                    <div class="cover-rules__item"><span class="cover-rules__num">1</span> 4 fases × 2 tableros: 4×4, 6×6, 8×8 y 10×10</div>
-                    <div class="cover-rules__item"><span class="cover-rules__num">2</span> Cada tablero permite un máximo de errores: la mitad de sus pares</div>
-                    <div class="cover-rules__item"><span class="cover-rules__num">3</span> Si superas el límite de errores, la prueba termina en ese punto</div>
+                    <div class="cover-rules__item"><span class="cover-rules__num">1</span> 4 fases: 4×4, 6×6, 8×8 y 10×10 (1 tablero por fase)</div>
+                    <div class="cover-rules__item"><span class="cover-rules__num">2</span> Cada tablero permite un máximo de errores: la mitad de sus aciertos disponibles</div>
+                    <div class="cover-rules__item"><span class="cover-rules__num">3</span> Al llegar a esa cantidad de errores, el juego se termina</div>
                 </div>
                 <button class="btn-primary-cover" id="btnStart">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3" /></svg>

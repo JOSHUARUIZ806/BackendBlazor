@@ -55,9 +55,7 @@ static async Task<object> ConstruirResumenEstudianteAsync(ApplicationDbContext d
 
     object? objMem = mem == null ? null : new
     {
-        puntaje = mem.TotalPares > 0
-            ? (int)Math.Round((double)mem.ParesEncontrados / mem.TotalPares * 100.0)
-            : (int)Math.Round(mem.PrecisionPorcentaje),
+        puntaje = (int)Math.Round(mem.PrecisionPorcentaje),
         precision_pct = mem.PrecisionPorcentaje,
         tiempo_ms = mem.TiempoSegundos * 1000,
         errores = mem.Errores,
@@ -66,19 +64,34 @@ static async Task<object> ConstruirResumenEstudianteAsync(ApplicationDbContext d
 
     object? objAte = ate == null ? null : new
     {
-        puntaje = ate.TotalRondas > 0
-            ? (int)Math.Round((double)ate.Aciertos / ate.TotalRondas * 100.0)
-            : (int)Math.Round(ate.PrecisionPorcentaje),
+        puntaje = (int)Math.Round(ate.PrecisionPorcentaje),
         precision_pct = ate.PrecisionPorcentaje,
         errores = ate.Errores,
         creado_en = ate.FechaPartida
     };
 
+    int puntajeSuc = 0;
+    if (suc != null)
+    {
+        if (!string.IsNullOrWhiteSpace(suc.DetallePruebas))
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(suc.DetallePruebas);
+                if (doc.RootElement.TryGetProperty("puntajeFinal", out var pf))
+                    puntajeSuc = pf.GetInt32();
+            }
+            catch {}
+        }
+        if (puntajeSuc == 0 && suc.TotalPruebas > 0)
+        {
+            puntajeSuc = (int)Math.Round((double)suc.RespuestasCorrectas / suc.TotalPruebas * 100.0);
+        }
+    }
+
     object? objSuc = suc == null ? null : new
     {
-        puntaje = suc.TotalPruebas > 0
-            ? (int)Math.Round((double)suc.RespuestasCorrectas / suc.TotalPruebas * 100.0)
-            : 0,
+        puntaje = puntajeSuc,
         precision_pct = suc.TotalPruebas > 0
             ? Math.Round((decimal)suc.RespuestasCorrectas / suc.TotalPruebas * 100m, 2)
             : 0m,
@@ -208,7 +221,9 @@ app.MapPost("/api/grupos/unirse", async (UnirseGrupoDto dto, ApplicationDbContex
         return Results.BadRequest(new { ok = false, error = "Datos incompletos." });
 
     var codigoLimpio = dto.Codigo.Trim().ToUpperInvariant();
-    var grupo = await db.Grupos.FirstOrDefaultAsync(g => g.CodigoGrupo.ToUpper() == codigoLimpio && g.Activo);
+    var grupo = await db.Grupos
+        .Include(g => g.Docente)
+        .FirstOrDefaultAsync(g => g.CodigoGrupo.ToUpper() == codigoLimpio && g.Activo);
     if (grupo == null)
         return Results.NotFound(new { ok = false, error = "No se encontró ningún grupo activo con ese código." });
 
@@ -226,7 +241,24 @@ app.MapPost("/api/grupos/unirse", async (UnirseGrupoDto dto, ApplicationDbContex
         await db.SaveChangesAsync();
     }
 
-    return Results.Ok(new { ok = true, codigo = grupo.CodigoGrupo, nombre = grupo.NombreGrupo });
+    string? docenteNombre = null;
+    if (grupo.Docente != null)
+    {
+        var partes = new List<string> { grupo.Docente.Nombre };
+        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoPaterno) && grupo.Docente.ApellidoPaterno != "-")
+            partes.Add(grupo.Docente.ApellidoPaterno);
+        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoMaterno))
+            partes.Add(grupo.Docente.ApellidoMaterno);
+        docenteNombre = string.Join(' ', partes);
+    }
+
+    return Results.Ok(new
+    {
+        ok = true,
+        codigo = grupo.CodigoGrupo,
+        nombre = grupo.NombreGrupo,
+        docente = docenteNombre
+    });
 });
 
 app.MapGet("/api/estudiantes/{id:int}/resumen", async (int id, ApplicationDbContext db) =>
@@ -237,15 +269,29 @@ app.MapGet("/api/estudiantes/{id:int}/resumen", async (int id, ApplicationDbCont
 
     var inscripcion = await db.GruposEstudiantes
         .Include(ge => ge.Grupo)
+            .ThenInclude(g => g!.Docente)
         .Where(ge => ge.IdEstudiante == id)
         .OrderByDescending(ge => ge.FechaInscripcion)
         .FirstOrDefaultAsync();
+
+    string? docenteNombre = null;
+    var grupo = inscripcion?.Grupo;
+    if (grupo?.Docente != null)
+    {
+        var partes = new List<string> { grupo.Docente.Nombre };
+        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoPaterno) && grupo.Docente.ApellidoPaterno != "-")
+            partes.Add(grupo.Docente.ApellidoPaterno);
+        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoMaterno))
+            partes.Add(grupo.Docente.ApellidoMaterno);
+        docenteNombre = string.Join(' ', partes);
+    }
 
     var resumen = await ConstruirResumenEstudianteAsync(db, id);
     return Results.Ok(new
     {
         ok = true,
-        grupoCodigo = inscripcion?.Grupo?.CodigoGrupo,
+        grupoCodigo = grupo?.CodigoGrupo,
+        docente = docenteNombre,
         resumen
     });
 });
@@ -272,7 +318,7 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
         case "memoria":
         {
             int paresEncontrados = 0;
-            int totalPares = 52;
+            int totalPares = 108;
             if (dto.Detalle.HasValue && dto.Detalle.Value.ValueKind == JsonValueKind.Object &&
                 dto.Detalle.Value.TryGetProperty("fases", out var fasesEl) && fasesEl.ValueKind == JsonValueKind.Array)
             {
@@ -302,7 +348,7 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
                 TotalPares = totalPares,
                 Movimientos = paresEncontrados + dto.Errores,
                 Errores = dto.Errores,
-                PrecisionPorcentaje = Math.Clamp(dto.PrecisionPct, 0m, 100m),
+                PrecisionPorcentaje = Math.Clamp((decimal)dto.Puntaje, 0m, 100m),
                 TiempoSegundos = Math.Max(0, (int)Math.Round(dto.TiempoMs / 1000.0)),
                 RatingEstrellas = estrellas,
                 FechaPartida = DateTime.Now
@@ -313,7 +359,7 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
 
         case "atencion":
         {
-            int totalRondas = 45;
+            int totalRondas = 15;
             int aciertos = (int)Math.Round(dto.Puntaje * totalRondas / 100.0);
             string evaluacion = dto.PrecisionPct >= 90
                 ? "Control Inhibitorio Excelente"
@@ -326,7 +372,7 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
                 TotalRondas = totalRondas,
                 Aciertos = aciertos,
                 Errores = dto.Errores,
-                PrecisionPorcentaje = Math.Clamp(dto.PrecisionPct, 0m, 100m),
+                PrecisionPorcentaje = Math.Clamp((decimal)dto.Puntaje, 0m, 100m),
                 Evaluacion = evaluacion,
                 FechaPartida = DateTime.Now
             };
@@ -360,14 +406,27 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
         case "razonamiento":
         {
             int totalPruebas = 15;
-            int correctas = (int)Math.Round(dto.Puntaje * totalPruebas / 100.0);
+            int aciertosReales = 0;
+            if (dto.Detalle.HasValue && dto.Detalle.Value.ValueKind == JsonValueKind.Object &&
+                dto.Detalle.Value.TryGetProperty("preguntas", out var pregEl) && pregEl.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var p in pregEl.EnumerateArray())
+                {
+                    if (p.TryGetProperty("correct", out var c) && c.GetBoolean())
+                        aciertosReales++;
+                }
+            }
+            else
+            {
+                aciertosReales = (int)Math.Round(dto.Puntaje * totalPruebas / 100.0);
+            }
 
             db.ResultadosSucesiones.Add(new ResultadoSucesiones
             {
                 IdEstudiante = dto.EstudianteId,
                 IdGrupo = idGrupo,
                 TotalPruebas = totalPruebas,
-                RespuestasCorrectas = correctas,
+                RespuestasCorrectas = aciertosReales,
                 RespuestasIncorrectas = dto.Errores,
                 TiempoTotalMs = Math.Max(0, dto.TiempoMs),
                 DetallePruebas = dto.Detalle.HasValue ? dto.Detalle.Value.GetRawText() : null,
@@ -379,7 +438,7 @@ app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbCont
 
         case "velocidad":
         {
-            int totalCirculos = 40;
+            int totalCirculos = 85;
             var ahora = DateTime.Now;
             var inicio = ahora.AddMilliseconds(-Math.Max(0, dto.TiempoMs));
 

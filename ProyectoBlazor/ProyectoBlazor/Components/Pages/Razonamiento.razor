@@ -40,21 +40,17 @@
                 <h2>¿Listo para el reto?</h2>
                 <p>
                     Resuelve 15 niveles divididos en 3 fases de 5 niveles cada una. En cada nivel verás una sucesión con el
-                    último elemento oculto: deduce el patrón y elige la opción correcta entre cuatro. Los problemas se generan
-                    aleatoriamente.
+                    último elemento oculto: deduce el patrón y elige la opción correcta entre cuatro. La pista se encuentra oculta (solicitarla restará puntos de tu evaluación) y tardar más de 1 minuto en resolver el nivel también restará puntos.
                 </p>
                 <div class="rules-list">
                     <div class="rules-list__item">
-                        <span class="rules-list__num">1</span>Fase 1 (Niveles 1–5) · Números: sumas,
-                        diferencias crecientes, operaciones alternadas y series entrelazadas
+                        <span class="rules-list__num">1</span>Fase 1 (Niveles 1–5) · Flechas: giros de 90° y patrones de relleno
                     </div>
                     <div class="rules-list__item">
-                        <span class="rules-list__num">2</span>Fase 2 (Niveles 6–10) · Letras: saltos en
-                        el alfabeto español
+                        <span class="rules-list__num">2</span>Fase 2 (Niveles 6–10) · Números: sumas, diferencias crecientes, operaciones alternadas y series entrelazadas
                     </div>
                     <div class="rules-list__item">
-                        <span class="rules-list__num">3</span>Fase 3 (Niveles 11–15) · Flechas: giros de
-                        90° y patrones de relleno
+                        <span class="rules-list__num">3</span>Fase 3 (Niveles 11–15) · Alfabeto: saltos en el alfabeto español
                     </div>
                 </div>
                 <button id="btn-start" class="btn-primary">
@@ -125,7 +121,17 @@
             <!-- Question card -->
             <div class="question-card">
                 <div id="q-label" class="question-card__label"></div>
-                <p id="q-hint" class="question-card__hint"></p>
+                <div class="hint-container">
+                    <button type="button" id="btn-show-hint" class="btn-hint">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18h6" />
+                            <path d="M10 22h4" />
+                            <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z" />
+                        </svg>
+                        Pedir pista (-2 pts)
+                    </button>
+                    <p id="q-hint" class="question-card__hint" style="display:none;"></p>
+                </div>
                 <div id="sequence-display" class="sequence-display"></div>
                 <div id="explanation" class="explanation" style="display:none">
                     <div class="explanation__title">💡 Explicación</div>
@@ -156,6 +162,10 @@
 
                 <div class="results-stats">
                     <div class="result-stat">
+                        <div id="res-score" class="result-stat__value result-stat__value--indigo">0</div>
+                        <div class="result-stat__label">Puntaje</div>
+                    </div>
+                    <div class="result-stat">
                         <div id="res-correct" class="result-stat__value result-stat__value--green">0</div>
                         <div class="result-stat__label">Aciertos</div>
                     </div>
@@ -168,6 +178,7 @@
                         <div class="result-stat__label">Tiempo Total</div>
                     </div>
                 </div>
+                <div id="results-penalties" class="results-penalties"></div>
 
                 <div id="results-detail" class="results-detail">
                     <div class="results-detail__title">Desglose por fase</div>

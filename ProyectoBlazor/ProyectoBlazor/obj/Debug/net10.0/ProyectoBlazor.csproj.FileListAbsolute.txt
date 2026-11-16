@@ -212,10 +212,7 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\runtimes\win-x86\native\msalruntime_x86.dll
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\System.Security.Cryptography.Pkcs.dll
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\runtimes\win\lib\net10.0\System.Security.Cryptography.Pkcs.dll
-c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-g9hvub3f68-g9hvub3f68.gz
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\riuz8qxs4x-{0}-00i0et01yx-00i0et01yx.gz
-c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\l40t2e53ca-{0}-h0zpz8b4rs-h0zpz8b4rs.gz
-c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\19pydepsbz-{0}-ftvfx0jmy8-ftvfx0jmy8.gz
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\scopedcss\Components\Pages\Atencion.razor.rz.scp.css
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\scopedcss\Components\Pages\Docente.razor.rz.scp.css
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\scopedcss\Components\Pages\Estudiante.razor.rz.scp.css
@@ -226,9 +223,6 @@ c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\scopedcss\Components\Pages\Procesamiento.razor.rz.scp.css
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\scopedcss\Components\Pages\Razonamiento.razor.rz.scp.css
 c:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\snhckdgwv9-{0}-3l496ze94c-3l496ze94c.gz
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\nuui9sz41t-{0}-8j9l8cnk2e-8j9l8cnk2e.gz
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\jve5dthuig-{0}-8j9l8cnk2e-8j9l8cnk2e.gz
-C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\Azure.Core.dll
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\Azure.Identity.dll
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\bin\Debug\net10.0\Humanizer.dll
@@ -380,3 +374,10 @@ C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoB
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\jve5dthuig-{0}-8j9l8cnk2e-8j9l8cnk2e.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\rodwsalkg8-{0}-h6aae2zp56-h6aae2zp56.gz
 C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\tpo2do94d7-{0}-24whc5ikbw-24whc5ikbw.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\rodwsalkg8-{0}-h6aae2zp56-h6aae2zp56.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\19pydepsbz-{0}-d90y273z0m-d90y273z0m.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\l40t2e53ca-{0}-oo0jmstu57-oo0jmstu57.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\qc3cqufntf-{0}-us55w96ird-us55w96ird.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\nuui9sz41t-{0}-b050v4z17e-b050v4z17e.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\jve5dthuig-{0}-b050v4z17e-b050v4z17e.gz
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Debug\net10.0\compressed\tpo2do94d7-{0}-1753qepao8-1753qepao8.gz

@@ -1,4 +1,4 @@
-﻿/* Estudiante.js — antes estaba dentro de Estudiante.razor; se movió a wwwroot para que
+/* Estudiante.js — antes estaba dentro de Estudiante.razor; se movió a wwwroot para que
    se ejecute siempre (Blazor no corre los <script> que están dentro de un .razor). */
 window.iniciarEstudiante = function () {
     // ============================================================
@@ -222,13 +222,51 @@ window.iniciarEstudiante = function () {
         st.className = 'test-status done';
     }
 
-    // Unirse a un grupo en SQL Server
+    // ============================================================
+    // Gestión del grupo del estudiante
+    // ============================================================
     const inputCodigo = document.getElementById('code');
     const btnUnirseGrupo = document.getElementById('btnUnirseGrupo');
-    const grupoActual = localStorage.getItem('grupoCodigo');
-    if (inputCodigo && grupoActual) {
-        inputCodigo.value = grupoActual;
+    const introGrupo = document.getElementById('introGrupo');
+    const formGrupo = document.getElementById('formGrupo');
+    const cardGrupoUnido = document.getElementById('cardGrupoUnido');
+    const lblGrupoCodigo = document.getElementById('lblGrupoCodigo');
+    const lblDocenteNombre = document.getElementById('lblDocenteNombre');
+    const btnCambiarGrupo = document.getElementById('btnCambiarGrupo');
+
+    function mostrarGrupoUnido(codigo, docente) {
+        if (!cardGrupoUnido || !formGrupo) return;
+        if (lblGrupoCodigo) lblGrupoCodigo.textContent = codigo || '---';
+        if (lblDocenteNombre) lblDocenteNombre.textContent = docente || 'Docente asignado';
+        formGrupo.style.display = 'none';
+        if (introGrupo) introGrupo.style.display = 'none';
+        cardGrupoUnido.style.display = 'block';
     }
+
+    function mostrarFormularioGrupo() {
+        if (!cardGrupoUnido || !formGrupo) return;
+        cardGrupoUnido.style.display = 'none';
+        if (introGrupo) introGrupo.style.display = 'block';
+        formGrupo.style.display = 'flex';
+        if (inputCodigo) {
+            inputCodigo.value = '';
+            inputCodigo.focus();
+        }
+    }
+
+    if (btnCambiarGrupo) {
+        btnCambiarGrupo.addEventListener('click', () => {
+            mostrarFormularioGrupo();
+        });
+    }
+
+    const grupoGuardado = localStorage.getItem('grupoCodigo');
+    const docenteGuardado = localStorage.getItem('docenteNombre');
+    if (grupoGuardado) {
+        if (inputCodigo) inputCodigo.value = grupoGuardado;
+        mostrarGrupoUnido(grupoGuardado, docenteGuardado);
+    }
+
     if (btnUnirseGrupo && inputCodigo) {
         btnUnirseGrupo.addEventListener('click', async () => {
             const codigo = inputCodigo.value.trim().toUpperCase();
@@ -250,8 +288,11 @@ window.iniciarEstudiante = function () {
                     return;
                 }
                 localStorage.setItem('grupoCodigo', data.codigo);
+                if (data.docente) {
+                    localStorage.setItem('docenteNombre', data.docente);
+                }
                 inputCodigo.value = data.codigo;
-                alert('Te has inscrito correctamente al grupo ' + data.codigo + '.');
+                mostrarGrupoUnido(data.codigo, data.docente);
             } catch (err) {
                 alert('Error al conectar con la base de datos.');
             } finally {
@@ -273,9 +314,13 @@ window.iniciarEstudiante = function () {
             .then((res) => (res.ok ? res.json() : null))
             .then((data) => {
                 if (!data || !data.resumen) return;
-                if (data.grupoCodigo && inputCodigo && !inputCodigo.value) {
-                    inputCodigo.value = data.grupoCodigo;
+                if (data.grupoCodigo) {
                     localStorage.setItem('grupoCodigo', data.grupoCodigo);
+                    if (data.docente) {
+                        localStorage.setItem('docenteNombre', data.docente);
+                    }
+                    if (inputCodigo) inputCodigo.value = data.grupoCodigo;
+                    mostrarGrupoUnido(data.grupoCodigo, data.docente || localStorage.getItem('docenteNombre') || '');
                 }
                 const tag = document.getElementById('results-tag');
                 tag.textContent = 'Tus resultados';
