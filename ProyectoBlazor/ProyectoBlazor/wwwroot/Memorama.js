@@ -1,13 +1,11 @@
 /* ═══════════════════════════════════════════════════════
    MEMORAMA POR FASES — Lógica del juego
-   4 fases (4x4, 6x6, 8x8, 10x10) × 2 tableros por fase.
-   Cada tablero tiene un límite de errores (mitad de sus pares);
-   al alcanzarlo la prueba termina.
+   4 fases (4x4, 6x6, 8x8, 10x10) × 1 tablero por fase.
+   Cada tablero tiene un límite de errores (mitad de sus aciertos disponibles);
+   al alcanzar esa cantidad de errores el juego se termina.
    ═══════════════════════════════════════════════════════ */
 
 window.iniciarMemorama = function () {
-
-
   // ─── Emojis (50 distintos: lo que exige el tablero de 10x10) ───
   const CARD_EMOJIS = [
     '🦊', '🐉', '🦄', '🐬', '🦅', '🐙', '🌸', '🌊', '🔥', '🌙',
@@ -29,11 +27,11 @@ window.iniciarMemorama = function () {
     return {
       ...f,
       tamano: `${f.lado}x${f.lado}`,
-      pares,                                   // pares por tablero
-      limiteErrores: pares     // errores permitidos por tablero
+      pares,                                       // pares por tablero (aciertos disponibles)
+      limiteErrores: Math.floor(pares / 2)         // errores permitidos por tablero: mitad de aciertos disponibles
     };
   });
-  const TABLEROS_POR_FASE = 2;
+  const TABLEROS_POR_FASE = 1;
 
   // ─── DOM Elements ───────────────────────────────────
   const $ = (sel) => document.querySelector(sel);
@@ -274,9 +272,9 @@ window.iniciarMemorama = function () {
       highlightRepeatedErrors(idx1, idx2);
       updateErrorPanel();
 
-      const limiteAlcanzado = errors > fase.limiteErrores;
+      const limiteAlcanzado = errors >= fase.limiteErrores;
       if (limiteAlcanzado) {
-        // Se detiene el tiempo en el momento del error que agota el límite
+        // Se detiene el tiempo en el momento del error que alcanza el límite
         finishBoard(false, 900);
         return;
       }
@@ -379,17 +377,11 @@ window.iniciarMemorama = function () {
 
   // ─── Transición entre tableros / fases ──────────────
   function showTransition() {
-    const cambiaFase = tableroIdx === TABLEROS_POR_FASE - 1;
-    const sigFase = cambiaFase ? faseIdx + 1 : faseIdx;
-    const sigTablero = cambiaFase ? 0 : tableroIdx + 1;
+    const sigFase = faseIdx + 1;
 
-    $('#transIcon').textContent = cambiaFase ? '🎉' : '✅';
-    $('#transTitle').textContent = cambiaFase
-      ? `¡Fase ${faseIdx + 1} completada!`
-      : `¡Tablero ${tableroIdx + 1} completado!`;
-    $('#transText').textContent = cambiaFase
-      ? `Sigue la Fase ${sigFase + 1}/4 con tableros de ${FASES[sigFase].tamano}. Límite: ${FASES[sigFase].limiteErrores} errores por tablero.`
-      : `Sigue el Tablero ${sigTablero + 1}/${TABLEROS_POR_FASE} de la Fase ${sigFase + 1} (${FASES[sigFase].tamano}).`;
+    $('#transIcon').textContent = '🎉';
+    $('#transTitle').textContent = `¡Fase ${faseIdx + 1} completada!`;
+    $('#transText').textContent = `Sigue la Fase ${sigFase + 1}/4 con tablero de ${FASES[sigFase].tamano}. Límite: ${FASES[sigFase].limiteErrores} errores permitidos.`;
 
     transitionModal.classList.add('active');
     btnContinue.focus();
@@ -397,12 +389,8 @@ window.iniciarMemorama = function () {
 
   function onContinue() {
     transitionModal.classList.remove('active');
-    if (tableroIdx === TABLEROS_POR_FASE - 1) {
-      faseIdx++;
-      tableroIdx = 0;
-    } else {
-      tableroIdx++;
-    }
+    faseIdx++;
+    tableroIdx = 0;
     startBoard();
   }
 
@@ -433,8 +421,8 @@ window.iniciarMemorama = function () {
     $('#resIcon').textContent = terminoPorErrores ? '🛑' : '🏆';
     $('#resTitle').textContent = terminoPorErrores ? 'La prueba ha terminado' : '¡Prueba completada!';
     $('#resSubtitle').textContent = terminoPorErrores
-      ? `Superaste el límite de errores. Llegaste hasta la fase ${faseIdx + 1}, tablero ${tableroIdx + 1}.`
-      : 'Completaste las 4 fases (8 tableros).';
+      ? `Llegaste al límite de errores permitidos. Llegaste hasta la fase ${faseIdx + 1} (${FASES[faseIdx].tamano}).`
+      : 'Completaste las 4 fases (4 tableros).';
     $('#resPuntaje').textContent = puntaje;
     $('#resTiempo').textContent = formatTime(Math.floor(tiempoMs / 1000));
     $('#resAciertos').textContent = aciertos;

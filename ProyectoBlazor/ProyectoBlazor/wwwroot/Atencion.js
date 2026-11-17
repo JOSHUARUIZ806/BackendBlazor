@@ -417,7 +417,7 @@ class StroopGame {
     const phase = PHASES[this.phaseIndex];
     this.acceptingInput = false;
 
-    this.phaseKicker.textContent = `Fase ${this.phaseIndex + 1} de ${TOTAL_PHASES}`;
+    this.phaseKicker.textContent = `Parte ${this.phaseIndex + 1} de ${TOTAL_PHASES} (Niveles ${this.phaseIndex * LEVELS_PER_PHASE + 1} a ${(this.phaseIndex + 1) * LEVELS_PER_PHASE})`;
     this.phaseTitle.textContent = phase.nombre;
     this.phaseDesc.innerHTML = phase.descripcion;
 
@@ -437,7 +437,7 @@ class StroopGame {
     }).join('');
 
     this.phaseMeta.textContent =
-      `${LEVELS_PER_PHASE} niveles · ` +
+      `5 niveles en esta parte (15 niveles en total) · ` +
       `Errores acumulados: ${this.errors}/${MAX_ERRORS}`;
 
     this.showScreen('phase');
@@ -458,8 +458,9 @@ class StroopGame {
     const text = TASK_TEXT[stim.task];
 
     // Indicadores superiores
+    const globalLevel = this.phaseIndex * LEVELS_PER_PHASE + stim.level;
     this.positionIndicator.textContent =
-      `Fase ${this.phaseIndex + 1}/${TOTAL_PHASES} · Nivel ${stim.level}/${LEVELS_PER_PHASE}`;
+      `Nivel ${globalLevel}/${TOTAL_STIMULI} · Parte ${this.phaseIndex + 1}/${TOTAL_PHASES}`;
 
     const answered = this.hits + this.errors;
     this.progressBar.style.width = `${(answered / TOTAL_STIMULI) * 100}%`;
@@ -504,11 +505,6 @@ class StroopGame {
         btn.setAttribute('aria-label', `Opción ${idx + 1}`);
         btn.innerHTML = `<div class="option-left"><span class="option-key-badge">${idx + 1}</span></div>`;
       }
-
-
-
-
-
 
       btn.addEventListener('click', () => this.handleOptionSelect(colorOpt, btn));
       this.optionsGrid.appendChild(btn);

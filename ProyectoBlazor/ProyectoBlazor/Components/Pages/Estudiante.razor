@@ -13,18 +13,44 @@
 </header>
 
 <main>
-  <div class="intro">
+  <div class="intro" id="introGrupo">
     <h2>Acceso de estudiante</h2>
     <p>Ingresa el código de grupo que te compartió tu docente para comenzar.</p>
   </div>
 
-  <form class="access" onsubmit="return false;">
+  <form class="access" id="formGrupo" onsubmit="return false;">
     <div class="access-field">
       <label for="code">Código de grupo</label>
       <input id="code" type="text" placeholder="Ej. INF-2026-A" maxlength="20" style="text-transform:uppercase;">
     </div>
     <button type="button" class="btn" id="btnUnirseGrupo">Ingresar</button>
   </form>
+
+  <!-- Tarjeta mostrada cuando el estudiante ya se unió a un grupo -->
+  <div class="group-joined-card" id="cardGrupoUnido" style="display:none;">
+    <div class="group-joined-header">
+      <span class="group-joined-badge">
+        <span class="pulse-dot-green"></span>
+        Te uniste a un grupo
+      </span>
+    </div>
+    <div class="group-joined-body">
+      <div class="group-info-item">
+        <span class="group-info-label">Código del grupo</span>
+        <span class="group-info-value group-code-highlight" id="lblGrupoCodigo">---</span>
+      </div>
+      <div class="group-info-item">
+        <span class="group-info-label">Docente</span>
+        <span class="group-info-value" id="lblDocenteNombre">---</span>
+      </div>
+    </div>
+    <div class="group-joined-actions">
+      <button type="button" class="btn-secondary-group" id="btnCambiarGrupo">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        Unirse a otro grupo
+      </button>
+    </div>
+  </div>
 
   <div class="section-title">Tus pruebas</div>
   <div class="section-sub">Se presentan en una sola sesión, en el orden que prefieras.</div>
