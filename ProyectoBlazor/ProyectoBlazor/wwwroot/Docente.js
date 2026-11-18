@@ -1,5 +1,15 @@
-﻿/* Docente.js — antes estaba dentro de Docente.razor; se movió a wwwroot para que
-   se ejecute siempre (Blazor no corre los <script> que están dentro de un .razor). */
+﻿// Convierte texto a HTML seguro (evita que un nombre con código se ejecute).
+function escaparHtml(texto) {
+    return String(texto ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+/* Docente.js — antes estaba dentro de Docente.razor; se movió a wwwroot para que
+  se ejecute siempre (Blazor no corre los <script> que están dentro de un .razor). */
 window.iniciarDocente = function () {
     const btn = document.getElementById('genCodeBtn');
     const codeEl = document.getElementById('groupCode');
@@ -168,7 +178,7 @@ window.iniciarDocente = function () {
                 }).join('');
 
                 return `<tr>
-          <td>${estudiante.nombre}</td>
+          <td>${escaparHtml(estudiante.nombre)}</td>
           ${celdas}
           <td>${completas} / ${PRUEBAS.length}</td>
           <td><span class="tag ${tagClase}">${tagTexto}</span></td>
