@@ -58,6 +58,7 @@ BEGIN
         carrera VARCHAR(100) NULL,
         correo_electronico VARCHAR(150) NOT NULL UNIQUE,
         contrasena VARCHAR(255) NOT NULL,
+        tipo_aprendizaje VARCHAR(50) NULL,
         fecha_registro DATETIME NOT NULL DEFAULT GETDATE()
     );
 END

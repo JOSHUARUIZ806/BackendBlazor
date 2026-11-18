@@ -21,16 +21,16 @@ window.iniciarRazonamiento = function () {
 
     const CATEGORIAS = [
         {
+            id: 'flechas', nombre: 'Flechas (90°)', grafico: true,
+            descripcion: 'Fíjate hacia dónde gira cada flecha en pasos de 90° (sentido horario o antihorario) y en su relleno.'
+        },
+        {
             id: 'numeros', nombre: 'Números', grafico: false,
             descripcion: 'Descubre el número que falta: observa sumas, diferencias crecientes, operaciones alternadas y series entrelazadas.'
         },
         {
-            id: 'letras', nombre: 'Letras', grafico: false,
+            id: 'letras', nombre: 'Alfabeto', grafico: false,
             descripcion: 'Usa el orden del alfabeto español (incluye la Ñ) para encontrar la letra que falta.'
-        },
-        {
-            id: 'flechas', nombre: 'Flechas (90°)', grafico: true,
-            descripcion: 'Fíjate hacia dónde gira cada flecha en pasos de 90° (sentido horario o antihorario) y en su relleno.'
         }
     ];
 
@@ -41,10 +41,13 @@ window.iniciarRazonamiento = function () {
         wrongCount: 0,
         timerInterval: null,
         questionStartTime: 0,
-        results: [],          // { nivel, categoria, correct, timeMs }
+        results: [],          // { nivel, categoria, correct, timeMs, usedHint, overtime, points }
         answered: false,
         questions: [],
-        enviado: false        // evita enviar el resultado más de una vez
+        enviado: false,       // evita enviar el resultado más de una vez
+        currentHintUsed: false,
+        totalHintsUsed: 0,
+        totalOvertimeCount: 0
     };
 
     // ===== DOM =====
@@ -599,11 +602,11 @@ window.iniciarRazonamiento = function () {
         };
     }
 
-    // 15 generadores: 5 de números, 5 de letras y 5 de flechas (90°)
+    // 15 generadores en orden: 5 de flechas (90°), 5 de números y 5 de alfabeto
     const GENERADORES = [
+        generateFlechasGiro90, generateFlechasGiro90RellenoAlt, generateFlechasGiro90RellenoCiclo, generateFlechasGiro90DobleAlt, generateFlechasGiro90Pares,
         generateConstantDiff, generateIncreasingDiff, generateAddSubAlt, generateMultSubAlt, generateInterleaved,
-        generateLetrasSaltoAscendente, generateLetrasSaltoConstante, generateLetrasSaltoCreciente, generateLetrasSaltosAlternados, generateLetrasIntercaladas,
-        generateFlechasGiro90, generateFlechasGiro90RellenoAlt, generateFlechasGiro90RellenoCiclo, generateFlechasGiro90DobleAlt, generateFlechasGiro90Pares
+        generateLetrasSaltoAscendente, generateLetrasSaltoConstante, generateLetrasSaltoCreciente, generateLetrasSaltosAlternados, generateLetrasIntercaladas
     ];
 
     // Categoría (fase) a la que pertenece un nivel (1-15)
@@ -709,6 +712,20 @@ window.iniciarRazonamiento = function () {
         });
     }
 
+    // ===== PISTA =====
+    function pedirPista() {
+        if (state.answered || state.currentHintUsed) return;
+        state.currentHintUsed = true;
+        state.totalHintsUsed++;
+        const q = state.questions[state.currentQuestion];
+        const hintEl = $('q-hint');
+        hintEl.innerHTML = `💡 <strong>Pista:</strong> ${q.hint} <span class="hint-penalty-badge">-2 pts</span>`;
+        hintEl.style.display = 'block';
+
+        const btnHint = $('btn-show-hint');
+        if (btnHint) btnHint.style.display = 'none';
+    }
+
     // ===== TEMPORIZADOR (cronómetro por nivel) =====
     function startTimer() {
         state.questionStartTime = Date.now();
@@ -716,6 +733,7 @@ window.iniciarRazonamiento = function () {
         const timerText = $('timer-text');
         timerEl.className = 'quiz-timer';
         timerText.textContent = '00:00';
+        timerEl.title = 'Resuelve en menos de 1 minuto para evitar penalización';
 
         if (state.timerInterval) clearInterval(state.timerInterval);
         state.timerInterval = setInterval(() => {
@@ -724,9 +742,14 @@ window.iniciarRazonamiento = function () {
             const secs = String(elapsed % 60).padStart(2, '0');
             timerText.textContent = `${mins}:${secs}`;
 
-            if (elapsed >= 60) timerEl.className = 'quiz-timer danger';
-            else if (elapsed >= 30) timerEl.className = 'quiz-timer warning';
-            else timerEl.className = 'quiz-timer';
+            if (elapsed >= 60) {
+                timerEl.className = 'quiz-timer danger';
+                timerEl.title = 'Tiempo superior a 1 minuto (-2 pts de penalización)';
+            } else if (elapsed >= 45) {
+                timerEl.className = 'quiz-timer warning';
+            } else {
+                timerEl.className = 'quiz-timer';
+            }
         }, 250);
     }
 
@@ -753,8 +776,26 @@ window.iniciarRazonamiento = function () {
 
         const elapsed = stopTimer();
         const isCorrect = selected.key === q.answer.key;
+        const usedHint = state.currentHintUsed;
+        const overtime = (elapsed / 1000) > 60; // Más de 1 minuto
 
+        if (overtime) {
+            state.totalOvertimeCount++;
+        }
+
+        // Puntos de la pregunta:
+        // Base = 100 / 15 ≈ 6.6667
+        // Si pidió pista: -2 pts
+        // Si tardó más de 1 minuto (>60s): -2 pts
+        // Mínimo al acertar: 1 pt
+        // Si falló: 0 pts
+        let points = 0;
+        const basePoints = 100 / TOTAL_NIVELES;
         if (isCorrect) {
+            let p = basePoints;
+            if (usedHint) p -= 2;
+            if (overtime) p -= 2;
+            points = Math.max(1, p);
             state.correctCount++;
             btnEl.classList.add('correct');
         } else {
@@ -766,12 +807,24 @@ window.iniciarRazonamiento = function () {
             });
         }
 
+        // Desactivar botón de pista si seguía en pantalla
+        const btnHint = $('btn-show-hint');
+        if (btnHint) btnHint.style.display = 'none';
+
         $('stat-correct').textContent = state.correctCount;
         $('stat-wrong').textContent = state.wrongCount;
 
         showFeedback(isCorrect);
 
-        state.results.push({ nivel: q.nivel, categoria: q.categoria, correct: isCorrect, timeMs: elapsed });
+        state.results.push({
+            nivel: q.nivel,
+            categoria: q.categoria,
+            correct: isCorrect,
+            timeMs: elapsed,
+            usedHint,
+            overtime,
+            points
+        });
 
         // Explicación
         $('explanation-text').textContent = q.explanation;
@@ -805,15 +858,34 @@ window.iniciarRazonamiento = function () {
     // ===== CARGAR PREGUNTA =====
     function loadQuestion(index) {
         state.answered = false;
+        state.currentHintUsed = false;
         $('explanation').style.display = 'none';
         $('btn-next').style.display = 'none';
+
+        // Ocultar pista por defecto
+        const hintEl = $('q-hint');
+        hintEl.style.display = 'none';
+        hintEl.textContent = '';
+
+        const btnHint = $('btn-show-hint');
+        if (btnHint) {
+            btnHint.style.display = 'inline-flex';
+            btnHint.disabled = false;
+            btnHint.innerHTML = `
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18h6" />
+                    <path d="M10 22h4" />
+                    <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z" />
+                </svg>
+                Pedir pista (-2 pts)
+            `;
+        }
 
         const q = state.questions[index];
         const cat = categoriaDeNivel(q.nivel);
         const fase = CATEGORIAS.indexOf(cat) + 1;
         const nivelEnFase = ((q.nivel - 1) % NIVELES_POR_CATEGORIA) + 1;
         $('q-label').textContent = `Fase ${fase}/${CATEGORIAS.length} · Nivel ${nivelEnFase}/${NIVELES_POR_CATEGORIA} · ${cat.nombre}`;
-        $('q-hint').textContent = `Pista: ${q.hint}`;
         $('progress-label').textContent = `Nivel ${index + 1} / ${state.questions.length}`;
         $('progress-fill').style.width = `${(index / state.questions.length) * 100}%`;
 
@@ -862,23 +934,46 @@ window.iniciarRazonamiento = function () {
         const wrong = state.wrongCount;
         const totalTime = state.results.reduce((s, r) => s + r.timeMs, 0);
 
+        // Suma de puntos obtenidos y cálculo final sobre 100
+        const totalPointsEarned = state.results.reduce((s, r) => s + (r.points || 0), 0);
+        const puntaje = Math.max(0, Math.min(100, Math.round(totalPointsEarned)));
+
+        const scoreEl = $('res-score');
+        if (scoreEl) scoreEl.textContent = puntaje;
         $('res-correct').textContent = correct;
         $('res-wrong').textContent = wrong;
         $('res-time').textContent = formatearTiempo(totalTime);
 
-        if (correct === total) {
+        // Mostrar desglose de penalizaciones
+        const penaltiesEl = $('results-penalties');
+        if (penaltiesEl) {
+            const penalPistas = state.totalHintsUsed * 2;
+            const penalTiempo = state.totalOvertimeCount * 2;
+            if (state.totalHintsUsed > 0 || state.totalOvertimeCount > 0) {
+                penaltiesEl.innerHTML = `⚠️ <strong>Penalizaciones aplicadas:</strong> ` +
+                    (state.totalHintsUsed > 0 ? `Pistas pedidas: ${state.totalHintsUsed} (-${penalPistas} pts) ` : '') +
+                    (state.totalHintsUsed > 0 && state.totalOvertimeCount > 0 ? `· ` : '') +
+                    (state.totalOvertimeCount > 0 ? `Niveles con más de 1 min: ${state.totalOvertimeCount} (-${penalTiempo} pts)` : '');
+                penaltiesEl.style.display = 'block';
+            } else {
+                penaltiesEl.innerHTML = `✨ <strong>¡Excelente ritmo!</strong> No solicitaste pistas ni excediste el minuto en ningún nivel (sin penalizaciones).`;
+                penaltiesEl.style.display = 'block';
+            }
+        }
+
+        if (puntaje >= 90) {
             $('results-emoji').textContent = '🏆';
-            $('results-title').textContent = '¡Perfecto!';
-            $('results-message').textContent = 'Acertaste los 15 niveles. ¡Eres un maestro de los patrones!';
+            $('results-title').textContent = '¡Excelente!';
+            $('results-message').textContent = `Obtuviste ${puntaje}/100 puntos resolviendo patrones con gran rapidez y precisión.`;
             spawnConfetti();
-        } else if (correct >= Math.ceil(total / 2)) {
+        } else if (puntaje >= 60) {
             $('results-emoji').textContent = '🎯';
             $('results-title').textContent = '¡Buen trabajo!';
-            $('results-message').textContent = 'Acertaste la mayoría. Con más práctica serás imparable.';
+            $('results-message').textContent = `Obtuviste ${puntaje}/100 puntos. Con más práctica y mejor ritmo serás imparable.`;
         } else {
             $('results-emoji').textContent = '💪';
             $('results-title').textContent = 'Sigue practicando';
-            $('results-message').textContent = 'Los patrones son difíciles, pero cada intento te acerca más. ¡Vuelve a intentarlo!';
+            $('results-message').textContent = `Obtuviste ${puntaje}/100 puntos. Los patrones son desafiantes, cada intento mejora tu deducción lógica.`;
         }
 
         // Desglose por fase (con el acierto de cada nivel)
@@ -911,14 +1006,19 @@ window.iniciarRazonamiento = function () {
         // Enviar el resultado al backend (una sola vez)
         if (state.enviado) return;
         state.enviado = true;
-        const puntaje = Math.round((correct / total) * 100);
         enviarResultadoAlServidor({
             prueba: 'razonamiento',
             puntaje,
-            precisionPct: puntaje,
+            precisionPct: Math.round((correct / total) * 100),
             tiempoMs: totalTime,
             errores: wrong,
-            detalle
+            detalle: {
+                ...detalle,
+                puntajeFinal: puntaje,
+                pistasUsadas: state.totalHintsUsed,
+                nivelesTiempoExcedido: state.totalOvertimeCount,
+                preguntas: state.results
+            }
         });
     }
 
@@ -968,6 +1068,9 @@ window.iniciarRazonamiento = function () {
         state.results = [];
         state.answered = false;
         state.enviado = false;
+        state.currentHintUsed = false;
+        state.totalHintsUsed = 0;
+        state.totalOvertimeCount = 0;
         $('stat-correct').textContent = '0';
         $('stat-wrong').textContent = '0';
 
@@ -978,6 +1081,8 @@ window.iniciarRazonamiento = function () {
     // ===== EVENTOS =====
     $('btn-start').addEventListener('click', initGame);
     $('btn-level-start').addEventListener('click', () => loadQuestion(state.currentQuestion));
+    const btnHint = $('btn-show-hint');
+    if (btnHint) btnHint.addEventListener('click', pedirPista);
     $('btn-next').addEventListener('click', () => {
         state.currentQuestion++;
         if (state.currentQuestion >= state.questions.length) {

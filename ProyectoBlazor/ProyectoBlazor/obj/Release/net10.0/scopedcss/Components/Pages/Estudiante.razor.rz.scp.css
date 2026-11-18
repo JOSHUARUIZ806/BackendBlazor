@@ -145,6 +145,125 @@
   background: var(--navy-dark);
 }
 
+/* ============================================================
+   TARJETA DE GRUPO UNIDO
+   ============================================================ */
+.page-scope[b-sy7vcwu5p7]  .group-joined-card {
+  background: #ffffff;
+  border: 1.5px solid #D1E7DD;
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 48px;
+  box-shadow: 0 4px 16px rgba(30, 158, 99, 0.08);
+  transition: all 0.25s ease;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-joined-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-joined-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #E8F7F0;
+  color: #147A4B;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.page-scope[b-sy7vcwu5p7]  .pulse-dot-green {
+  width: 9px;
+  height: 9px;
+  background-color: #1E9E63;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 0 rgba(30, 158, 99, 0.7);
+  animation: pulseGreen-b-sy7vcwu5p7 1.8s infinite;
+}
+
+@keyframes pulseGreen-b-sy7vcwu5p7 {
+  0% {
+    box-shadow: 0 0 0 0 rgba(30, 158, 99, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(30, 158, 99, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(30, 158, 99, 0);
+  }
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-joined-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 16px 0;
+  border-top: 1px solid #F0F2F5;
+  border-bottom: 1px solid #F0F2F5;
+  margin-bottom: 18px;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-info-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-info-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-code-highlight {
+  font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: var(--navy);
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.page-scope[b-sy7vcwu5p7]  .group-joined-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.page-scope[b-sy7vcwu5p7]  .btn-secondary-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-scope[b-sy7vcwu5p7]  .btn-secondary-group:hover {
+  background: var(--navy);
+  color: #ffffff;
+}
+
 .page-scope[b-sy7vcwu5p7]  .section-title {
   font-size: 15px;
   font-weight: 600;

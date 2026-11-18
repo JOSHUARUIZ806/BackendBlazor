@@ -120,17 +120,101 @@ window.iniciarEstudiante = function () {
     }
 
     // ============================================================
-    // ESTILO DE APRENDIZAJE (visual / auditivo / kinestésico)
-    // 6 preguntas; cada opción suma a un estilo. Gana el que más suma
-    // (en empate, el primero en el orden visual, auditivo, kinestésico).
+    // ESTILO DE APRENDIZAJE (visual / auditivo / lector / kinestésico)
+    // 10 preguntas; cada opción suma a un estilo. Gana el que más suma
+    // (en empate, el primero en el orden visual, auditivo, lector, kinestésico).
     // ============================================================
     const PREGUNTAS_ESTILO = [
-        { q: 'Cuando quieres aprender algo nuevo, prefieres...', o: ['Ver un video, una imagen o un diagrama', 'Que alguien te lo explique', 'Probarlo tú mismo'] },
-        { q: 'Para recordar un número de teléfono...', o: ['Me lo imagino escrito', 'Lo repito en voz alta', 'Lo marco o lo escribo con los dedos'] },
-        { q: 'En clase aprendes mejor cuando...', o: ['El profesor usa pizarrón, imágenes o esquemas', 'Explica y se platica o discute el tema', 'Hay prácticas y actividades para hacer'] },
-        { q: 'Al estudiar para un examen...', o: ['Subrayo y hago esquemas de colores', 'Me explico el tema en voz alta o con un compañero', 'Camino o hago ejercicios mientras repaso'] },
-        { q: 'Cuando armas o instalas algo nuevo...', o: ['Miro las imágenes del instructivo', 'Leo o escucho las instrucciones', 'Empiezo a armarlo y voy descubriendo'] },
-        { q: 'Te distraes más cuando...', o: ['Hay desorden o mucho movimiento a tu alrededor', 'Hay ruido o conversaciones', 'Tienes que estar sentado sin moverte'] }
+        {
+            q: 'Cuando quieres aprender a usar un programa o aparato nuevo, prefieres...',
+            o: [
+                'Ver un video tutorial con diagramas o demostración visual',
+                'Que alguien te lo explique oralmente paso a paso',
+                'Leer el manual de usuario, la guía escrita o los instructivos detallados',
+                'Empezar a usarlo directamente y descubrirlo sobre la marcha'
+            ]
+        },
+        {
+            q: 'Para recordar información importante (como un número de teléfono o una clave)...',
+            o: [
+                'La visualizo en mi mente como si estuviera escrita o dibujada',
+                'La repito varias veces en voz alta o como una rima',
+                'La anoto en mi libreta o la escribo textualmente para memorizarla',
+                'La marco con los dedos en el teclado o la asocio con un movimiento'
+            ]
+        },
+        {
+            q: 'En clase aprendes mejor cuando el profesor...',
+            o: [
+                'Muestra diapositivas con esquemas, gráficos y mapas conceptuales',
+                'Explica con claridad y abre espacios de diálogo y discusión oral',
+                'Proporciona lecturas, apuntes estructurados o escribe notas en el pizarrón',
+                'Realiza dinámicas, resolución práctica de problemas o actividades aplicadas'
+            ]
+        },
+        {
+            q: 'Al prepararte para un examen difícil, tu técnica favorita es...',
+            o: [
+                'Hacer mapas mentales con colores, tablas comparativas y símbolos',
+                'Explicarle el tema a un compañero o grabarte resumiéndolo en voz alta',
+                'Releer el libro o apuntes y redactar cuestionarios y resúmenes escritos',
+                'Resolver ejercicios prácticos, simuladores o moverte mientras repasas'
+            ]
+        },
+        {
+            q: 'Cuando visitas una ciudad desconocida y buscas una dirección, prefieres...',
+            o: [
+                'Consultar un mapa interactivo o una imagen satelital de la zona',
+                'Preguntar a personas del lugar y seguir sus indicaciones orales',
+                'Leer las instrucciones escritas paso a paso o la lista de nombres de calles',
+                'Caminar y orientarte por intuición recorriendo el terreno'
+            ]
+        },
+        {
+            q: 'Al elegir qué platillo pedir en un restaurante, te decides más por...',
+            o: [
+                'Las fotografías e imágenes atractivas del menú',
+                'Las recomendaciones que el mesero o tus acompañantes te describen',
+                'Leer la descripción detallada de los ingredientes y el texto del menú',
+                'Recordar la sensación y sabor de platillos que ya has probado físicamente'
+            ]
+        },
+        {
+            q: 'Te distraes más fácilmente durante tus sesiones de estudio cuando...',
+            o: [
+                'Hay desorden visual, luces parpadeantes o mucho movimiento alrededor',
+                'Se escuchan ruidos molestos, conversaciones o música con letra',
+                'La lectura es confusa, faltan textos explicativos o el material está mal redactado',
+                'Llevas demasiado tiempo sentado sin poder moverte ni cambiar de postura'
+            ]
+        },
+        {
+            q: 'Cuando compras un mueble o producto para armar, lo primero que haces es...',
+            o: [
+                'Mirar detenidamente las ilustraciones y planos de ensamble',
+                'Pedirle a alguien que te diga cómo se hace o buscar un audio explicativo',
+                'Leer minuciosamente la lista de piezas y los pasos numerados del manual',
+                'Separar las piezas con las manos y empezar a ensamblarlas directamente'
+            ]
+        },
+        {
+            q: 'Cuando un amigo te cuenta una anécdota emocionante, sueles...',
+            o: [
+                'Imaginarte la escena completa como si estuvieras viendo una película',
+                'Concentrarte en su tono de voz, expresiones y sonidos de la narración',
+                'Prestar atención a los datos precisos, nombres y relacionarlo con algo que leíste',
+                'Sentir empatía física con las emociones, gestos y reacciones corporales'
+            ]
+        },
+        {
+            q: 'Si tienes que dar una presentación sobre un proyecto escolar, prefieres apoyarte en...',
+            o: [
+                'Diapositivas llenas de imágenes, infografías y diagramas claros',
+                'Tu fluidez verbal para hablar, debatir y responder preguntas',
+                'Un guion escrito con notas precisas, citas y referencias bibliográficas',
+                'Una demostración en vivo, maqueta o muestra física interactiva'
+            ]
+        }
     ];
     const ESTILOS = {
         visual: {
@@ -139,14 +223,18 @@ window.iniciarEstudiante = function () {
         },
         auditivo: {
             nombre: 'Auditivo',
-            rec: 'Explica los temas en voz alta, graba tus propios resúmenes para escucharlos, estudia en grupo y apóyate en podcasts o clases grabadas.'
+            rec: 'Explica los temas en voz alta, graba tus propios resúmenes para escucharlos, estudia en grupo y apóyate en podcasts o debates.'
+        },
+        lector: {
+            nombre: 'Lector/Escritor',
+            rec: 'Aprende leyendo libros, artículos y tomando notas detalladas; redacta resúmenes, elabora listas, fichas de conceptos y reescribe tus apuntes.'
         },
         kinestesico: {
             nombre: 'Kinestésico',
-            rec: 'Estudia en movimiento: haz ejercicios prácticos, maquetas o simulaciones, escribe a mano y toma pausas activas entre bloques.'
+            rec: 'Estudia en movimiento: haz ejercicios prácticos, laboratorios, maquetas o simulaciones, escribe a mano y toma descansos activos entre bloques.'
         }
     };
-    const ORDEN_ESTILOS = ['visual', 'auditivo', 'kinestesico'];
+    const ORDEN_ESTILOS = ['visual', 'auditivo', 'lector', 'kinestesico'];
     const CLAVE_ESTILO = 'estiloAprendizaje:' + (estudianteId || 'ejemplo');
     const styleCard = document.getElementById('style-card');
 
@@ -166,7 +254,7 @@ window.iniciarEstudiante = function () {
         } else {
             styleCard.innerHTML =
                 '<h3>Tu estilo de aprendizaje</h3>' +
-                '<p>Responde 6 preguntas rápidas para saber si aprendes mejor de forma visual, auditiva o kinestésica y recibir una recomendación extra.</p>' +
+                '<p>Responde 10 preguntas rápidas para saber si aprendes mejor de forma visual, auditiva, lectora/escritora o kinestésica y recibir una recomendación extra.</p>' +
                 '<button type="button" class="style-btn" id="btn-iniciar-estilo">Responder cuestionario</button>';
             document.getElementById('btn-iniciar-estilo').addEventListener('click', pintarCuestionario);
         }
@@ -182,13 +270,13 @@ window.iniciarEstudiante = function () {
         styleCard.innerHTML =
             '<h3>Tu estilo de aprendizaje</h3><p>Elige la opción que más se parezca a ti en cada pregunta.</p>' +
             '<form id="form-estilo">' + preguntas +
-            '<div class="quiz-error" id="quiz-error" hidden>Responde las 6 preguntas para ver tu resultado.</div>' +
+            '<div class="quiz-error" id="quiz-error" hidden>Responde las 10 preguntas para ver tu resultado.</div>' +
             '<button type="submit" class="style-btn">Ver mi estilo</button>' +
             '<button type="button" class="style-btn secondary" id="btn-cancelar-estilo">Cancelar</button></form>';
         document.getElementById('btn-cancelar-estilo').addEventListener('click', pintarEstilo);
         document.getElementById('form-estilo').addEventListener('submit', (e) => {
             e.preventDefault();
-            const cuenta = { visual: 0, auditivo: 0, kinestesico: 0 };
+            const cuenta = { visual: 0, auditivo: 0, lector: 0, kinestesico: 0 };
             let respondidas = 0;
             PREGUNTAS_ESTILO.forEach((_, i) => {
                 const marcada = document.querySelector('input[name="estilo' + i + '"]:checked');
@@ -201,6 +289,15 @@ window.iniciarEstudiante = function () {
             const ganador = ORDEN_ESTILOS.reduce((a, b) => (cuenta[b] > cuenta[a] ? b : a));
             try { localStorage.setItem(CLAVE_ESTILO, ganador); } catch (err) { /* sin almacenamiento: solo se muestra */ }
             pintarEstilo();
+
+            if (estudianteId) {
+                const nombreEstilo = ESTILOS[ganador] ? ESTILOS[ganador].nombre : ganador;
+                fetch('/api/estudiantes/' + encodeURIComponent(estudianteId) + '/tipo-aprendizaje', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipoAprendizaje: nombreEstilo })
+                }).catch(() => {});
+            }
         });
     }
 
@@ -321,6 +418,14 @@ window.iniciarEstudiante = function () {
                     }
                     if (inputCodigo) inputCodigo.value = data.grupoCodigo;
                     mostrarGrupoUnido(data.grupoCodigo, data.docente || localStorage.getItem('docenteNombre') || '');
+                }
+                if (data.tipoAprendizaje) {
+                    let claveNormalizada = data.tipoAprendizaje.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if (claveNormalizada.includes('lector') || claveNormalizada.includes('escritor')) claveNormalizada = 'lector';
+                    if (ESTILOS[claveNormalizada]) {
+                        try { localStorage.setItem(CLAVE_ESTILO, claveNormalizada); } catch (e) {}
+                        pintarEstilo();
+                    }
                 }
                 const tag = document.getElementById('results-tag');
                 tag.textContent = 'Tus resultados';

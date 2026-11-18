@@ -416,12 +416,55 @@
     margin-bottom: 1rem;
 }
 
-.page-scope[b-jh0apafy3z]  .question-card__hint {
-    font-size: .85rem;
-    color: var(--text-secondary);
+.page-scope[b-jh0apafy3z]  .hint-container {
     margin-bottom: 1.25rem;
+}
+
+.page-scope[b-jh0apafy3z]  .btn-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201, 123, 46, .1);
+    color: #C97B2E;
+    border: 1px dashed rgba(201, 123, 46, .45);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.page-scope[b-jh0apafy3z]  .btn-hint:hover {
+    background: rgba(201, 123, 46, .18);
+    border-color: #C97B2E;
+    transform: translateY(-1px);
+}
+
+.page-scope[b-jh0apafy3z]  .btn-hint svg {
+    color: #C97B2E;
+}
+
+.page-scope[b-jh0apafy3z]  .question-card__hint {
+    font-size: .88rem;
+    color: var(--text-secondary);
     line-height: 1.5;
-    font-style: italic;
+    background: rgba(201, 123, 46, .08);
+    border-left: 3px solid #C97B2E;
+    padding: .5rem .75rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    animation: fadeIn .3s ease;
+}
+
+.page-scope[b-jh0apafy3z]  .hint-penalty-badge {
+    display: inline-block;
+    background: rgba(209, 67, 67, .12);
+    color: #D14343;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
 }
 
 .page-scope[b-jh0apafy3z]  .sequence-display {
@@ -726,9 +769,9 @@
 
 .page-scope[b-jh0apafy3z]  .results-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: .75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .page-scope[b-jh0apafy3z]  .result-stat {
@@ -743,6 +786,10 @@
     font-weight: 800;
 }
 
+.page-scope[b-jh0apafy3z]  .result-stat__value--indigo {
+    color: var(--accent-indigo);
+}
+
 .page-scope[b-jh0apafy3z]  .result-stat__value--green {
     color: var(--accent-green);
 }
@@ -753,6 +800,18 @@
 
 .page-scope[b-jh0apafy3z]  .result-stat__value--cyan {
     color: var(--accent-cyan);
+}
+
+.page-scope[b-jh0apafy3z]  .results-penalties {
+    background: #FFF7ED;
+    border: 1px solid #FFEDD5;
+    border-radius: var(--radius-md);
+    padding: .75rem 1rem;
+    font-size: .85rem;
+    color: #9A3412;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    line-height: 1.4;
 }
 
 .page-scope[b-jh0apafy3z]  .result-stat__label {

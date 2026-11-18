@@ -30,6 +30,7 @@ const STIMULI_PER_PHASE = LEVELS_PER_PHASE * STIMULI_PER_LEVEL; // 5
 const TOTAL_STIMULI = TOTAL_PHASES * STIMULI_PER_PHASE;         // 15
 const MAX_ERRORS = 5;
 const FEEDBACK_PAUSE_MS = 750;
+const STIMULUS_TIME_LIMIT_MS = 9000; // 9s por nivel (Test de Stroop Golden: 45s por lámina ÷ 5 niveles)
 
 // Número de opciones por nivel (índice 0 = nivel 1): 4, 4, 5, 5, 6
 const OPTIONS_BY_LEVEL = [4, 4, 5, 5, 6];
@@ -306,6 +307,9 @@ class StroopGame {
     this.errors = 0;
     this.totalTimeMs = 0;       // suma de los tiempos de respuesta
     this.stimulusStartTime = 0;
+    this.totalOvertimeCount = 0;
+    if (this.levelTimerInterval) clearInterval(this.levelTimerInterval);
+    this.levelTimerInterval = null;
     this.resultSent = false;
     this.rondas = [];
     this.phaseStats = PHASES.map(() => ({
@@ -339,6 +343,7 @@ class StroopGame {
     this.progressBar = document.getElementById('progress-bar');
     this.hitsCount = document.getElementById('hits-count');
     this.missesCount = document.getElementById('misses-count');
+    this.timerCount = document.getElementById('timer-count');
 
     // Estímulo
     this.stimulusBox = document.getElementById('stimulus-box');
@@ -361,6 +366,7 @@ class StroopGame {
     this.evaluationTitle = document.getElementById('evaluation-title');
     this.evaluationDesc = document.getElementById('evaluation-desc');
     this.phasesBreakdown = document.getElementById('phases-breakdown');
+    this.resultsPenalties = document.getElementById('results-penalties');
 
     // Sonido
     this.btnSoundToggle = document.getElementById('btn-sound-toggle');
@@ -510,17 +516,45 @@ class StroopGame {
       this.optionsGrid.appendChild(btn);
     });
 
+    if (this.levelTimerInterval) clearInterval(this.levelTimerInterval);
+    if (this.timerCount) {
+      this.timerCount.textContent = '0.0s';
+      this.timerCount.style.color = '';
+      this.timerCount.title = 'Límite por nivel: 9s (Test de Stroop: 45s por fase)';
+    }
+
     this.acceptingInput = true;
     this.stimulusStartTime = performance.now();
+
+    this.levelTimerInterval = setInterval(() => {
+      if (!this.acceptingInput) return;
+      const elapsedMs = performance.now() - this.stimulusStartTime;
+      const elapsedSec = (elapsedMs / 1000).toFixed(1);
+      if (this.timerCount) {
+        this.timerCount.textContent = `${elapsedSec}s`;
+        if (elapsedMs > STIMULUS_TIME_LIMIT_MS) {
+          this.timerCount.style.color = '#ef4444';
+          this.timerCount.title = 'Tiempo superior a 9s (-1 pt de penalización)';
+        } else {
+          this.timerCount.style.color = '';
+          this.timerCount.title = 'Límite por nivel: 9s';
+        }
+      }
+    }, 100);
   }
 
   handleOptionSelect(selectedColor, selectedBtn) {
     if (!this.acceptingInput) return;
     this.acceptingInput = false;
+    if (this.levelTimerInterval) clearInterval(this.levelTimerInterval);
 
     const stim = this.stimuli[this.cursor];
     const stats = this.phaseStats[this.phaseIndex];
     const reactionTimeMs = Math.round(performance.now() - this.stimulusStartTime);
+    const overtime = reactionTimeMs > STIMULUS_TIME_LIMIT_MS;
+    if (overtime) {
+      this.totalOvertimeCount++;
+    }
     const isCorrect = selectedColor.id === stim.correct.id;
     const askedText = stim.task === 'tinta' ? 'La tinta' : 'La palabra';
 
@@ -532,7 +566,8 @@ class StroopGame {
       colorTinta: stim.ink.name,
       colorElegido: selectedColor.name,
       esCorrecto: isCorrect,
-      tiempoReaccionMs: reactionTimeMs
+      tiempoReaccionMs: reactionTimeMs,
+      tiempoExcedido: overtime
     });
 
     const allButtons = this.optionsGrid.querySelectorAll('.option-btn');
@@ -593,19 +628,33 @@ class StroopGame {
   }
 
   showFinalResults(closedByErrors) {
+    if (this.levelTimerInterval) clearInterval(this.levelTimerInterval);
     this.acceptingInput = false;
     this.progressBar.style.width = `${((this.hits + this.errors) / TOTAL_STIMULI) * 100}%`;
     this.showScreen('results');
 
     const answered = this.hits + this.errors;
     // Los estímulos no alcanzados cuentan como no acertados
-    const puntaje = Math.round((this.hits / TOTAL_STIMULI) * 100);
+    const puntajeBase = Math.round((this.hits / TOTAL_STIMULI) * 100);
+    // Se resta 1 punto por cada nivel en el que se sobrepasó el límite de tiempo (9s)
+    const puntaje = Math.max(0, Math.min(100, puntajeBase - this.totalOvertimeCount));
     const precisionPct = answered ? Math.round((this.hits / answered) * 100) : 0;
 
     this.finalHits.textContent = `${this.hits}/${TOTAL_STIMULI}`;
     this.finalMisses.textContent = `${this.errors}/${MAX_ERRORS}`;
     this.finalAccuracy.textContent = `${precisionPct}%`;
     this.finalScore.textContent = puntaje;
+
+    // Mensaje de penalizaciones por tiempo
+    if (this.resultsPenalties) {
+      if (this.totalOvertimeCount > 0) {
+        this.resultsPenalties.innerHTML = `⚠️ <strong>Penalización por tiempo:</strong> ${this.totalOvertimeCount} ${this.totalOvertimeCount === 1 ? 'nivel sobrepasó' : 'niveles sobrepasaron'} el límite de 9s (-${this.totalOvertimeCount} pt${this.totalOvertimeCount === 1 ? '' : 's'}).`;
+        this.resultsPenalties.style.display = 'block';
+      } else {
+        this.resultsPenalties.innerHTML = `✨ <strong>¡Excelente ritmo!</strong> Respondiste todos los niveles dentro del tiempo límite de 9s (sin penalizaciones).`;
+        this.resultsPenalties.style.display = 'block';
+      }
+    }
 
     // Mensaje principal según cómo terminó la prueba
     if (closedByErrors) {
@@ -655,6 +704,7 @@ class StroopGame {
       detalle: {
         terminoPorErrores: closedByErrors,
         estimulosRespondidos: answered,
+        nivelesTiempoExcedido: this.totalOvertimeCount,
         fases,
         rondas: this.rondas
       }

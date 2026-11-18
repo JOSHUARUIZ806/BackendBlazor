@@ -733,7 +733,7 @@ window.iniciarRazonamiento = function () {
         const timerText = $('timer-text');
         timerEl.className = 'quiz-timer';
         timerText.textContent = '00:00';
-        timerEl.title = 'Resuelve en menos de 1 minuto para evitar penalización';
+        timerEl.title = 'Límite: 1 minuto por nivel (Raven-2). Si lo sobrepasas se resta 1 punto';
 
         if (state.timerInterval) clearInterval(state.timerInterval);
         state.timerInterval = setInterval(() => {
@@ -744,7 +744,7 @@ window.iniciarRazonamiento = function () {
 
             if (elapsed >= 60) {
                 timerEl.className = 'quiz-timer danger';
-                timerEl.title = 'Tiempo superior a 1 minuto (-2 pts de penalización)';
+                timerEl.title = 'Tiempo superior a 1 minuto (-1 pt de penalización)';
             } else if (elapsed >= 45) {
                 timerEl.className = 'quiz-timer warning';
             } else {
@@ -786,7 +786,7 @@ window.iniciarRazonamiento = function () {
         // Puntos de la pregunta:
         // Base = 100 / 15 ≈ 6.6667
         // Si pidió pista: -2 pts
-        // Si tardó más de 1 minuto (>60s): -2 pts
+        // Si tardó más de 1 minuto (>60s): -1 pt
         // Mínimo al acertar: 1 pt
         // Si falló: 0 pts
         let points = 0;
@@ -794,7 +794,7 @@ window.iniciarRazonamiento = function () {
         if (isCorrect) {
             let p = basePoints;
             if (usedHint) p -= 2;
-            if (overtime) p -= 2;
+            if (overtime) p -= 1;
             points = Math.max(1, p);
             state.correctCount++;
             btnEl.classList.add('correct');
@@ -948,12 +948,12 @@ window.iniciarRazonamiento = function () {
         const penaltiesEl = $('results-penalties');
         if (penaltiesEl) {
             const penalPistas = state.totalHintsUsed * 2;
-            const penalTiempo = state.totalOvertimeCount * 2;
+            const penalTiempo = state.totalOvertimeCount * 1;
             if (state.totalHintsUsed > 0 || state.totalOvertimeCount > 0) {
                 penaltiesEl.innerHTML = `⚠️ <strong>Penalizaciones aplicadas:</strong> ` +
                     (state.totalHintsUsed > 0 ? `Pistas pedidas: ${state.totalHintsUsed} (-${penalPistas} pts) ` : '') +
                     (state.totalHintsUsed > 0 && state.totalOvertimeCount > 0 ? `· ` : '') +
-                    (state.totalOvertimeCount > 0 ? `Niveles con más de 1 min: ${state.totalOvertimeCount} (-${penalTiempo} pts)` : '');
+                    (state.totalOvertimeCount > 0 ? `Niveles con más de 1 min: ${state.totalOvertimeCount} (-${penalTiempo} pt${penalTiempo === 1 ? '' : 's'})` : '');
                 penaltiesEl.style.display = 'block';
             } else {
                 penaltiesEl.innerHTML = `✨ <strong>¡Excelente ritmo!</strong> No solicitaste pistas ni excediste el minuto en ningún nivel (sin penalizaciones).`;

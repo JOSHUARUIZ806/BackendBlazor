@@ -8,13 +8,9 @@
 <PageTitle>Iniciar sesión — Evaluación Cognitiva</PageTitle>
 
 @* ============================================================
-   LOGIN + REGISTRO (estudiante y docente) en un solo archivo.
-   - El perfil llega desde Home: /login?rol=Estudiantes  o  /login?rol=Docente
-   - Cada perfil tiene su propio formulario de registro.
-   - MIENTRAS NO HAYA BASE DE DATOS, las cuentas se guardan en el navegador
-     (localStorage). Para conectar la BD, solo hay que cambiar el contenido de
-     los métodos  RegistrarAsync()  y  EntrarAsync()  al final de este archivo
-     (están marcados con "BASE DE DATOS"). Lo demás de la página no cambia.
+   LOGIN + REGISTRO (estudiante y docente)
+   - El perfil llega desde Home: /login?rol=Estudiantes o /login?rol=Docente
+   - Autenticación y registro con hash seguro PBKDF2/SHA256 en SQL Server
    ============================================================ *@
 
 <div class="page-scope">
@@ -444,10 +440,7 @@
             if (inscripcion?.Grupo?.Docente != null)
             {
                 var d = inscripcion.Grupo.Docente;
-                var partes = new List<string> { d.Nombre };
-                if (!string.IsNullOrWhiteSpace(d.ApellidoPaterno) && d.ApellidoPaterno != "-") partes.Add(d.ApellidoPaterno);
-                if (!string.IsNullOrWhiteSpace(d.ApellidoMaterno)) partes.Add(d.ApellidoMaterno);
-                docenteNombre = string.Join(' ', partes);
+                docenteNombre = FormatearNombreCompleto(d.Nombre, d.ApellidoPaterno, d.ApellidoMaterno);
             }
 
             var nombreCompleto = FormatearNombreCompleto(estudiante.Nombre, estudiante.ApellidoPaterno, estudiante.ApellidoMaterno);

@@ -54,17 +54,23 @@ window.iniciarProcesamiento = function () {
         {
             tipo: 'numeros',
             nombre: 'Números (1–25)',
-            total: 25
+            total: 25,
+            limiteTiempoSeg: 29, // Trail Making Test Parte A: 29s promedio
+            descTiempo: '29 s (TMT Parte A)'
         },
         {
             tipo: 'figuras',
             nombre: 'Figuras (30)',
-            total: 30
+            total: 30,
+            limiteTiempoSeg: 60, // WAIS Búsqueda de símbolos / Claves: 60s
+            descTiempo: '60 s (Búsqueda de símbolos)'
         },
         {
             tipo: 'alfanumerico',
             nombre: 'Números y Letras (30)',
-            total: 30
+            total: 30,
+            limiteTiempoSeg: 75, // Trail Making Test Parte B: 75s promedio
+            descTiempo: '75 s (TMT Parte B)'
         }
     ];
 
@@ -307,7 +313,16 @@ window.iniciarProcesamiento = function () {
 
     function updateTimer() {
         if (startTime === null || !gameActive) return;
-        timerVal.textContent = formatTime(performance.now() - startTime);
+        const elapsedMs = performance.now() - startTime;
+        timerVal.textContent = formatTime(elapsedMs);
+        const nivel = NIVELES[nivelActual];
+        if (nivel && (elapsedMs / 1000) > nivel.limiteTiempoSeg) {
+            timerVal.style.color = '#ef4444';
+            timerVal.title = `Tiempo superior al límite de ${nivel.limiteTiempoSeg}s (-1 pt)`;
+        } else {
+            timerVal.style.color = '';
+            timerVal.title = nivel ? `Límite: ${nivel.limiteTiempoSeg}s (${nivel.descTiempo})` : '';
+        }
         timerRAF = requestAnimationFrame(updateTimer);
     }
 
@@ -389,6 +404,8 @@ window.iniciarProcesamiento = function () {
         hitsVal.textContent = '0';
         errorsVal.textContent = '0';
         timerVal.textContent = '00:00.0';
+        timerVal.style.color = '';
+        timerVal.title = nivel ? `Límite para este nivel: ${nivel.limiteTiempoSeg}s (${nivel.descTiempo})` : '';
         endOverlay.classList.add('hidden');
 
         buildCircles(nivel);
@@ -409,8 +426,12 @@ window.iniciarProcesamiento = function () {
         const r = (SEG_LENTO - segPorElemento) / (SEG_LENTO - SEG_RAPIDO);
         return Math.round(Math.max(0, Math.min(1, r)) * 100);
     }
-    function puntajeNivel(aciertos, errores, tiempoMs) {
-        return Math.round(0.6 * precisionNivel(aciertos, errores) + 0.4 * rapidezNivel(tiempoMs, aciertos));
+    function puntajeNivel(aciertos, errores, tiempoMs, tiempoExcedido) {
+        let p = Math.round(0.6 * precisionNivel(aciertos, errores) + 0.4 * rapidezNivel(tiempoMs, aciertos));
+        if (tiempoExcedido) {
+            p = Math.max(0, p - 1); // Se resta 1 punto por nivel al exceder el tiempo límite
+        }
+        return p;
     }
 
     /* ── Fin de fase: guarda resultados y muestra el resumen ── */
@@ -421,18 +442,21 @@ window.iniciarProcesamiento = function () {
         const nivel = NIVELES[nivelActual];
         const tiempoMs = Math.round(performance.now() - startTime);
         timerVal.textContent = formatTime(tiempoMs);
+        const tiempoExcedido = (tiempoMs / 1000) > nivel.limiteTiempoSeg;
 
         const totalFase = nivel.total;
         const res = {
             nivel: nivelActual + 1,
             tipo: nivel.tipo,
             tiempoMs,
+            tiempoExcedido,
+            limiteTiempoSeg: nivel.limiteTiempoSeg,
             errores: errors,
             primerClicMs,
             primerClicCorrecto,
             precision: precisionNivel(totalFase, errors),
             rapidez: rapidezNivel(tiempoMs, totalFase),
-            puntaje: puntajeNivel(totalFase, errors, tiempoMs)
+            puntaje: puntajeNivel(totalFase, errors, tiempoMs, tiempoExcedido)
         };
         resultados.push(res);
 
@@ -441,10 +465,15 @@ window.iniciarProcesamiento = function () {
             mostrarResumenFinal();
         } else {
             endTitle.textContent = `Fase ${res.nivel} completada`;
+            let tiempoTexto = formatTime(res.tiempoMs);
+            if (tiempoExcedido) {
+                tiempoTexto += ` (Excedió ${nivel.limiteTiempoSeg}s · -1 pt)`;
+            }
             resultsDiv.innerHTML =
                 filaResultado('✅ Aciertos', totalFase, 'green') +
                 filaResultado('❌ Errores', res.errores, 'red') +
-                filaResultado('⏱️ Tiempo de la fase', formatTime(res.tiempoMs), 'yellow') +
+                filaResultado('⏱️ Tiempo de la fase', tiempoTexto, tiempoExcedido ? 'red' : 'yellow') +
+                (tiempoExcedido ? filaResultado('⚠️ Penalización de tiempo', 'Límite excedido (-1 pt)', 'red') : '') +
                 filaResultado('🎯 Precisión', res.precision + '%', 'green') +
                 filaResultado('🚀 Rapidez', res.rapidez + '%', 'green') +
                 filaResultado('⚡ Tiempo de reacción al primer clic', formatSegundos(res.primerClicMs), 'yellow');
@@ -466,12 +495,14 @@ window.iniciarProcesamiento = function () {
             resultados.reduce((sum, r) => sum + r.primerClicMs, 0) / resultados.length);
         const precisionPct = Math.round((aciertosTotal / (aciertosTotal + erroresTotal)) * 100);
         const puntaje = Math.round(resultados.reduce((sum, r) => sum + r.puntaje, 0) / resultados.length);
+        const nivelesExcedidos = resultados.filter(r => r.tiempoExcedido).length;
 
         endTitle.textContent = '🏆 ¡Prueba completada!';
         resultsDiv.innerHTML =
             filaResultado('✅ Aciertos totales', aciertosTotal, 'green') +
             filaResultado('❌ Errores totales', erroresTotal, 'red') +
             filaResultado('⏱️ Tiempo total', formatTime(tiempoMs), 'yellow') +
+            (nivelesExcedidos > 0 ? filaResultado('⚠️ Penalización por tiempo', `${nivelesExcedidos} ${nivelesExcedidos === 1 ? 'nivel excedió' : 'niveles excedieron'} el límite (-${nivelesExcedidos} pt${nivelesExcedidos === 1 ? '' : 's'})`, 'red') : '') +
             filaResultado('🎯 Precisión', precisionPct + '%', 'green') +
             filaResultado('⚡ Tiempo de reacción al primer clic (promedio)', formatSegundos(primerClicMsPromedio), 'yellow') +
             filaResultado('⭐ Puntaje', puntaje + '/100', 'green');
@@ -489,7 +520,7 @@ window.iniciarProcesamiento = function () {
             precisionPct,
             tiempoMs,
             errores: erroresTotal,
-            detalle: { primerClicMsPromedio, niveles: resultados }
+            detalle: { primerClicMsPromedio, nivelesTiempoExcedido: nivelesExcedidos, niveles: resultados }
         });
     }
 

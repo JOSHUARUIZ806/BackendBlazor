@@ -25,11 +25,29 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
+// Encabezados HTTP de seguridad defensiva
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    await next();
+});
+
 app.UseAntiforgery();
 
 // ============================================================
 // ENDPOINTS API CONECTADOS A SQL SERVER
 // ============================================================
+
+static string FormatearNombreCompleto(string nombre, string? paterno, string? materno)
+{
+    var partes = new List<string> { nombre };
+    if (!string.IsNullOrWhiteSpace(paterno) && paterno != "-") partes.Add(paterno);
+    if (!string.IsNullOrWhiteSpace(materno)) partes.Add(materno);
+    return string.Join(' ', partes);
+}
 
 static async Task<object> ConstruirResumenEstudianteAsync(ApplicationDbContext db, int idEstudiante)
 {
@@ -183,10 +201,7 @@ app.MapGet("/api/grupos/{codigo}", async (string codigo, ApplicationDbContext db
     {
         if (insc.Estudiante == null) continue;
         var e = insc.Estudiante;
-        var partesNombre = new List<string> { e.Nombre };
-        if (!string.IsNullOrWhiteSpace(e.ApellidoPaterno) && e.ApellidoPaterno != "-") partesNombre.Add(e.ApellidoPaterno);
-        if (!string.IsNullOrWhiteSpace(e.ApellidoMaterno)) partesNombre.Add(e.ApellidoMaterno);
-        var nombreCompleto = string.Join(' ', partesNombre);
+        var nombreCompleto = FormatearNombreCompleto(e.Nombre, e.ApellidoPaterno, e.ApellidoMaterno);
 
         var resumen = await ConstruirResumenEstudianteAsync(db, e.IdEstudiante);
         listaEstudiantes.Add(new
@@ -196,7 +211,8 @@ app.MapGet("/api/grupos/{codigo}", async (string codigo, ApplicationDbContext db
                 id = e.IdEstudiante,
                 nombre = nombreCompleto,
                 matricula = e.Matricula,
-                correo = e.CorreoElectronico
+                correo = e.CorreoElectronico,
+                tipoAprendizaje = e.TipoAprendizaje
             },
             resumen
         });
@@ -217,8 +233,8 @@ app.MapGet("/api/grupos/{codigo}", async (string codigo, ApplicationDbContext db
 
 app.MapPost("/api/grupos/unirse", async (UnirseGrupoDto dto, ApplicationDbContext db) =>
 {
-    if (dto.EstudianteId <= 0 || string.IsNullOrWhiteSpace(dto.Codigo))
-        return Results.BadRequest(new { ok = false, error = "Datos incompletos." });
+    if (dto.EstudianteId <= 0 || string.IsNullOrWhiteSpace(dto.Codigo) || dto.Codigo.Trim().Length > 20)
+        return Results.BadRequest(new { ok = false, error = "Datos incompletos o inválidos." });
 
     var codigoLimpio = dto.Codigo.Trim().ToUpperInvariant();
     var grupo = await db.Grupos
@@ -241,16 +257,9 @@ app.MapPost("/api/grupos/unirse", async (UnirseGrupoDto dto, ApplicationDbContex
         await db.SaveChangesAsync();
     }
 
-    string? docenteNombre = null;
-    if (grupo.Docente != null)
-    {
-        var partes = new List<string> { grupo.Docente.Nombre };
-        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoPaterno) && grupo.Docente.ApellidoPaterno != "-")
-            partes.Add(grupo.Docente.ApellidoPaterno);
-        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoMaterno))
-            partes.Add(grupo.Docente.ApellidoMaterno);
-        docenteNombre = string.Join(' ', partes);
-    }
+    string? docenteNombre = grupo.Docente != null
+        ? FormatearNombreCompleto(grupo.Docente.Nombre, grupo.Docente.ApellidoPaterno, grupo.Docente.ApellidoMaterno)
+        : null;
 
     return Results.Ok(new
     {
@@ -274,17 +283,10 @@ app.MapGet("/api/estudiantes/{id:int}/resumen", async (int id, ApplicationDbCont
         .OrderByDescending(ge => ge.FechaInscripcion)
         .FirstOrDefaultAsync();
 
-    string? docenteNombre = null;
     var grupo = inscripcion?.Grupo;
-    if (grupo?.Docente != null)
-    {
-        var partes = new List<string> { grupo.Docente.Nombre };
-        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoPaterno) && grupo.Docente.ApellidoPaterno != "-")
-            partes.Add(grupo.Docente.ApellidoPaterno);
-        if (!string.IsNullOrWhiteSpace(grupo.Docente.ApellidoMaterno))
-            partes.Add(grupo.Docente.ApellidoMaterno);
-        docenteNombre = string.Join(' ', partes);
-    }
+    string? docenteNombre = grupo?.Docente != null
+        ? FormatearNombreCompleto(grupo.Docente.Nombre, grupo.Docente.ApellidoPaterno, grupo.Docente.ApellidoMaterno)
+        : null;
 
     var resumen = await ConstruirResumenEstudianteAsync(db, id);
     return Results.Ok(new
@@ -292,14 +294,40 @@ app.MapGet("/api/estudiantes/{id:int}/resumen", async (int id, ApplicationDbCont
         ok = true,
         grupoCodigo = grupo?.CodigoGrupo,
         docente = docenteNombre,
+        tipoAprendizaje = estudiante.TipoAprendizaje,
         resumen
     });
+});
+
+app.MapPost("/api/estudiantes/{id:int}/tipo-aprendizaje", async (int id, GuardarTipoAprendizajeDto dto, ApplicationDbContext db) =>
+{
+    if (id <= 0 || string.IsNullOrWhiteSpace(dto.TipoAprendizaje) || dto.TipoAprendizaje.Trim().Length > 50)
+        return Results.BadRequest(new { ok = false, error = "Datos no válidos." });
+
+    var estudiante = await db.Estudiantes.FindAsync(id);
+    if (estudiante == null)
+        return Results.NotFound(new { ok = false, error = "Estudiante no encontrado." });
+
+    estudiante.TipoAprendizaje = dto.TipoAprendizaje.Trim();
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { ok = true, tipoAprendizaje = estudiante.TipoAprendizaje });
 });
 
 app.MapPost("/api/resultados", async (GuardarResultadoDto dto, ApplicationDbContext db) =>
 {
     if (dto.EstudianteId <= 0 || string.IsNullOrWhiteSpace(dto.Prueba))
         return Results.BadRequest(new { ok = false, error = "Datos de resultado inválidos." });
+
+    // Validación defensiva de límites y anti-manipulación de datos
+    if (dto.Puntaje < 0 || dto.Puntaje > 100)
+        return Results.BadRequest(new { ok = false, error = "El puntaje debe estar comprendido entre 0 y 100." });
+
+    if (dto.TiempoMs < 0 || dto.TiempoMs > 3_600_000)
+        return Results.BadRequest(new { ok = false, error = "El tiempo registrado no es válido." });
+
+    if (dto.Errores < 0 || dto.Errores > 5_000)
+        return Results.BadRequest(new { ok = false, error = "La cantidad de errores no es válida." });
 
     var estudianteExiste = await db.Estudiantes.AnyAsync(e => e.IdEstudiante == dto.EstudianteId);
     if (!estudianteExiste)
@@ -474,6 +502,7 @@ app.Run();
 
 public record GenerarGrupoDto(int? DocenteId);
 public record UnirseGrupoDto(int EstudianteId, string Codigo);
+public record GuardarTipoAprendizajeDto(string? TipoAprendizaje);
 public record GuardarResultadoDto(
     int EstudianteId,
     string Prueba,

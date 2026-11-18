@@ -16,29 +16,20 @@
     <p>Selecciona tu perfil para continuar a la evaluación de aprendizaje cognitivo.</p>
   </div>
 
-<div class="grid">
-                @* MODIFICADO: Navega primero a la página de login (/login) enviando el rol como parámetro en la URL.
-                   Luego de validar las credenciales en el login, se redirige a /Estudiantes *@
-                @* CAMBIO: Se reemplazó <a> por <NavLink> (componente de navegación de Blazor).
-                   Se conserva la clase "card full" para no perder el diseño y se envía ?rol=Estudiantes
-                   para que login.razor sepa a qué página redirigir después de iniciar sesión. *@
-                <NavLink class="card full" href="login?rol=Estudiantes">
-        <div class="icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-        </div>
-        <h3>Estudiantes</h3>
-        <p>Presenta tus pruebas cognitivas y consulta tus resultados</p>
-    </NavLink> @* CAMBIO: cierre de NavLink en lugar de </a> *@
+  <div class="grid">
+    <NavLink class="card full" href="login?rol=Estudiantes">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <h3>Estudiantes</h3>
+      <p>Presenta tus pruebas cognitivas y consulta tus resultados</p>
+    </NavLink>
   </div>
 
-
   <div class="row3">
-    @* MODIFICADO: Navega primero a la página de login (/login) enviando el rol de Docente en la URL.
-       Luego de validar las credenciales en el login, se redirige a /Docente *@
-    @* CAMBIO: Se reemplazó <a> por <NavLink>. Se envía ?rol=Docente para que el login redirija a /Docente. *@
     <NavLink class="card" href="login?rol=Docente">
       <div class="icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -47,7 +38,7 @@
       </div>
       <h3>Docentes</h3>
       <p>Gestiona tus grupos y consulta estadísticas</p>
-    </NavLink> @* CAMBIO: cierre de NavLink en lugar de </a> *@
+    </NavLink>
 
     <NavLink class="card" href="Instrucciones">
       <div class="icon">

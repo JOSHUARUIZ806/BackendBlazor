@@ -66,6 +66,11 @@
                     </div>
 
                     <div class="scores-group">
+                        <div class="stat-pill timer-pill" id="atencion-timer-pill" title="Límite: 9s por nivel (Test de Stroop: 45s por fase). Si lo sobrepasas se resta 1 punto">
+                            <span class="stat-icon">⏱️</span>
+                            <span class="stat-label">Tiempo:</span>
+                            <span id="timer-count" class="stat-value">0.0s</span>
+                        </div>
                         <div class="stat-pill hit-pill" title="Aciertos acumulados">
                             <span class="stat-icon">✓</span>
                             <span class="stat-label">Aciertos:</span>
@@ -130,6 +135,8 @@
                     <span class="summary-label">Puntaje /100</span>
                 </div>
             </div>
+
+            <div id="results-penalties" style="display:none; margin: 14px 0; padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; background: rgba(239, 68, 68, 0.1); color: #B91C1C; border: 1px solid rgba(239, 68, 68, 0.2);"></div>
 
             <!-- Diagnóstico de rendimiento -->
             <div class="evaluation-box" id="evaluation-box">

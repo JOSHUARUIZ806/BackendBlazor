@@ -1,4 +1,4 @@
-﻿/* Docente.js — antes estaba dentro de Docente.razor; se movió a wwwroot para que
+/* Docente.js — antes estaba dentro de Docente.razor; se movió a wwwroot para que
    se ejecute siempre (Blazor no corre los <script> que están dentro de un .razor). */
 window.iniciarDocente = function () {
     const btn = document.getElementById('genCodeBtn');
@@ -167,10 +167,21 @@ window.iniciarDocente = function () {
                     return `<td class="res-cell"><div class="donut ${clase}" style="--pct:${pts}"><b>${pts}%</b></div><span class="donut-lbl">${texto}</span></td>`;
                 }).join('');
 
+                let badgeAprendizajeClase = 'badge-na';
+                let estiloTexto = 'N/A';
+                if (estudiante.tipoAprendizaje) {
+                    const norm = estudiante.tipoAprendizaje.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    estiloTexto = estudiante.tipoAprendizaje;
+                    if (norm.includes('visual')) badgeAprendizajeClase = 'badge-visual';
+                    else if (norm.includes('auditivo')) badgeAprendizajeClase = 'badge-auditivo';
+                    else if (norm.includes('kinestesico')) badgeAprendizajeClase = 'badge-kinestesico';
+                    else if (norm.includes('lector') || norm.includes('escritor')) badgeAprendizajeClase = 'badge-lector';
+                }
+
                 return `<tr>
           <td>${estudiante.nombre}</td>
           ${celdas}
-          <td>${completas} / ${PRUEBAS.length}</td>
+          <td><span class="badge-aprendizaje ${badgeAprendizajeClase}">${estiloTexto}</span></td>
           <td><span class="tag ${tagClase}">${tagTexto}</span></td>
         </tr>`;
             }).join('');

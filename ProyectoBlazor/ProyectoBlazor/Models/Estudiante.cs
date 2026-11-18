@@ -41,6 +41,10 @@ namespace ProyectoBlazor.Models
         [Column("fecha_registro")]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
+        [Column("tipo_aprendizaje")]
+        [MaxLength(50)]
+        public string? TipoAprendizaje { get; set; }
+
         public ICollection<GrupoEstudiante> GruposEstudiantes { get; set; } = new List<GrupoEstudiante>();
         public ICollection<ResultadoAtencion> ResultadosAtencion { get; set; } = new List<ResultadoAtencion>();
         public ICollection<ResultadoMemorama> ResultadosMemorama { get; set; } = new List<ResultadoMemorama>();
