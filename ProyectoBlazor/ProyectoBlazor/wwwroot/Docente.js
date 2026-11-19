@@ -157,13 +157,13 @@ window.iniciarDocente = function () {
                 else if (completas > 0) { tagClase = 'tag-progress'; tagTexto = 'En progreso'; }
 
                 // Una gráfica circular por prueba, con el mismo criterio de color
-                // que ve el alumno: >=75 Fuerte, >=50 Promedio, menos Por reforzar.
+                // que ve el alumno: >=75 Bueno, >=50 Intermedio, menos Por mejorar.
                 const celdas = PRUEBAS.map((p) => {
                     if (!resumen[p]) return '<td class="res-cell"><div class="donut level-none"><b>—</b></div><span class="donut-lbl">Pendiente</span></td>';
                     const pts = Math.max(0, Math.min(100, Math.round(resumen[p].puntaje)));
-                    let clase = 'level-focus', texto = 'Por reforzar';
-                    if (pts >= 75) { clase = 'level-strong'; texto = 'Fuerte'; }
-                    else if (pts >= 50) { clase = 'level-avg'; texto = 'Promedio'; }
+                    let clase = 'level-focus', texto = 'Por mejorar';
+                    if (pts >= 75) { clase = 'level-strong'; texto = 'Bueno'; }
+                    else if (pts >= 50) { clase = 'level-avg'; texto = 'Intermedio'; }
                     return `<td class="res-cell"><div class="donut ${clase}" style="--pct:${pts}"><b>${pts}%</b></div><span class="donut-lbl">${texto}</span></td>`;
                 }).join('');
 

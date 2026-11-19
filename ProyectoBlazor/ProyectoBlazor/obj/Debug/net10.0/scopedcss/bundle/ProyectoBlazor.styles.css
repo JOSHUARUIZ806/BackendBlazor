@@ -2158,6 +2158,11 @@
   margin-bottom: 4px;
 }
 
+.page-scope[b-sy7vcwu5p7]  .rec-list li strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
 .page-scope[b-sy7vcwu5p7]  .rec-list li:last-child {
   margin-bottom: 0;
 }

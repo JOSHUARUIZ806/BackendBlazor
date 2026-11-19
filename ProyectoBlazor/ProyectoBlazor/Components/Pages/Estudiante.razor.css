@@ -468,6 +468,11 @@
   margin-bottom: 4px;
 }
 
+.page-scope ::deep .rec-list li strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
 .page-scope ::deep .rec-list li:last-child {
   margin-bottom: 0;
 }
