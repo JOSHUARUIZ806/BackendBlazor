@@ -87,13 +87,25 @@
                                 <input id="nombre" type="text" @bind="Nombre" @bind:event="oninput" placeholder="Ej. Joshua Ruiz López" autocomplete="name" />
                             </div>
 
-                            if (!EsDocente)
+                            if (EsDocente)
+                            {
+                                <div class="field">
+                                    <label for="empleado">Número de empleado</label>
+                                    <input id="empleado" type="text" @bind="NumeroEmpleado" @bind:event="oninput" placeholder="Ej. D-82698" />
+                                </div>
+                            }
+                            else
                             {
                                 <div class="field">
                                     <label for="control">Número de control</label>
                                     <input id="control" type="text" @bind="NumeroControl" @bind:event="oninput" placeholder="Ej. 21212363" />
                                 </div>
                             }
+
+                            <div class="field">
+                                <label for="carrera">Carrera</label>
+                                <input id="carrera" type="text" @bind="Carrera" @bind:event="oninput" placeholder="Ej. Ingeniería en Sistemas Computacionales" />
+                            </div>
                         }
 
                         <div class="field">
@@ -180,6 +192,8 @@
     private string Password { get; set; } = "";
     private string Nombre { get; set; } = "";         // solo registro
     private string NumeroControl { get; set; } = "";  // solo registro (estudiante)
+    private string NumeroEmpleado { get; set; } = ""; // solo registro (docente)
+    private string Carrera { get; set; } = "";        // solo registro (ambos)
     private string Confirmar { get; set; } = "";      // solo registro
     private string CodigoGrupo { get; set; } = "";    // solo registro (estudiante, opcional)
     private string ClaveDocente { get; set; } = "";   // solo registro (docente)
@@ -224,15 +238,28 @@
                 MensajeError = "Por favor escribe tu nombre completo.";
                 return;
             }
+            if (string.IsNullOrWhiteSpace(Carrera))
+            {
+                MensajeError = "Por favor escribe tu carrera.";
+                return;
+            }
             if (EsEstudiante && string.IsNullOrWhiteSpace(NumeroControl))
             {
                 MensajeError = "Por favor escribe tu número de control.";
                 return;
             }
-            if (EsDocente && string.IsNullOrWhiteSpace(ClaveDocente))
+            if (EsDocente)
             {
-                MensajeError = "Por favor escribe la clave de docente.";
-                return;
+                if (string.IsNullOrWhiteSpace(NumeroEmpleado))
+                {
+                    MensajeError = "Por favor escribe tu número de empleado.";
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(ClaveDocente))
+                {
+                    MensajeError = "Por favor escribe la clave de docente.";
+                    return;
+                }
             }
             if (Password != Confirmar)
             {
@@ -303,17 +330,23 @@
         var (nombre, paterno, materno) = SepararNombreCompleto(nombreCompleto);
         var sal = NuevaSal();
         var hashConSal = $"{sal}:{CalcularHash(Password, sal)}";
+        var carrera = Carrera.Trim();
+
+        if (string.IsNullOrWhiteSpace(carrera) || carrera.Length > 120)
+            return "Escribe el nombre de tu carrera (máximo 120 caracteres).";
 
         if (EsDocente)
         {
+            var numEmpleado = NumeroEmpleado.Trim();
+
+            if (string.IsNullOrWhiteSpace(numEmpleado) || numEmpleado.Length > 20)
+                return "Escribe un número de empleado válido (máximo 20 caracteres).";
+
             if (await Db.Docentes.AnyAsync(d => d.CorreoElectronico.ToLower() == correo))
                 return "Ya existe una cuenta de docente con ese correo. Inicia sesión.";
 
-            string numEmpleado;
-            do
-            {
-                numEmpleado = "D-" + RandomNumberGenerator.GetInt32(1000, 99999);
-            } while (await Db.Docentes.AnyAsync(d => d.NumeroEmpleado == numEmpleado));
+            if (await Db.Docentes.AnyAsync(d => d.NumeroEmpleado.ToLower() == numEmpleado.ToLower()))
+                return "Ya existe una cuenta de docente con ese número de empleado.";
 
             var nuevoDocente = new ProyectoBlazor.Models.Docente
             {
@@ -321,7 +354,7 @@
                 ApellidoPaterno = paterno,
                 ApellidoMaterno = materno,
                 NumeroEmpleado = numEmpleado,
-                Carrera = "Ingeniería en Sistemas Computacionales",
+                Carrera = carrera,
                 CorreoElectronico = correo,
                 Contrasena = hashConSal,
                 FechaRegistro = DateTime.Now
@@ -363,7 +396,7 @@
                 ApellidoPaterno = paterno,
                 ApellidoMaterno = materno,
                 Matricula = control,
-                Carrera = "Ingeniería en Sistemas Computacionales",
+                Carrera = carrera,
                 CorreoElectronico = correo,
                 Contrasena = hashConSal,
                 FechaRegistro = DateTime.Now
@@ -413,9 +446,9 @@
 
         if (EsDocente)
         {
-            var docente = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == correo);
+            var docente = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == correo || d.NumeroEmpleado.ToLower() == correo);
             if (docente == null)
-                return "Correo o contraseña incorrectos.";
+                return "Correo, número de empleado o contraseña incorrectos.";
 
             if (!VerificarContrasena(Password, docente.Contrasena))
                 return "Correo o contraseña incorrectos.";
