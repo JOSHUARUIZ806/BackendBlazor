@@ -25,6 +25,7 @@ C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoB
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\Microsoft.SqlServer.Server.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.ClientModel.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.Configuration.ConfigurationManager.dll
+C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.Formats.Asn1.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.Memory.Data.dll
 C:\Users\Contr\OneDrive\Escritorio\Antigravity Proyectos\BackendBlazor\ProyectoBlazor\ProyectoBlazor\obj\Release\net10.0\PubTmp\Out\System.Security.Cryptography.Pkcs.dll

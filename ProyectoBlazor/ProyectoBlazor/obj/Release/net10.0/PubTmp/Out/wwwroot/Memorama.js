@@ -17,11 +17,12 @@ window.iniciarMemorama = function () {
 
   // ─── Configuración de fases ─────────────────────────
   // lado: casillas por lado; memorizar: segundos que se muestran las cartas.
+  // tiempoLimiteSeg: tiempo asignado por nivel según Span de imágenes / Retención de dígitos (~10 min total).
   const FASES = [
-    { lado: 4, memorizar: 10 },
-    { lado: 6, memorizar: 10 },
-    { lado: 8, memorizar: 10 },
-    { lado: 10, memorizar: 10 }
+    { lado: 4, memorizar: 10, tiempoLimiteSeg: 60, descTiempo: '1 min' },
+    { lado: 6, memorizar: 10, tiempoLimiteSeg: 120, descTiempo: '2 min' },
+    { lado: 8, memorizar: 10, tiempoLimiteSeg: 180, descTiempo: '3 min' },
+    { lado: 10, memorizar: 10, tiempoLimiteSeg: 240, descTiempo: '4 min' }
   ].map(f => {
     const pares = (f.lado * f.lado) / 2;
     return {
@@ -170,6 +171,9 @@ window.iniciarMemorama = function () {
     cardErrorMap = {};
     clearInterval(timerInterval);
     inicioTableroMs = null;
+    timerDisplay.style.color = '';
+    const faseActual = FASES[faseIdx];
+    timerDisplay.title = faseActual ? `Límite para este nivel: ${faseActual.descTiempo}` : '';
 
     createBoard();
     updateDisplays();
@@ -210,10 +214,21 @@ window.iniciarMemorama = function () {
   // ─── Timer ──────────────────────────────────────────
   function startTimer() {
     inicioTableroMs = Date.now();
+    actualizarTimer();
+    timerInterval = setInterval(actualizarTimer, 250);
+  }
+
+  function actualizarTimer() {
     timerDisplay.textContent = formatTime(Math.floor(tiempoJugadoMs() / 1000));
-    timerInterval = setInterval(() => {
-      timerDisplay.textContent = formatTime(Math.floor(tiempoJugadoMs() / 1000));
-    }, 250);
+    const fase = FASES[faseIdx];
+    const tiempoTableroSec = inicioTableroMs !== null ? Math.floor((Date.now() - inicioTableroMs) / 1000) : 0;
+    if (fase && tiempoTableroSec > fase.tiempoLimiteSeg) {
+      timerDisplay.style.color = '#ef4444';
+      timerDisplay.title = `Tiempo superior al límite de ${fase.descTiempo} (-1 pt)`;
+    } else {
+      timerDisplay.style.color = '';
+      timerDisplay.title = fase ? `Límite para este tablero: ${fase.descTiempo}` : '';
+    }
   }
 
   function formatTime(totalSec) {
@@ -349,10 +364,15 @@ window.iniciarMemorama = function () {
     isGameActive = false;
     isLocked = true;
     clearInterval(timerInterval);
+    let tiempoTableroMs = 0;
     if (inicioTableroMs !== null) {
-      tiempoAcumuladoMs += Date.now() - inicioTableroMs;
+      tiempoTableroMs = Date.now() - inicioTableroMs;
+      tiempoAcumuladoMs += tiempoTableroMs;
       inicioTableroMs = null;
     }
+
+    const fase = FASES[faseIdx];
+    const tiempoExcedido = (tiempoTableroMs / 1000) > fase.tiempoLimiteSeg;
 
     // Registrar el tablero en los resultados de su fase
     const rf = resultados[faseIdx];
@@ -361,8 +381,12 @@ window.iniciarMemorama = function () {
     rt.errores = errors;
     rt.completado = completado;
     rt.jugado = true;
+    rt.tiempoMs = tiempoTableroMs;
+    rt.tiempoExcedido = tiempoExcedido;
     rf.paresEncontrados += matchedPairs;
     rf.errores += errors;
+    rf.tiempoMs = (rf.tiempoMs || 0) + tiempoTableroMs;
+    rf.tiempoExcedido = tiempoExcedido;
 
     setTimeout(() => {
       if (!completado) {
@@ -381,7 +405,7 @@ window.iniciarMemorama = function () {
 
     $('#transIcon').textContent = '🎉';
     $('#transTitle').textContent = `¡Fase ${faseIdx + 1} completada!`;
-    $('#transText').textContent = `Sigue la Fase ${sigFase + 1}/4 con tablero de ${FASES[sigFase].tamano}. Límite: ${FASES[sigFase].limiteErrores} errores permitidos.`;
+    $('#transText').textContent = `Sigue la Fase ${sigFase + 1}/4 con tablero de ${FASES[sigFase].tamano}. Límite: ${FASES[sigFase].descTiempo} · ${FASES[sigFase].limiteErrores} errores permitidos.`;
 
     transitionModal.classList.add('active');
     btnContinue.focus();
@@ -401,10 +425,14 @@ window.iniciarMemorama = function () {
     const erroresTotales = resultados.reduce((s, f) => s + f.errores, 0);
     const intentos = aciertos + erroresTotales;
     const precisionPct = intentos > 0 ? Math.round((aciertos / intentos) * 1000) / 10 : 0;
-    // Puntaje: promedio del % de pares encontrados de cada fase (fase no alcanzada = 0%)
-    const puntaje = Math.round(
+    // Cantidad de niveles (tableros) que sobrepasaron su tiempo específico
+    const nivelesTiempoExcedido = resultados.filter(f => f.tiempoExcedido).length;
+    // Puntaje base: promedio del % de pares encontrados de cada fase (fase no alcanzada = 0%)
+    const puntajeBase = Math.round(
       resultados.reduce((s, f) => s + (f.paresEncontrados / f.paresTotales) * 100, 0) / FASES.length
     );
+    // Se resta 1 punto por cada nivel que haya sobrepasado su tiempo
+    const puntaje = Math.max(0, Math.min(100, puntajeBase - nivelesTiempoExcedido));
     const tiempoMs = Math.round(tiempoAcumuladoMs);
     const fasesCompletadas = resultados.filter(f => f.tableros.every(t => t.completado)).length;
 
@@ -414,23 +442,28 @@ window.iniciarMemorama = function () {
       faseAlcanzada: faseIdx + 1,
       tableroAlcanzado: tableroIdx + 1,
       fasesCompletadas,
+      nivelesTiempoExcedido,
       fases: resultados
     };
 
     // Pantalla de resultados
     $('#resIcon').textContent = terminoPorErrores ? '🛑' : '🏆';
     $('#resTitle').textContent = terminoPorErrores ? 'La prueba ha terminado' : '¡Prueba completada!';
+    let penalTexto = nivelesTiempoExcedido > 0
+      ? ` · ${nivelesTiempoExcedido} ${nivelesTiempoExcedido === 1 ? 'nivel sobrepasó el tiempo' : 'niveles sobrepasaron el tiempo'} (-${nivelesTiempoExcedido} pt${nivelesTiempoExcedido === 1 ? '' : 's'})`
+      : '';
     $('#resSubtitle').textContent = terminoPorErrores
-      ? `Llegaste al límite de errores permitidos. Llegaste hasta la fase ${faseIdx + 1} (${FASES[faseIdx].tamano}).`
-      : 'Completaste las 4 fases (4 tableros).';
+      ? `Llegaste al límite de errores permitidos en la fase ${faseIdx + 1} (${FASES[faseIdx].tamano}).${penalTexto}`
+      : `Completaste las 4 fases (4 tableros).${penalTexto}`;
     $('#resPuntaje').textContent = puntaje;
     $('#resTiempo').textContent = formatTime(Math.floor(tiempoMs / 1000));
     $('#resAciertos').textContent = aciertos;
     $('#resErrores').textContent = erroresTotales;
     $('#resFases').innerHTML = '<h4>Resumen por fase</h4>' + resultados.map((f, i) => {
       const alcanzada = f.tableros.some(t => t.jugado);
+      const excedido = f.tiempoExcedido;
       const texto = alcanzada
-        ? `${f.paresEncontrados}/${f.paresTotales} pares · ${f.errores} errores`
+        ? `${f.paresEncontrados}/${f.paresTotales} pares · ${f.errores} errores · ${(f.tiempoMs / 1000).toFixed(1)}s` + (excedido ? ` ⚠️ (Límite: ${FASES[i].descTiempo} · -1 pt)` : '')
         : 'No alcanzada';
       return `
         <div class="error-item">

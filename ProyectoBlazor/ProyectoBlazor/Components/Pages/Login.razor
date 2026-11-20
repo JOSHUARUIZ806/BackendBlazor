@@ -201,6 +201,7 @@
 
     private bool EsRegistro { get; set; } = false;    // false = iniciar sesión, true = crear cuenta
     private bool Procesando { get; set; } = false;
+    private string? _urlDestino;
 
     private void ElegirRol(string rol)
     {
@@ -278,31 +279,17 @@
                 return;
             }
 
-            Navigation.NavigateTo(EsDocente ? "/Docente" : "/Estudiante", forceLoad: true);
+            Navigation.NavigateTo(_urlDestino ?? (EsDocente ? "/Docente" : "/Estudiante"), forceLoad: true);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            MensajeError = "Ocurrió un error al procesar tu solicitud. Intenta de nuevo en unos minutos.";
+            MensajeError = ex.InnerException?.Message ?? ex.Message;
         }
         finally
         {
             Procesando = false;
         }
     }
-
-    // ============================================================
-    //  BASE DE DATOS  —  lo único que hay que reemplazar
-    // ============================================================
-    // Las dos funciones devuelven null si todo salió bien, o el mensaje de error.
-    //
-    //  RegistrarAsync(): crear la cuenta.
-    //      Estudiante: Nombre, NumeroControl, Correo, Password, CodigoGrupo (opcional)
-    //      Docente:    Nombre, Correo, Password, ClaveDocente (obligatoria)
-    //  EntrarAsync():    validar Correo + Password del perfil activo.
-    //
-    // Al terminar bien se debe llamar a AbrirSesionAsync(...) para que las páginas
-    // Estudiante / Docente / juegos sepan quién entró (ver al final).
-    // La contraseña NUNCA se guarda en texto plano: aquí se guarda con PBKDF2.
 
     private async Task<string?> RegistrarAsync()
     {
@@ -371,6 +358,7 @@
                 Correo = correo
             };
             await AbrirSesionAsync(usuario, null);
+            _urlDestino = "/Docente";
             return null;
         }
         else
@@ -435,80 +423,122 @@
                 EstudianteId = nuevoEstudiante.IdEstudiante
             };
             await AbrirSesionAsync(usuario, grupoBd?.CodigoGrupo, docenteNombre);
+            _urlDestino = "/Estudiante";
             return null;
         }
     }
 
     private async Task<string?> EntrarAsync()
     {
-        var rol = EsDocente ? "docente" : "estudiante";
-        var correo = Correo.Trim().ToLowerInvariant();
+        var input = Correo.Trim().ToLowerInvariant();
 
+        // 1. Si está marcado como docente, buscar primero en docentes
         if (EsDocente)
         {
-            var docente = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == correo || d.NumeroEmpleado.ToLower() == correo);
-            if (docente == null)
-                return "Correo, número de empleado o contraseña incorrectos.";
-
-            if (!VerificarContrasena(Password, docente.Contrasena))
-                return "Correo o contraseña incorrectos.";
-
-            var nombreCompleto = FormatearNombreCompleto(docente.Nombre, docente.ApellidoPaterno, docente.ApellidoMaterno);
-            var usuario = new Usuario
+            var docente = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == input || d.NumeroEmpleado.ToLower() == input);
+            if (docente != null)
             {
-                Id = docente.IdDocente,
-                Rol = rol,
-                Nombre = nombreCompleto,
-                Correo = docente.CorreoElectronico
-            };
+                if (!VerificarContrasena(Password, docente.Contrasena))
+                    return "Contraseña incorrecta.";
 
-            var grupoDocente = await Db.Grupos
-                .Where(g => g.IdDocente == docente.IdDocente && g.Activo)
-                .OrderByDescending(g => g.FechaCreacion)
-                .FirstOrDefaultAsync();
+                await IniciarSesionDocenteAsync(docente);
+                _urlDestino = "/Docente";
+                return null;
+            }
 
-            await AbrirSesionAsync(usuario, grupoDocente?.CodigoGrupo);
-            return null;
+            // Detección automática: ¿será un estudiante que entró por el perfil de docente por error?
+            var estudianteFallback = await Db.Estudiantes.FirstOrDefaultAsync(e => e.CorreoElectronico.ToLower() == input || e.Matricula.ToLower() == input);
+            if (estudianteFallback != null)
+            {
+                if (!VerificarContrasena(Password, estudianteFallback.Contrasena))
+                    return "Contraseña incorrecta.";
+
+                await IniciarSesionEstudianteAsync(estudianteFallback);
+                _urlDestino = "/Estudiante";
+                return null;
+            }
+
+            return "No se encontró ninguna cuenta con ese correo o número de empleado.";
         }
         else
         {
-            var estudiante = await Db.Estudiantes.FirstOrDefaultAsync(e => e.CorreoElectronico.ToLower() == correo);
-            if (estudiante == null)
-                return "Correo o contraseña incorrectos.";
-
-            if (!VerificarContrasena(Password, estudiante.Contrasena))
-                return "Correo o contraseña incorrectos.";
-
-            var inscripcion = await Db.GruposEstudiantes
-                .Include(ge => ge.Grupo)
-                    .ThenInclude(g => g!.Docente)
-                .Where(ge => ge.IdEstudiante == estudiante.IdEstudiante)
-                .OrderByDescending(ge => ge.FechaInscripcion)
-                .FirstOrDefaultAsync();
-
-            var codigoGrupo = inscripcion?.Grupo?.CodigoGrupo;
-            string? docenteNombre = null;
-            if (inscripcion?.Grupo?.Docente != null)
+            // 2. Si está marcado como estudiante, buscar primero en estudiantes
+            var estudiante = await Db.Estudiantes.FirstOrDefaultAsync(e => e.CorreoElectronico.ToLower() == input || e.Matricula.ToLower() == input);
+            if (estudiante != null)
             {
-                var d = inscripcion.Grupo.Docente;
-                docenteNombre = FormatearNombreCompleto(d.Nombre, d.ApellidoPaterno, d.ApellidoMaterno);
+                if (!VerificarContrasena(Password, estudiante.Contrasena))
+                    return "Contraseña incorrecta.";
+
+                await IniciarSesionEstudianteAsync(estudiante);
+                _urlDestino = "/Estudiante";
+                return null;
             }
 
-            var nombreCompleto = FormatearNombreCompleto(estudiante.Nombre, estudiante.ApellidoPaterno, estudiante.ApellidoMaterno);
-
-            var usuario = new Usuario
+            // Detección automática: ¿será un docente que entró por el perfil de estudiante por error?
+            var docenteFallback = await Db.Docentes.FirstOrDefaultAsync(d => d.CorreoElectronico.ToLower() == input || d.NumeroEmpleado.ToLower() == input);
+            if (docenteFallback != null)
             {
-                Id = estudiante.IdEstudiante,
-                Rol = rol,
-                Nombre = nombreCompleto,
-                Correo = estudiante.CorreoElectronico,
-                NumeroControl = estudiante.Matricula,
-                EstudianteId = estudiante.IdEstudiante
-            };
+                if (!VerificarContrasena(Password, docenteFallback.Contrasena))
+                    return "Contraseña incorrecta.";
 
-            await AbrirSesionAsync(usuario, codigoGrupo, docenteNombre);
-            return null;
+                await IniciarSesionDocenteAsync(docenteFallback);
+                _urlDestino = "/Docente";
+                return null;
+            }
+
+            return "No se encontró ninguna cuenta con ese correo o número de control.";
         }
+    }
+
+    private async Task IniciarSesionDocenteAsync(ProyectoBlazor.Models.Docente docente)
+    {
+        var nombreCompleto = FormatearNombreCompleto(docente.Nombre, docente.ApellidoPaterno, docente.ApellidoMaterno);
+        var usuario = new Usuario
+        {
+            Id = docente.IdDocente,
+            Rol = "docente",
+            Nombre = nombreCompleto,
+            Correo = docente.CorreoElectronico
+        };
+
+        var grupoDocente = await Db.Grupos
+            .Where(g => g.IdDocente == docente.IdDocente && g.Activo)
+            .OrderByDescending(g => g.FechaCreacion)
+            .FirstOrDefaultAsync();
+
+        await AbrirSesionAsync(usuario, grupoDocente?.CodigoGrupo);
+    }
+
+    private async Task IniciarSesionEstudianteAsync(ProyectoBlazor.Models.Estudiante estudiante)
+    {
+        var inscripcion = await Db.GruposEstudiantes
+            .Include(ge => ge.Grupo)
+                .ThenInclude(g => g!.Docente)
+            .Where(ge => ge.IdEstudiante == estudiante.IdEstudiante)
+            .OrderByDescending(ge => ge.FechaInscripcion)
+            .FirstOrDefaultAsync();
+
+        var codigoGrupo = inscripcion?.Grupo?.CodigoGrupo;
+        string? docenteNombre = null;
+        if (inscripcion?.Grupo?.Docente != null)
+        {
+            var d = inscripcion.Grupo.Docente;
+            docenteNombre = FormatearNombreCompleto(d.Nombre, d.ApellidoPaterno, d.ApellidoMaterno);
+        }
+
+        var nombreCompleto = FormatearNombreCompleto(estudiante.Nombre, estudiante.ApellidoPaterno, estudiante.ApellidoMaterno);
+
+        var usuario = new Usuario
+        {
+            Id = estudiante.IdEstudiante,
+            Rol = "estudiante",
+            Nombre = nombreCompleto,
+            Correo = estudiante.CorreoElectronico,
+            NumeroControl = estudiante.Matricula,
+            EstudianteId = estudiante.IdEstudiante
+        };
+
+        await AbrirSesionAsync(usuario, codigoGrupo, docenteNombre);
     }
 
     private static (string Nombre, string Paterno, string? Materno) SepararNombreCompleto(string nombreCompleto)
@@ -534,21 +564,26 @@
 
     private static bool VerificarContrasena(string passwordIngresado, string contrasenaGuardada)
     {
+        if (string.IsNullOrWhiteSpace(contrasenaGuardada)) return false;
+        contrasenaGuardada = contrasenaGuardada.Trim();
+
         if (contrasenaGuardada.Contains(':'))
         {
             var partes = contrasenaGuardada.Split(':', 2);
             try
             {
-                var esperado = Convert.FromBase64String(partes[1]);
-                var calculado = Convert.FromBase64String(CalcularHash(passwordIngresado, partes[0]));
+                var salStr = partes[0].Trim();
+                var hashStr = partes[1].Trim();
+                var esperado = Convert.FromBase64String(hashStr);
+                var calculado = Convert.FromBase64String(CalcularHash(passwordIngresado, salStr));
                 return CryptographicOperations.FixedTimeEquals(esperado, calculado);
             }
             catch
             {
-                return false;
+                // Fallback por si la contraseña estaba en texto plano o con formato alternativo
             }
         }
-        return string.Equals(passwordIngresado, contrasenaGuardada, StringComparison.Ordinal);
+        return string.Equals(passwordIngresado.Trim(), contrasenaGuardada, StringComparison.Ordinal);
     }
 
     private const string ClaveDocenteValida = "TECTIJ-DOCENTE";

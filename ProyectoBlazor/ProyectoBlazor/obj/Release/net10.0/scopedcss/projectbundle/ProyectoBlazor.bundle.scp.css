@@ -1401,6 +1401,40 @@
   color: var(--muted);
 }
 
+.page-scope[b-ss5ahu1f6i]  .badge-aprendizaje {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.page-scope[b-ss5ahu1f6i]  .badge-visual {
+  background: #EBF5FF;
+  color: #1E40AF;
+}
+
+.page-scope[b-ss5ahu1f6i]  .badge-auditivo {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.page-scope[b-ss5ahu1f6i]  .badge-kinestesico {
+  background: #F3E8FF;
+  color: #6B21A8;
+}
+
+.page-scope[b-ss5ahu1f6i]  .badge-lector {
+  background: #ECFDF5;
+  color: #065F46;
+}
+
+.page-scope[b-ss5ahu1f6i]  .badge-na {
+  background: #F3F4F6;
+  color: #6B7280;
+}
+
 .page-scope[b-ss5ahu1f6i]  .table-wrap {
   overflow-x: auto;
 }
@@ -2122,6 +2156,11 @@
 
 .page-scope[b-sy7vcwu5p7]  .rec-list li {
   margin-bottom: 4px;
+}
+
+.page-scope[b-sy7vcwu5p7]  .rec-list li strong {
+  color: var(--navy);
+  font-weight: 600;
 }
 
 .page-scope[b-sy7vcwu5p7]  .rec-list li:last-child {
