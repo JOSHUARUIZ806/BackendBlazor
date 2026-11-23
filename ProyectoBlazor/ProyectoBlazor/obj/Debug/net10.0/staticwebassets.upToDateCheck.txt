@@ -1,0 +1,37 @@
+wwwroot\app.css
+wwwroot\Atencion.js
+wwwroot\Docente.js
+wwwroot\Estudiante.js
+wwwroot\imagenes\colordetinta.png
+wwwroot\imagenes\conecta.png
+wwwroot\imagenes\desktop.ini
+wwwroot\imagenes\Estudiantepaso5.png
+wwwroot\imagenes\Estudiantespaso1.png
+wwwroot\imagenes\Estudiantespaso2.png
+wwwroot\imagenes\Estudiantespaso3.png
+wwwroot\imagenes\Estudiantespaso4.png
+wwwroot\imagenes\Estudiantespaso6.png
+wwwroot\imagenes\guia de recomendaciones.png
+wwwroot\imagenes\incio de sesion docente.png
+wwwroot\imagenes\Memorama.png
+wwwroot\imagenes\resultados.png
+wwwroot\imagenes\resumendelgrupo.png
+wwwroot\imagenes\sucesioneslogicas.png
+wwwroot\imagenes\tendenciacognitiva.png
+wwwroot\imagenes\ultimaimagendeestudiantes.png
+wwwroot\Memorama.js
+wwwroot\Procesamiento.js
+wwwroot\Razonamiento.js
+Components\Layout\ReconnectModal.razor.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\build\..\_framework\blazor.web.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\build\..\_framework\blazor.server.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Procesamiento.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Atencion.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Memorama.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\_framework\blazor.web.js
+C:\Users\esdej\.nuget\packages\microsoft.aspnetcore.app.internal.assets\10.0.14\_framework\blazor.server.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\Components\Layout\ReconnectModal.razor.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Razonamiento.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\app.css
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Estudiante.js
+C:\Users\esdej\OneDrive\Documentos\GitHub\BackendBlazor\ProyectoBlazor\ProyectoBlazor\wwwroot\Docente.js

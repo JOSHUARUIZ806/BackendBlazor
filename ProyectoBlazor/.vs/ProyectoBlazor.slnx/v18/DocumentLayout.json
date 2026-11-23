@@ -1,7 +1,16 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Contr\\OneDrive\\Escritorio\\Antigravity Proyectos\\BackendBlazor\\ProyectoBlazor\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\instrucciones.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\instrucciones.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|c:\\users\\esdej\\onedrive\\documentos\\github\\backendblazor\\proyectoblazor\\proyectoblazor\\components\\pages\\instrucciones.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{804C07CD-0733-A084-5C1F-1282F3031EBD}|ProyectoBlazor\\ProyectoBlazor.csproj|solutionrelative:proyectoblazor\\components\\pages\\instrucciones.razor.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +18,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -28,8 +41,30 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Instrucciones.razor.css",
+              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Instrucciones.razor.css",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Instrucciones.razor.css",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Instrucciones.razor.css",
+              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Instrucciones.razor.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIoEAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-11-22T20:23:25.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Instrucciones.razor",
+              "DocumentMoniker": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Instrucciones.razor",
+              "RelativeDocumentMoniker": "ProyectoBlazor\\Components\\Pages\\Instrucciones.razor",
+              "ToolTip": "C:\\Users\\esdej\\OneDrive\\Documentos\\GitHub\\BackendBlazor\\ProyectoBlazor\\ProyectoBlazor\\Components\\Pages\\Instrucciones.razor",
+              "RelativeToolTip": "ProyectoBlazor\\Components\\Pages\\Instrucciones.razor",
+              "ViewState": "AgIAANIBAAAAAAAAAAAAAO8BAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-11-22T18:29:57.78Z",
+              "EditorCaption": ""
             }
           ]
         }
