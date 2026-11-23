@@ -11,7 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MiConexionSQL")));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MiConexionSQL"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            // Reintentos automáticos para fallos transitorios y arranque en frío de Azure SQL
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(10),
+                errorNumbersToAdd: null);
+            // Tiempo de espera para permitir el auto-resume de Azure SQL Serverless
+            sqlOptions.CommandTimeout(60);
+        }));
 
 var app = builder.Build();
 

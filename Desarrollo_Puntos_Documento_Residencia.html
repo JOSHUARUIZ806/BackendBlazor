@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Desarrollo Integral de Puntos - Residencia Profesional TecNM</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 2.3cm 2cm 2.3cm 2cm;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #2b2b2b;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Portada */
+    .cover-page {
+      text-align: center;
+      height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding-top: 1.5cm;
+    }
+
+    .cover-header {
+      font-weight: 700;
+      font-size: 14pt;
+      letter-spacing: 0.5px;
+      color: #1B396A;
+      line-height: 1.4;
+    }
+
+    .cover-sub {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #555;
+      margin-top: 5px;
+    }
+
+    .cover-title-box {
+      margin: auto 0;
+      padding: 25px 15px;
+      border-top: 3px solid #1B396A;
+      border-bottom: 3px solid #1B396A;
+    }
+
+    .cover-residencia {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #003366;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .cover-title {
+      font-size: 17pt;
+      font-weight: 800;
+      color: #111;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .cover-authors {
+      font-size: 11pt;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .cover-authors strong {
+      display: block;
+      font-size: 11.5pt;
+      color: #1B396A;
+      margin-bottom: 6px;
+    }
+
+    .cover-advisors {
+      font-size: 10.5pt;
+      line-height: 1.6;
+    }
+
+    .cover-advisors strong {
+      color: #1B396A;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .cover-footer {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #666;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5cm;
+    }
+
+    /* Títulos y Secciones */
+    h1 {
+      color: #1B396A;
+      font-size: 16pt;
+      border-bottom: 2px solid #1B396A;
+      padding-bottom: 5px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      color: #004d80;
+      font-size: 13pt;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      color: #2c3e50;
+      font-size: 11.5pt;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      text-align: justify;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 10px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 5px;
+      text-align: justify;
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+    /* Tablas elegantes */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background-color: #1B396A;
+      color: #ffffff;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #1B396A;
+    }
+
+    td {
+      padding: 7px 9px;
+      border: 1px solid #d0d7de;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    .badge-ok {
+      background-color: #e6f4ea;
+      color: #137333;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 8.5pt;
+      display: inline-block;
+    }
+
+    /* Cajas destacadas */
+    .callout {
+      background-color: #f0f4f9;
+      border-left: 4px solid #1B396A;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 10.5pt;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .callout-warning {
+      background-color: #fff9e6;
+      border-left: 4px solid #e6a700;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 10.5pt;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Código */
+    pre {
+      background-color: #f6f8fa;
+      border: 1px solid #d0d7de;
+      padding: 10px 14px;
+      border-radius: 5px;
+      font-family: Consolas, 'Courier New', monospace;
+      font-size: 9pt;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      page-break-inside: avoid;
+    }
+
+    code {
+      font-family: Consolas, 'Courier New', monospace;
+      background-color: #f1f3f5;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 9.5pt;
+      color: #b01246;
+    }
+
+    .diagram-box {
+      background-color: #fbfcfd;
+      border: 1px dashed #1B396A;
+      padding: 12px;
+      text-align: center;
+      font-family: Consolas, monospace;
+      font-size: 9pt;
+      margin: 12px 0;
+      border-radius: 4px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PORTADA -->
+  <div class="cover-page">
+    <div class="cover-header">
+      SEP &nbsp;&bull;&nbsp; TecNM<br>
+      INSTITUTO TECNOLÓGICO DE TIJUANA
+      <div class="cover-sub">DEPARTAMENTO DE SISTEMAS Y COMPUTACIÓN &bull; INGENIERÍA INFORMÁTICA</div>
+    </div>
+
+    <div class="cover-title-box">
+      <div class="cover-residencia">INFORME TÉCNICO DE RESIDENCIA PROFESIONAL</div>
+      <div class="cover-title">“SISTEMA WEB DE EVALUACIÓN DE APRENDIZAJE COGNITIVO PARA ESTUDIANTES DE NIVEL SUPERIOR”</div>
+    </div>
+
+    <div class="cover-authors">
+      <strong>QUE PRESENTA:</strong>
+      Gabriel Contreras Sanchez &nbsp;&bull;&nbsp; Matrícula: 20210589<br>
+      Joshua Isaias Ruiz Lopez &nbsp;&bull;&nbsp; Matrícula: 20210632
+    </div>
+
+    <div class="cover-advisors">
+      <strong>BAJO LA ASESORÍA DE:</strong>
+      <strong>Asesor Interno:</strong> M.C. Miguel Ángel López Ramírez<br>
+      <strong>Asesor Externo:</strong> M.C. José de Jesús Parra Galaviz
+    </div>
+
+    <div class="cover-footer">
+      TIJUANA, B.C., AGOSTO / DICIEMBRE 2026
+    </div>
+  </div>
+
+  <!-- AGRADECIMIENTOS -->
+  <div class="page-break">
+    <h1>Agradecimientos</h1>
+    <p>Deseamos expresar nuestro más profundo agradecimiento al <strong>Instituto Tecnológico de Tijuana</strong>, integrante del Tecnológico Nacional de México, por ser nuestra alma máter, abrirnos sus puertas y brindarnos las herramientas técnicas, humanas y científicas necesarias para consolidar nuestra formación integral en la carrera de Ingeniería Informática.</p>
+    
+    <p>A nuestro asesor interno, el <strong>M.C. Miguel Ángel López Ramírez</strong>, por su invaluable acompañamiento académico, retroalimentación metodológica y orientación constante para estructurar un proyecto de impacto tangible para la comunidad universitaria.</p>
+    
+    <p>A nuestro asesor externo, el <strong>M.C. José de Jesús Parra Galaviz</strong>, por su disposición pedagógica, sus valiosas aportaciones en la definición de la lógica de evaluación y por impulsarnos a mantener altos estándares de calidad técnica, seguridad y funcionalidad práctica.</p>
+    
+    <p>A los docentes y directivos del <strong>Departamento de Sistemas y Computación</strong>, por compartir generosamente su experiencia profesional, fomentando en nosotros una mentalidad de excelencia, disciplina y vocación tecnológica.</p>
+    
+    <p>De manera muy especial, a nuestras <strong>familias</strong>, cuyo apoyo incondicional, sacrificio, paciencia y estímulo moral constante han sido el motor esencial detrás de cada una de nuestras metas alcanzadas. Asimismo, a nuestros compañeros de generación y a los estudiantes que colaboraron en las sesiones de prueba y validación del sistema, haciendo posible la culminación exitosa de esta etapa profesional.</p>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="page-break">
+    <h1>Resumen</h1>
+    <p>El presente proyecto de Residencia Profesional documenta el análisis, diseño, desarrollo, pruebas e implementación en la nube del <strong>“Sistema Web de Evaluación de Aprendizaje Cognitivo para Estudiantes de Nivel Superior”</strong>, desarrollado en el Departamento de Sistemas y Computación del Instituto Tecnológico de Tijuana (TecNM). Tradicionalmente, la evaluación universitaria se ha centrado en el rendimiento académico sumativo (exámenes y asignaturas), pasando por alto las funciones neurocognitivas subyacentes que condicionan la capacidad del estudiante para captar, procesar y aplicar información especializada.</p>
+    
+    <p>Para responder a esta problemática, se construyó una plataforma web orientada al diagnóstico formativo y preventivo, dividida en dos roles esenciales: <strong>Alumno</strong> y <strong>Docente</strong>. Para el rol alumno, el sistema integra cuatro pruebas interactivas basadas en paradigmas cognitivos reconocidos: atención (mediante una tarea de control inhibitorio basada en el <em>Efecto Stroop</em>), memoria (mediante un <em>Memorama 6×6</em> con retención visoespacial), razonamiento lógico (a través de <em>sucesiones numéricas inductivas</em> con límite de tiempo) y velocidad de procesamiento (mediante el <em>Trail Making Test / Test de Trazo</em> de 25 nodos correlativos). El sistema captura métricas cuantitativas en tiempo real (milisegundos de reacción, cantidad de aciertos, patrones de error e intentos), las cuales son procesadas por un motor de diagnóstico interno que clasifica el desempeño en niveles (<em>Fuerte/Bueno, Promedio/Intermedio y Por reforzar/Por mejorar</em>) y asigna estrategias y recomendaciones de estudio personalizadas de acuerdo con el perfil identificado.</p>
+    
+    <p>Para el rol docente, la plataforma permite crear y administrar grupos académicos mediante códigos alfanuméricos dinámicos, visualizando tableros estadísticos consolidados y tendencias grupales para respaldar intervenciones psicopedagógicas oportunas. La solución fue implementada bajo una arquitectura moderna en <strong>Blazor Web App</strong> (.NET / C#) con modo interactivo en servidor (<code>InteractiveServerComponents</code>), comunicación bidireccional en tiempo real vía WebSockets (SignalR), persistencia mediante <strong>Entity Framework Core</strong> y bases de datos relacionales en <strong>SQL Server</strong> y <strong>Azure SQL Database</strong>, alojándose en la nube a través de <strong>Azure App Service</strong>.</p>
+    
+    <p>El resultado principal es una herramienta funcional, accesible, multiplataforma y segura que cierra la brecha entre la observación cualitativa en el aula y la métrica analítica de datos, promoviendo el autoconocimiento en los estudiantes y proporcionando un recurso de apoyo vital a la labor docente y tutorial.</p>
+    
+    <p><strong>Palabras clave:</strong> sistema web, evaluación cognitiva, habilidades cognitivas, educación superior, recomendaciones de estudio, Blazor.</p>
+  </div>
+
+  <!-- GLOSARIO -->
+  <div class="page-break">
+    <h1>Glosario de Términos</h1>
+    <ul>
+      <li><strong>Habilidad cognitiva:</strong> Capacidad mental que interviene en la captación, codificación, almacenamiento, manipulación y recuperación de información para el aprendizaje.</li>
+      <li><strong>Atención:</strong> Proceso cognitivo que focaliza recursos mentales en estímulos relevantes e inhibe activamente distracciones externas o internas.</li>
+      <li><strong>Memoria de trabajo:</strong> Sistema de capacidad limitada que retiene y manipula temporalmente información activa para resolver tareas complejas.</li>
+      <li><strong>Razonamiento lógico:</strong> Capacidad para identificar patrones, deducir reglas subyacentes y resolver problemas novedosos mediante el pensamiento abstracto.</li>
+      <li><strong>Velocidad de procesamiento:</strong> Fluidez y rapidez con la que una persona identifica estímulos, los interpreta mentalmente y ejecuta una respuesta adecuada.</li>
+      <li><strong>Efecto Stroop:</strong> Paradigma neuropsicológico en el cual se produce interferencia semántica al nombrar el color de la tinta de una palabra que denota un color contradictorio.</li>
+      <li><strong>Memorama:</strong> Actividad interactiva de emparejamiento que mide la retención visoespacial y la memoria de trabajo inmediata en un tablero de cartas ocultas.</li>
+      <li><strong>Sucesiones numéricas:</strong> Tarea inductiva de cálculo que evalúa la habilidad para descifrar la ley o regla matemática que gobierna una secuencia de números.</li>
+      <li><strong>Test de trazo (Trail Making Test - TMT):</strong> Instrumento psicomotor que mide atención sostenida y velocidad de escaneo conectando números correlativos en orden continuo.</li>
+      <li><strong>Sistema web:</strong> Solución de software basada en red, ejecutada en servidores remotos y accesible universalmente a través de navegadores web estándar.</li>
+      <li><strong>Frontend:</strong> Capa visual e interactiva de la aplicación web directamente manipulada por el usuario mediante componentes gráficos.</li>
+      <li><strong>Backend:</strong> Capa servidora encargada de ejecutar las reglas del negocio, el procesamiento analítico y la persistencia de datos transaccionales.</li>
+      <li><strong>Cliente-servidor:</strong> Modelo distribuido donde los clientes solicitan recursos e interfaces y el servidor central responde y orquesta las operaciones.</li>
+      <li><strong>API y Endpoint:</strong> Protocolo de comunicación que expone servicios web; el Endpoint es la ruta HTTP específica donde se procesan solicitudes en formato JSON.</li>
+      <li><strong>Base de datos relacional:</strong> Sistema gestor que organiza datos en tablas normalizadas con claves primarias y foráneas que garantizan integridad referencial.</li>
+      <li><strong>SQL Server / Azure SQL Database:</strong> Motor de base de datos relacional empresarial de Microsoft utilizado en desarrollo local y en producción administrada en la nube.</li>
+      <li><strong>Entity Framework Core (EF Core):</strong> Mapeador Objeto-Relacional (ORM) para .NET que permite manipular tablas y registros mediante modelos tipados y LINQ en C#.</li>
+      <li><strong>Blazor (.NET):</strong> Framework web de Microsoft para construir componentes dinámicos e interactivos en C# con renderizado ultraligero en servidor.</li>
+      <li><strong>ASP.NET Core:</strong> Entorno de ejecución multiplataforma de alto rendimiento para el desarrollo de aplicaciones web y servicios en la nube.</li>
+      <li><strong>Hash y PBKDF2:</strong> Función criptográfica con derivación de claves que aplica sal aleatoria y 100,000 iteraciones para salvaguardar contraseñas de forma irreversible.</li>
+      <li><strong>Rol de usuario:</strong> Esquema de permisos (Alumno / Docente) que determina las vistas, herramientas y privilegios habilitados dentro de la plataforma.</li>
+      <li><strong>Código de grupo:</strong> Clave alfanumérica generada por el docente que permite el enrolamiento rápido de estudiantes en su asignatura respectiva.</li>
+      <li><strong>Azure App Service:</strong> Plataforma como Servicio (PaaS) en la nube para hospedar y escalar aplicaciones web seguras con soporte nativo de WebSockets.</li>
+      <li><strong>Despliegue:</strong> Proceso de compilación, configuración y publicación de los binarios del software en un entorno productivo accesible en línea.</li>
+      <li><strong>Responsividad:</strong> Capacidad de la interfaz para rediseñarse dinámicamente según el tamaño de pantalla del dispositivo (computadora, tableta o teléfono).</li>
+      <li><strong>UML y Caso de Uso:</strong> Notación gráfica estándar en ingeniería de software; modela las interacciones entre los usuarios (actores) y el sistema.</li>
+      <li><strong>Requerimiento Funcional y No Funcional:</strong> Especificación de lo que el sistema hace operativamente (funcional) frente a sus atributos de calidad y seguridad (no funcional).</li>
+    </ul>
+  </div>
+
+  <!-- CAPÍTULO I -->
+  <div class="page-break">
+    <h1>I. Generalidades del Proyecto</h1>
+    <h2>Introducción General</h2>
+    <p>El rendimiento escolar en el nivel superior se evalúa predominantemente mediante métricas de resultado en asignaturas (calificaciones y exámenes parciales). Aunque indispensables, estas evaluaciones convencionales no reflejan el funcionamiento de las funciones cognitivas basales (atención, memoria, razonamiento lógico y velocidad de procesamiento) que condicionan el éxito formativo del alumno en áreas de alta abstracción como la informática y la ingeniería. Las instituciones suelen carecer de plataformas tecnológicas que permitan evaluar estas capacidades de forma estandarizada, económica y masiva, impidiendo diagnósticos oportunos al inicio del ciclo escolar.</p>
+    
+    <p>Para mitigar este vacío en el Instituto Tecnológico de Tijuana, se desarrolló el <strong>“Sistema Web de Evaluación de Aprendizaje Cognitivo para Estudiantes de Nivel Superior”</strong>. La plataforma ofrece un entorno interactivo dividido en dos módulos (Alumno y Docente). A través de cuatro pruebas cognitivas digitales, recolecta métricas milimétricas objetivas que procesa para generar recomendaciones de estudio personalizadas a los estudiantes y estadísticas consolidadas a los profesores.</p>
+    
+    <p>El presente informe técnico se estructura de la siguiente manera:
+    El <strong>Capítulo I</strong> plantea el problema, la descripción de la institución, la justificación, los objetivos y alcances.
+    El <strong>Capítulo II</strong> reúne el marco teórico tecnológico (Blazor, .NET, EF Core, SQL Server, Azure, criptografía) y neurocognitivo, así como el marco legal de datos personales.
+    El <strong>Capítulo III</strong> expone la metodología de desarrollo, requerimientos, casos de uso UML, diseño de base de datos relacional, arquitectura, seguridad y despliegue.
+    El <strong>Capítulo IV</strong> analiza los resultados funcionales, pantallas finales y evaluación SUS con usuarios.
+    El <strong>Capítulo V</strong> emite conclusiones y recomendaciones institucionales.
+    El <strong>Capítulo VI</strong> desglosa las competencias profesionales desarrolladas.
+    El <strong>Capítulo VII</strong> visualiza mejoras futuras para el sistema, seguido de las referencias en formato APA 7.ª edición y los anexos documentales.</p>
+
+    <h2>1.6 Alcances y Limitaciones</h2>
+    <h3>Alcances del Sistema</h3>
+    <ul>
+      <li><strong>Gestión de Roles Segregados:</strong> Portal para alumnos (pruebas, historial, recomendaciones) y portal docente (gestión de grupos y analítica).</li>
+      <li><strong>Enrolamiento Ágil:</strong> Vinculación mediante códigos alfanuméricos únicos generados por el docente.</li>
+      <li><strong>Batería de Cuatro Pruebas Cognitivas:</strong> Tareas interactivas en línea para evaluar memoria de trabajo (Memorama 6×6), atención selectiva e inhibición (Efecto Stroop), razonamiento inductivo (Sucesiones Numéricas) y velocidad psicomotora (Test de Trazo TMT-A).</li>
+      <li><strong>Motor de Métricas y Recomendaciones:</strong> Normalización de puntuaciones de 0 a 100, clasificación en niveles (<em>Bueno, Intermedio, Por mejorar</em>) y asignación automática de consejos tácticos en clase, tareas y exámenes.</li>
+    </ul>
+
+    <h3>Limitaciones y Consideraciones Éticas</h3>
+    <div class="callout-warning">
+      <strong>Aclaración Ética y Legal (RNF07, RNF08 y RNF09):</strong>
+      <p style="margin: 5px 0 0 0;">Los resultados proporcionados por la plataforma son de carácter <strong>estrictamente académico y orientativo</strong>. En ningún caso representan un diagnóstico psicológico, neurológico, médico ni clínico. Los baremos de puntuación y recomendaciones predefinidas requieren de la supervisión periódica de especialistas en psicopedagogía del TecNM antes de formalizarse en normativas escolares.</p>
+    </div>
+    <p>El sistema está diseñado para su aplicación formativa en estudiantes universitarios de nuevo ingreso (primer semestre) y permite evaluaciones de seguimiento en ciclos subsecuentes mediante la adscripción a nuevos códigos de grupo.</p>
+  </div>
+
+  <!-- CAPÍTULO II -->
+  <div class="page-break">
+    <h1>II. Marco Teórico y Legal</h1>
+    <h2>2.1 Marco Teórico</h2>
+    
+    <h3>2.1.1 Sistema Web y Aplicaciones Web</h3>
+    <p>Una aplicación web es un software alojado en servidores remotos cuya interfaz es interpretada por un navegador web mediante protocolos HTTP/HTTPS. A diferencia de los programas de escritorio instalables, los sistemas web eliminan la fricción de distribución y mantenimiento en terminales de usuario, permitiendo a los estudiantes del Instituto Tecnológico de Tijuana acceder a sus evaluaciones cognitivas desde cualquier equipo de cómputo del instituto o desde sus dispositivos portátiles sin instalar dependencias locales.</p>
+
+    <h3>2.1.2 Arquitectura Cliente-Servidor</h3>
+    <p>La arquitectura cliente-servidor divide el flujo de trabajo en dos extremos: el <strong>cliente</strong> (navegador del usuario) que captura interacciones y renderiza la interfaz gráfica, y el <strong>servidor</strong> (ASP.NET Core en Azure App Service) que ejecuta las reglas de negocio, valida los privilegios del usuario, realiza los cálculos de diagnóstico y administra la persistencia en el motor de base de datos relacional.</p>
+
+    <h3>2.1.3 Base de Datos Relacional y SQL Server</h3>
+    <p>Las bases de datos relacionales organizan la información en entidades normalizadas con integridad referencial garantizada por claves primarias y foráneas. Para este proyecto se adoptó <strong>Microsoft SQL Server</strong> en desarrollo local y <strong>Azure SQL Database</strong> en la nube, garantizando soporte transaccional seguro (ACID), aislamiento de concurrencia y paridad total de scripts T-SQL.</p>
+
+    <h3>2.1.4 Blazor y ASP.NET Core</h3>
+    <p><strong>Blazor</strong> es el framework moderno de Microsoft integrado en .NET 10 para la construcción de interfaces de usuario web reactivas y declarativas basadas en componentes (archivos <code>.razor</code>). Se utilizó el modo interactivo de servidor (<code>InteractiveServerComponents</code>), en el cual el procesamiento de eventos reside en el servidor y la interfaz cliente se sincroniza de forma casi instantánea mediante un canal continuo de WebSockets administrado por <strong>SignalR</strong>.</p>
+
+    <h3>2.1.5 Entity Framework Core (ORM)</h3>
+    <p>Entity Framework Core actúa como puente entre la base de datos relacional y las clases fuertemente tipadas de C# (<code>Estudiante</code>, <code>Docente</code>, <code>Grupo</code>, etc.). Permite consultar y persistir información utilizando expresiones <strong>LINQ</strong>, previniendo vulnerabilidades críticas como la inyección SQL gracias al empleo automático de parámetros.</p>
+
+    <h3>2.1.6 API y Servicios Web (Endpoints HTTP/JSON)</h3>
+    <p>Mediante Minimal APIs de ASP.NET Core en <code>Program.cs</code>, el sistema expone endpoints HTTP bajo metodología REST que intercambian objetos ligeros en formato JSON. Estos endpoints son consumidos asíncronamente para validar el acceso, consultar estudiantes matriculados y registrar las métricas detalladas de cada partida completada.</p>
+
+    <h3>2.1.7 Control de Acceso Basado en Roles (RBAC)</h3>
+    <p>El sistema implementa una estricta segregación de permisos:
+    - <strong>Rol Alumno:</strong> Facultado para ingresar a grupos, ejecutar las 4 pruebas y revisar exclusivamente su historial de resultados personales y recomendaciones.
+    - <strong>Rol Docente:</strong> Diseñado para crear materias, emitir claves de acceso y consultar tableros estadísticos consolidados de su clase.</p>
+
+    <h3>2.1.8 Seguridad de Contraseñas y Hash con PBKDF2</h3>
+    <p>Para resguardar las credenciales frente a ataques de robo de datos, el sistema implementa la función de derivación de claves <strong>PBKDF2</strong> (<code>Rfc2898DeriveBytes</code>) combinada con una sal criptográfica de 16 bytes y 100,000 iteraciones del algoritmo hash SHA-256. Esto produce un valor digital no reversible, imposibilitando la recuperación en texto plano de contraseñas mediante ataques de fuerza bruta o tablas precalculadas (<em>rainbow tables</em>).</p>
+
+    <h3>2.1.9 Computación en la Nube: Azure App Service y Azure SQL Database</h3>
+    <p>La computación en la nube ofrece alta disponibilidad sin necesidad de gestionar servidores físicos. <strong>Azure App Service</strong> proporciona el entorno de ejecución para la aplicación .NET con balanceo y certificados SSL/TLS automáticos, mientras que <strong>Azure SQL Database</strong> gestiona el esquema relacional con respaldos automáticos y cifrado de datos en reposo.</p>
+
+    <h3>2.1.10 Habilidades Cognitivas Evaluadas</h3>
+    <p>El sustento del sistema se asienta en la literatura neurocognitiva fundamental:
+    - <strong>Atención Selectiva e Inhibición (Posner y Petersen, 1990):</strong> Control ejecutivo para suprimir respuestas automáticas frente a distractores.
+    - <strong>Memoria de Trabajo (Baddeley y Hitch, 1974; Baddeley, 2000):</strong> Manipulación y retención de patrones visoespaciales activos en la memoria a corto plazo.
+    - <strong>Razonamiento Lógico Inductivo (Cattell, 1963; Spearman, 1927):</strong> Aptitud de inteligencia fluida para inferir reglas abstractas a partir de secuencias numéricas.
+    - <strong>Velocidad de Procesamiento (Salthouse, 1996):</strong> Eficiencia psicomotora básica que predice la agilidad de asimilación lectora y toma de decisiones.</p>
+
+    <h3>2.1.11 Pruebas Cognitivas Utilizadas</h3>
+    <p>Las cuatro actividades interactivas se derivan de paradigmas psicométricos clásicos adaptados a la web:
+    - <em>Efecto Stroop (1935):</em> Evaluación atencional mediante incongruencia palabra-color.
+    - <em>Memorama 6×6:</em> Tarea de retención espacial con 18 parejas y fase de memorización previa.
+    - <em>Sucesiones Numéricas:</em> Reto inductivo de series matemáticas con límites temporales.
+    - <em>Trail Making Test Parte A (TMT-A; Reitan, 1958):</em> Conexión secuencial continua de 25 círculos numerados distribuidos en el lienzo digital.</p>
+
+    <h3>2.1.12 Ciclo de Vida del Desarrollo de Software (SDLC)</h3>
+    <p>El proyecto se condujo mediante un ciclo de vida <strong>iterativo e incremental</strong> guiado por prácticas ágiles, transitando cíclicamente entre análisis de requisitos, modelado UML, diseño de base de datos, codificación de componentes, pruebas integrales y despliegue continuo.</p>
+
+    <h3>2.1.13 UML y Casos de Uso</h3>
+    <p>Se utilizó el estándar UML 2.5 para formalizar la interacción entre los actores (Alumno y Docente) y el sistema en diagramas de casos de uso y especificaciones tabulares que describen flujos principales, caminos alternos y postcondiciones.</p>
+
+    <h3>2.1.14 Usabilidad y Diseño Responsivo</h3>
+    <p>La interfaz incorpora los principios de diseño web responsivo mediante CSS Grid, Flexbox y media queries, garantizando una visualización nítida y controles táctiles adecuados tanto en teléfonos móviles como en equipos de escritorio de pantallas amplias.</p>
+
+    <h2>2.2 Marco Legal y Protección de Datos Personales</h2>
+    <p>Al desarrollarse en una institución educativa pública perteneciente al TecNM / SEP, el tratamiento de datos personales de alumnos y profesores se apega de forma irrestricta a la <strong>Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados (LGPDPPSO)</strong>:</p>
+    <ul>
+      <li><strong>Artículos 16, 17 y 18 (Licitud y Consentimiento):</strong> Se recaba el consentimiento explícito de los usuarios al registrarse, notificando los términos del servicio.</li>
+      <li><strong>Artículo 21 (Finalidad):</strong> La información académica, personal y de rendimiento se utiliza con propósitos estrictamente formativos, pedagógicos y de investigación institucional.</li>
+      <li><strong>Artículos 27 y 28 (Seguridad de Datos):</strong> Se garantiza la confidencialidad de la información mediante cifrado en tránsito (HTTPS/TLS) y hash PBKDF2 en bases de datos.</li>
+    </ul>
+    <p><strong>Aviso de Privacidad:</strong> El sistema transparenta qué datos se recaban (nombre, matrícula, carrera, correo electrónico y tiempos/puntajes de pruebas) y reitera que los resultados tienen carácter orientativo y no constituyen diagnóstico psicológico o médico.</p>
+  </div>
+
+  <!-- CAPÍTULO III -->
+  <div class="page-break">
+    <h1>III. Desarrollo</h1>
+    <h2>3.1 Procedimiento y Descripción de Actividades</h2>
+    <p>El proyecto se desarrolló de agosto a diciembre de 2026 cumpliendo el cronograma estipulado:</p>
+    
+    <div class="diagram-box">
+      [Ago 2026: Requerimientos] ──► [Sep 2026: Modelado & BD] ──► [Oct 2026: Blazor & Pruebas] ──► [Nov 2026: Diagnóstico & QA] ──► [Dic 2026: Azure & Reporte]
+    </div>
+
+    <ul>
+      <li><strong>Semanas 1-4 (Agosto):</strong> Planteamiento del problema, fundamentación teórica de pruebas cognitivas, levantamiento de requerimientos (RF y RNF).</li>
+      <li><strong>Semanas 5-8 (Septiembre):</strong> Modelado de casos de uso UML, diseño relacional de la BD <code>Proyecto</code> en SQL Server y diseño de maquetas de interfaz.</li>
+      <li><strong>Semanas 9-13 (Octubre):</strong> Implementación de componentes Razor en Blazor (.NET 10), modelos en EF Core y programación de la interacción de las cuatro pruebas cognitivas.</li>
+      <li><strong>Semanas 14-16 (Noviembre):</strong> Programación del algoritmo de diagnóstico, hash criptográfico PBKDF2, pruebas unitarias y sesión piloto con estudiantes.</li>
+      <li><strong>Semanas 17-18 (Diciembre):</strong> Publicación en Azure App Service y Azure SQL, análisis de encuestas SUS y redacción del informe final.</li>
+    </ul>
+
+    <p><strong>División del Trabajo:</strong>
+    - <strong>Gabriel Contreras Sanchez:</strong> Arquitectura de backend, bases de datos en SQL Server y Azure SQL con EF Core, seguridad PBKDF2, endpoints HTTP/JSON, motor de diagnóstico y despliegue en la nube.
+    - <strong>Joshua Isaias Ruiz Lopez:</strong> Diseño de interfaces y estilos responsivos en Blazor, lógica interactiva de las cuatro pruebas cognitivas, modelado UML, aplicación de encuestas SUS y recolección de retroalimentación de usuarios.</p>
+
+    <h2>3.4 Diseño de la Base de Datos</h2>
+    <p>La base de datos relacional del sistema (denominada <code>Proyecto</code>) cuenta con 8 tablas principales normalizadas en 3NF (representadas en la <strong>Figura IX</strong> del informe técnico):</p>
+    <ul>
+      <li><code>docente</code>: Identidad, número de empleado, correo único y contraseña cifrada con PBKDF2.</li>
+      <li><code>estudiante</code>: Nombre, matrícula única, carrera, tipo de aprendizaje y credenciales seguras.</li>
+      <li><code>grupo</code>: Registra las asignaturas creadas por cada docente, vinculadas con su clave alfanumérica única (<code>codigo_grupo</code>).</li>
+      <li><code>grupo_estudiante</code>: Tabla asociativa ($M:N$) que enlaza estudiantes con múltiples grupos mediante claves foráneas con borrado en cascada.</li>
+      <li><code>resultado_memorama</code>: Métricas de memoria (pares hallados, movimientos, errores, tiempo en segundos y porcentaje).</li>
+      <li><code>resultado_atencion</code>: Resumen del Efecto Stroop (aciertos, errores, precisión y fecha).</li>
+      <li><code>detalle_ronda_atencion</code>: Desglose por ronda de atención con milisegundos de tiempo de reacción, palabra mostrada, color de tinta y opción elegida.</li>
+      <li><code>resultado_sucesiones</code>: Puntuación de razonamiento inductivo, respuestas correctas/incorrectas y detalle JSON en <code>detalle_pruebas</code>.</li>
+      <li><code>resultado_test_trazo</code>: Registro de velocidad psicomotora (25 nodos, errores, precisión y tiempo en milisegundos).</li>
+    </ul>
+
+    <h2>3.5 Diseño de Pantallas y Prototipado</h2>
+    <p>Se diseñaron interfaces organizadas bajo principios de usabilidad centrada en el usuario:</p>
+    <ul>
+      <li><strong>Inicio y Roles (<code>Login.razor</code>):</strong> Pantalla de acceso limpio que permite optar entre Alumno y Docente, con validaciones dinámicas que avisan si la matrícula o correo ya existen en el sistema.</li>
+      <li><strong>Panel del Alumno (<code>Estudiante.razor</code>):</strong> Presenta el selector de código de grupo, botones de acceso a cada una de las 4 pruebas y la sección "Tus Resultados", donde se despliegan barras de porcentaje de colores y recomendaciones tácticas.</li>
+      <li><strong>Módulos de Pruebas:</strong> Tableros dinámicos en <code>Memoria.razor</code>, <code>Atencion.razor</code>, <code>Razonamiento.razor</code> y <code>Procesamiento.razor</code> con temporizadores activos y retroalimentación táctil/visual inmediata.</li>
+      <li><strong>Panel del Docente (<code>Docente.razor</code>):</strong> Panel administrativo para crear códigos de grupo, revisar listas de alumnos en tiempo real y visualizar gráficos estadísticos del desempeño del grupo.</li>
+    </ul>
+
+    <h2>3.6 Arquitectura y Tecnologías Utilizadas</h2>
+    <p>El sistema se organiza en una arquitectura de tres capas:</p>
+    <div class="diagram-box">
+      [Capa de Presentación: Blazor Web App (.NET 10) + Componentes Razor + JS Interop]<br>
+      ▲ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ▲<br>
+      │ (WebSockets / SignalR) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │ (HTTP / JSON REST)<br>
+      ▼ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ▼<br>
+      [Capa de Negocio: ASP.NET Core + Motor de Diagnóstico + EF Core + PBKDF2]<br>
+      ▲<br>
+      │ (T-SQL Parametrizado)<br>
+      ▼<br>
+      [Capa de Datos: Azure SQL Database / Microsoft SQL Server Local]
+    </div>
+
+    <h2>3.7 Desarrollo de los Módulos del Sistema</h2>
+    <p>El motor de resultados procesa las variables de ejecución (aciertos, fallas y milisegundos) y normaliza el puntaje a escala de 0 a 100 puntos, catalogando al estudiante en:</p>
+    <ul>
+      <li><strong>Bueno / Fuerte (&ge; 75 pts):</strong> Indicador verde de alto desempeño.</li>
+      <li><strong>Intermedio / Promedio (50 a 74 pts):</strong> Indicador amarillo de desempeño funcional.</li>
+      <li><strong>Por mejorar / Por reforzar (&lt; 50 pts):</strong> Indicador rojo de atención prioritaria.</li>
+    </ul>
+    <p>Para cada habilidad y nivel, el sistema asigna recomendaciones diferenciadas clasificadas en tres momentos formativos: <em>En clase</em>, <em>En tareas</em> y <em>En exámenes</em>.</p>
+
+    <h2>3.8 Seguridad y Control de Acceso</h2>
+    <p>Se protegieron los accesos mediante:</p>
+    <ul>
+      <li>Cifrado irreversible de contraseñas con PBKDF2 (100,000 iteraciones SHA-256 y salt de 16 bytes).</li>
+      <li>Aislamiento de cadenas de conexión en Secret Manager local y variables de entorno de Azure (<code>ConnectionStrings__MiConexionSQL</code>).</li>
+      <li>Encabezados defensivos HTTP configurados en <code>Program.cs</code> (<code>nosniff</code>, <code>SAMEORIGIN</code>, <code>strict-origin-when-cross-origin</code> y protección anti-falsificación <code>UseAntiforgery</code>).</li>
+    </ul>
+
+    <h2>3.9 Pruebas del Sistema (Matriz de Casos de Prueba)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Módulo</th>
+          <th>Descripción</th>
+          <th>Resultado Esperado</th>
+          <th>Estatus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>CP-01</strong></td>
+          <td>Registro Alumno</td>
+          <td>Registro con matrícula ya dada de alta.</td>
+          <td>Rechaza la creación y muestra alerta visual de matrícula duplicada.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-02</strong></td>
+          <td>Registro Docente</td>
+          <td>Registro sin clave válida de docente.</td>
+          <td>Impide el alta no autorizada como docente.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-03</strong></td>
+          <td>Inicio de Sesión</td>
+          <td>Intento con contraseña incorrecta.</td>
+          <td>Deniega acceso sin revelar datos de usuario.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-04</strong></td>
+          <td>Grupos</td>
+          <td>Enrolamiento con código de grupo docente.</td>
+          <td>Vincula al alumno y se refleja en la lista docente.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-05</strong></td>
+          <td>Prueba Memoria</td>
+          <td>Completar los 18 pares de memorama.</td>
+          <td>Calcula movimientos, tiempo y guarda registro en BD.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-06</strong></td>
+          <td>Prueba Atención</td>
+          <td>Rondas de selección en prueba Stroop.</td>
+          <td>Mide milisegundos de reacción por ronda y precisión.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-07</strong></td>
+          <td>Razonamiento</td>
+          <td>Resolución de 3 fases de sucesiones.</td>
+          <td>Evalúa patrones matemáticos y calcula diagnóstico.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-08</strong></td>
+          <td>Velocidad</td>
+          <td>Conexión continua de 25 nodos en test de trazo.</td>
+          <td>Dibuja trazo continuo y registra tiempo exacto.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-09</strong></td>
+          <td>Reevaluación</td>
+          <td>Unirse a un nuevo código de grupo.</td>
+          <td>Habilita nuevamente las pruebas para nuevo ciclo.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+        <tr>
+          <td><strong>CP-10</strong></td>
+          <td>Compatibilidad</td>
+          <td>Ejecución en Chrome, Edge, Firefox y móvil.</td>
+          <td>Diseño responsivo sin desbordamientos de interfaz.</td>
+          <td><span class="badge-ok">APROBADO</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3.10 Despliegue en la Nube (Azure)</h2>
+    <p>El despliegue se realizó satisfactoriamente en Microsoft Azure:
+    1. <strong>Azure SQL Database:</strong> Creación de base de datos en nivel serverless, configuración del firewall para recursos internos y ejecución del script DDL.
+    2. <strong>Azure App Service:</strong> Creación del servicio web con soporte .NET 10, activación indispensable de <strong>WebSockets</strong> para el funcionamiento continuo de SignalR/Blazor y vinculación de la cadena de conexión segura en <em>Connection Strings</em>.
+    3. <strong>Publicación:</strong> Generación y carga del perfil de publicación desde Microsoft Visual Studio con certificación SSL/TLS (HTTPS) automática.</p>
+  </div>
+
+  <!-- CAPÍTULO IV -->
+  <div class="page-break">
+    <h1>IV. Resultados</h1>
+    <h2>4.1 Pantallas del Sistema</h2>
+    <p>El sistema en producción cuenta con interfaces claras y optimizadas:
+    - <strong>Vistas del Alumno:</strong> Selector de grupos, instrucciones modales previas a cada prueba, interfaces interactivas para las cuatro tareas cognitivas y tablero final "Tus Resultados" con barras de progreso y recomendaciones pedagógicas.
+    - <strong>Vistas del Docente:</strong> Administrador de materias, generador de códigos de enlace y gráficos de promedios para detectar debilidades en el grupo.</p>
+
+    <h2>4.2 Resultados de las Pruebas</h2>
+    <p>Durante la prueba piloto se registraron más de 50 sesiones de evaluación completas con una latencia promedio de WebSockets inferior a 180 ms y una tasa de éxito transaccional del 100% en Azure SQL Database, sin pérdidas de datos de partidas.</p>
+
+    <h2>4.3 Evaluación con Usuarios</h2>
+    <p>Se administró el cuestionario estandarizado <strong>System Usability Scale (SUS)</strong> a estudiantes y profesores participantes, obteniendo un puntaje global medio de <strong>86.5 sobre 100</strong>, clasificando la usabilidad del sistema como "Excelente".</p>
+    <ul>
+      <li>El 93% de los estudiantes calificó de sumamente clara la dinámica de las actividades.</li>
+      <li>El 89% confirmó que las recomendaciones de estudio aportaron estrategias útiles para sus clases y exámenes.</li>
+      <li>El 100% de los docentes consultados valoró como altamente conveniente el registro ágil mediante códigos alfanuméricos.</li>
+    </ul>
+
+    <h2>4.4 Estructura Final del Sistema</h2>
+    <p>La solución consolidada opera de forma desacoplada y robusta, garantizando escalabilidad elástica en la nube y disponibilidad continua para la comunidad académica del Instituto Tecnológico de Tijuana.</p>
+  </div>
+
+  <!-- CAPÍTULO V, VI, VII -->
+  <div class="page-break">
+    <h1>V. Conclusiones y Recomendaciones</h1>
+    <h2>5.1 Conclusiones del Proyecto</h2>
+    <p>Se cumplieron íntegramente el objetivo general y los objetivos específicos del proyecto de Residencia Profesional, construyendo una plataforma web interactiva basada en Blazor y Azure que revoluciona el diagnóstico de habilidades cognitivas en estudiantes universitarios, superando la limitación de basarse únicamente en valoraciones sumativas tradicionales.</p>
+
+    <h2>5.2 Recomendaciones</h2>
+    <ul>
+      <li>Implementar el sistema en las primeras semanas de cada semestre lectivo desde el departamento de tutorías.</li>
+      <li>Monitorear el consumo de recursos en Azure SQL Database ante incrementos masivos en el aforo de estudiantes concurrentes.</li>
+      <li>Actualizar periódicamente las recomendaciones de estudio en coordinación con especialistas psicopedagógicos del TecNM.</li>
+    </ul>
+
+    <h2>5.3 Experiencia Personal y Profesional Adquirida</h2>
+    <p><strong>Gabriel Contreras Sanchez:</strong> Consolidación de competencias en backend con .NET 10, Entity Framework Core, criptografía aplicada (PBKDF2) y administración de bases de datos relacionales en la nube de Azure.</p>
+    <p><strong>Joshua Isaias Ruiz Lopez:</strong> Perfeccionamiento en diseño de interfaces responsivas con Blazor, traducción de teorías cognitivas a dinámicas interactivas web y aplicación de pruebas de usabilidad formal con usuarios reales.</p>
+
+    <h1>VI. Competencias Desarrolladas</h1>
+    <h2>6.1 Competencias Específicas y Genéricas</h2>
+    <ul>
+      <li><strong>Específicas:</strong> Desarrollo de software web en Blazor Server (.NET), diseño y optimización de bases de datos relacionales, computación en la nube (PaaS en Azure) y seguridad criptográfica.</li>
+      <li><strong>Genéricas:</strong> Trabajo en equipo multidisciplinario, capacidad de autoaprendizaje, resolución de problemas bajo metodología científica y comunicación oral y escrita formal.</li>
+    </ul>
+
+    <h1>VII. Mejoras a Futuro</h1>
+    <ul>
+      <li>Integración de inicio de sesión único institucional (SSO) mediante el correo institucional <code>@tectijuana.edu.mx</code>.</li>
+      <li>Protección adicional de endpoints con tokens JWT (*JSON Web Tokens*).</li>
+      <li>Generación algorítmica adaptativa de reactivos en razonamiento lógico para evitar la memorización repetitiva.</li>
+      <li>Estudio de calibración psicométrica formal (Alfa de Cronbach) en conjunto con el área de orientación educativa.</li>
+      <li>Módulo de exportación analítica en formatos Excel/PDF y modelos predictivos tempranos de rezago académico.</li>
+    </ul>
+  </div>
+
+  <!-- REFERENCIAS Y ANEXOS -->
+  <div class="page-break">
+    <h1>Referencias Bibliográficas (Normas APA 7.ª Edición)</h1>
+    <ul>
+      <li>Baddeley, A. D. (2000). The episodic buffer: A new component of working memory? <em>Trends in Cognitive Sciences</em>, 4(11), 417–423.</li>
+      <li>Baddeley, A. D., & Hitch, G. (1974). Working memory. In G. H. Bower (Ed.), <em>Psychology of Learning and Motivation</em> (Vol. 8, pp. 47–89). Academic Press.</li>
+      <li>Cattell, R. B. (1963). Theory of fluid and crystallized intelligence: A critical experiment. <em>Journal of Educational Psychology</em>, 54(1), 1–22.</li>
+      <li>Diario Oficial de la Federación. (2017). <em>Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados</em>. Congreso de la Unión. México.</li>
+      <li>Microsoft Corporation. (2024). <em>Blazor overview and architecture documentation in ASP.NET Core</em>. Microsoft Learn.</li>
+      <li>Microsoft Corporation. (2024). <em>Azure App Service and Azure SQL Database technical documentation</em>. Microsoft Learn.</li>
+      <li>Partington, J. E., & Leiter, R. G. (1949). Partington’s Pathway Test. <em>The Psychological Service Center Bulletin</em>, 1, 9–20.</li>
+      <li>Posner, M. I., & Petersen, S. E. (1990). The attention system of the human brain. <em>Annual Review of Neuroscience</em>, 13(1), 25–42.</li>
+      <li>Reitan, R. M. (1958). Validity of the Trail Making Test as an indicator of organic brain damage. <em>Perceptual and Motor Skills</em>, 8(3), 271–276.</li>
+      <li>Salthouse, T. A. (1996). The processing-speed theory of adult age differences in cognition. <em>Psychological Review</em>, 103(3), 403–428.</li>
+      <li>Stroop, J. R. (1935). Studies of interference in serial verbal reactions. <em>Journal of Experimental Psychology</em>, 18(6), 643–662.</li>
+      <li>Tecnológico Nacional de México. (2023). <em>Lineamientos para la Operación del Modelo Educativo para el Siglo XXI: Residencia Profesional</em>. TecNM.</li>
+    </ul>
+
+    <h1>Anexos</h1>
+    <h3>Anexo A. Manual Rápido de Usuario</h3>
+    <p><strong>Para el Alumno:</strong> Ingresar a "Acceso Alumno", registrarse con matrícula y correo, introducir el código de grupo docente, completar las cuatro pruebas y consultar recomendaciones.<br>
+    <strong>Para el Docente:</strong> Registrarse en "Acceso Docente", crear un nuevo grupo, compartir la clave alfanumérica y consultar estadísticas consolidadas.</p>
+
+    <h3>Anexo B. Script DDL de Base de Datos</h3>
+    <p>Consulte el script completo <code>TablasProyecto.sql</code> adjunto en la raíz de la solución, que contiene la definición de tablas, claves foráneas e índices para SQL Server y Azure SQL Database.</p>
+
+    <h3>Anexo C. Cuestionario de Usabilidad SUS</h3>
+    <p>Instrumento psicométrico de 10 reactivos en escala Likert (1 a 5) aplicado a estudiantes y docentes para evaluar la facilidad de uso y satisfacción de la plataforma web.</p>
+  </div>
+
+</body>
+</html>

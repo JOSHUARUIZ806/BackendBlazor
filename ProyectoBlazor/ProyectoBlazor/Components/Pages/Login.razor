@@ -283,7 +283,17 @@
         }
         catch (Exception ex)
         {
-            MensajeError = ex.InnerException?.Message ?? ex.Message;
+            var msg = ex.InnerException?.Message ?? ex.Message;
+            if (msg.Contains("timed out", StringComparison.OrdinalIgnoreCase) ||
+                msg.Contains("tiempo de espera", StringComparison.OrdinalIgnoreCase) ||
+                msg.Contains("Timeout", StringComparison.OrdinalIgnoreCase))
+            {
+                MensajeError = "La base de datos se está reactivando tras un periodo de inactividad. Por favor, vuelve a presionar el botón para ingresar.";
+            }
+            else
+            {
+                MensajeError = msg;
+            }
         }
         finally
         {
